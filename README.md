@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download Latest Version](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.0)
+[Download Latest Version](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.1)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
@@ -14,7 +14,12 @@ A Rich Presence program to show your activity on Discord
           - Nintendo 3DS
           - Wii U
           - Nintendo Switch
-      * Credits go to ninstar on GitHub for Nintendo Console Discord Presences
+      - PC Games:
+         - Overwatch
+         - Overwatch 2 BETA
+      * Credits go to: 
+         * ninstar on GitHub for Nintendo Console Discord Presences
+         * Tominous on GitHub for Overwatch Discord Presence Application IDs
       
     * Program (Windows Only):
       * Uses Windows User32 Library to grab the current window title and process name that the user is using currently.
@@ -43,10 +48,6 @@ A Rich Presence program to show your activity on Discord
          - Wikipedia
          - YouTube
       * Credits go to PreMiD on GitHub for Website Discord Presence Application IDs
-    
-    * PlayStation (PS4/PS5) Presence:
-      * Uses the official Playstation API to grab your presence and what game you are playing or if you're at the home screen.
-      * Credits go to sirzechs753 on GitHub for PlayStation Discord Presence Application IDs
 
     * Beat Saber Presence:
       * Requires the HTTP Status Mod installed from ModAsssistant in order for it to work.
@@ -59,4 +60,4 @@ A Rich Presence program to show your activity on Discord
       * Grabs data from a lua script to track map information on the emulator.
        * Supports only Diamond, Pearl, and Platinum ROMs. Credits go to kiwi515 on GitHub for the script
 
-If you would like to request a program, website or presence to be added, DM Logicism at his Discord (Logicism#9308)
+If you would like to request a program, game, website or presence to be added, DM Logicism at his Discord (Logicism#9308)
