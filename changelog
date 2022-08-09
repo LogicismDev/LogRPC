@@ -1,6 +1,7 @@
 1.3 - August 9, 2022
 
 - Fixed Presence if a field in a config is empty
+- Update LogRPC Dependencies
 - Add New Update Dialog with Changelogs
 - Implement Automatic Updater
 - Add Check for Updates Button in Settings
