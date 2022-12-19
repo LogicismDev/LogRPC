@@ -1,3 +1,7 @@
+1.7 - December 19, 2022
+
+- Fixed Nintendo Switch Presence Missing Large Image Keys
+
 1.6 - November 23, 2022
 
 - Fixed Disney+ Time Presence
@@ -30,8 +34,3 @@ hypeRateId: 123A
 # This sections specifies if you would like to enable the HR Reader for the Beat Saber Presence
 
 enableHrReaderForBeatSaber: true
-
-1.4 - August 19, 2022
-
-- Fix Download Window not disappearing if Download fails
-- Fix Incorrect Versions in Presences and Tray Icon
