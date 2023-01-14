@@ -1,3 +1,27 @@
+1.8 - January 13, 2023
+
+- Updated Adobe Rich Presences
+- Fixed loading for macOS and Linux
+- Created Windows Installer for LogRPC. If you prefer installing it, download it from the website.
+- Created macOS Application for LogRPC. Download the dmg file from the website to use.
+- Added support for MAGIX Vegas Pro versions 15 to 20
+- Added Music Presence Support for Windows and macOS. Add these configuration lines below:
+
+# This section lets you choose the music program to check on the presence software. Please note that this will only work on Windows Systems.
+# Any program will work as long it shows the artist and song name on the Windows Media Control. Even Chromium Based Browsers or Firefox will work.
+# macOS Systems by default will use Apple Music/iTunes as the primary program to use on the presence software.
+
+# Please specify the program by it's executable name and it's extension, e.g. Spotify.exe
+
+musicProgram: Amazon Music.exe
+
+# This is where you specify the Alpha-2 country code where the program will use the TIDAL API or iTunes API to grab the artwork to put on the presence.
+# This will also be used to grab the song link information from Songwhip
+
+# To disable checking for artwork, put none below.
+
+musicArtworkCountry: US
+
 1.7 - December 19, 2022
 
 - Fixed Nintendo Switch Presence Missing Large Image Keys
@@ -6,31 +30,3 @@
 
 - Fixed Disney+ Time Presence
 - Changed Overwatch Presence to Overwatch 2
-
-1.5 - September 11, 2022
-
-- Replace Beat Saber Websocket with DataPuller Data
-- Updated Extensions to contain Popup Window to Toggle Websites
-- Add Disney+ Website
-- Update Netflix Large Image to use Animated Logo
-- Fixed Twitter, Instagram, and Twitch Website Presences
-- Fixed YouTube Time Presence
-- Added Thumnbnails for Large Image for Dailymotion, and YouTube presences
-- Updated Chrome Extension to Manifest v3, Firefox Extensions are now seperate. The extension will not be updated automatically, please update it manually!
-* At the moment the Firefox Extension is really buggy to use since it is a Manifest v2 Extension. It is highly recommended to use the Chrome Extension if possible.
-- Removed enabledWebsites in Configuration! Please remove it or your program will not be able to run!
-- Add HypeRate and Pulsoid Placeholder for Presences which supports BLE Bluetooth Devices, Smartwatches and other heart rate monitors. To start using it, use ${hrRate} in your presence text and it will automatically update. Add these configuration lines below:
-
-# This section is where you can specify HR Reader settings. Currently supports Pulsoid and HypeRate.
-# Supported devices can be found at https://www.blog.pulsoid.net/monitors?from=mheader or https://www.hyperate.io/supported-devices
-# To use in your presence, use the variable ${hrRate}
-
-# This section specifies the reader you are using (pulsoid, hyperate)
-
-hrReader: hyperate
-pulsoidWidgetId: 679b43d1-5fbd-4031-97cc-d0b0cb430a09
-hypeRateId: 123A
-
-# This sections specifies if you would like to enable the HR Reader for the Beat Saber Presence
-
-enableHrReaderForBeatSaber: true
