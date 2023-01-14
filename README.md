@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download for Windows](https://logicism.tv/downloads/LogRPC-v1.7-win64.zip) - [Download for macOS/Linux](https://logicism.tv/downloads/LogRPC-v1.7-mac_linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.7)
+[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v1.8-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v1.8-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v1.8-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.8)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
@@ -36,6 +36,24 @@ A Rich Presence program to show your activity on Discord
          * angeloanan on GitHub for MPC-HC Discord Presence Application IDs
          * Pigpog on GitHub for VLC Discord Presence Application IDs
          * FizzyApple12 on GitHub for Beat Saber Discord Presence Application IDs
+
+    * Music (Windows/macOS):
+      * Windows: Uses a Python Script with Embedded Python to grab the song information from the Windows Media Control Bar using WinRT API. Artwork is grabbed from TIDAL, and secondarily iTunes.
+        * Specific Rich Presence Programs:
+          - Amazon Music (does not display Timestamp)
+          - Deezer
+          - iTunes
+          - Qobuz
+          - TIDAL
+        * Default Rich Presence:
+          - Any program that shows information from the Windows Media Control Bar.
+      * macOS: Uses a TypeScript Script to grab the song information from Apple Music/iTunes. Artwork is grabbed from iTunes.
+      * Credits go to:
+         * NextFire on GitHub for the original TypeScript Script Code and Apple Music, iTunes Discord Presence Application IDs
+         * willf668 on GitHub for the original Python Script Code
+         * Braasileiro for the Deezer Discord Presence Application ID
+         * Lockna on GitHub for the Qobuz Discord Presence Application ID
+         * purpl3F0x on GitHub for the TIDAL Discord Presence Application ID
 
     * Website (Chrome/Firefox Extension):
       * Uses the Chrome/Firefox Extension to grab the Website Title, URL and HTML to parse into Discord Presences.
