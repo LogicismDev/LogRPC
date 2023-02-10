@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v1.8-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v1.8-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v1.8-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.8)
+[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v1.9-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v1.9-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v1.9-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.9)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
