@@ -1,0 +1,159 @@
+#
+#              ##        #######   ######   ########  ########   ######
+#              ##       ##     ## ##    ##  ##     ## ##     ## ##    ##
+#              ##       ##     ## ##        ##     ## ##     ## ##
+#              ##       ##     ## ##   #### ########  ########  ##
+#              ##       ##     ## ##    ##  ##   ##   ##        ##
+#              ##       ##     ## ##    ##  ##    ##  ##        ##    ##
+#              ########  #######   ######   ##     ## ##         ######
+#
+#                             Version 1.9 by Logicism
+#              A Rich Presence program to show your activity on Discord
+
+# Check for updates on startup
+checkForUpdates: true
+
+# This section allows you to modify the default fallback presence or default startup presence
+
+defaultClientID: "389249289223929856"
+defaultDetails: "LogRPC v1.9"
+defaultState: "Coded in Java and JavaScript"
+defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
+defaultLargeImageText: "LogRPC v1.9"
+defaultSmallImageKey: "null"
+defaultSmallImageText: "null"
+
+# Use -1 for no timestamp. Use 0 for current timestamp.
+defaultStartTimestamp: -1
+defaultEndTimestamp: -1
+
+defaultMainButtonText: "Download my Work"
+defaultMainButtonURL: "https://logicism.tv/downloads/"
+defaultSecondaryButtonText: "Buy a Gaming/Anime Banner"
+defaultSecondaryButtonURL: "https://www.fiverr.com/logicism/design-a-youtube-or-twitch-banner-and-logo-made-for-gamers"
+
+defaultPartySize: 0
+defaultMaxPartySize: 0
+
+# This section lists the programs that are enabled on the presence software. Please note that this will only work on Windows Systems.
+
+enabledPrograms:
+  - acrobat
+  - aftereffects
+  - beatsaber
+  - desmume
+  - dosbox
+  - dreamweaver
+  - fceux
+  - fusion
+#  - gimp
+  - illustrator
+  - indesign
+  - libreofficewriter
+  - libreofficecalc
+  - libreofficeimpress
+  - libreofficedraw
+  - libreofficebase
+  - libreofficemath
+#  - microsoftword
+#  - microsoftpowerpoint
+#  - microsoftexcel
+  - mame
+  - melonds
+  - mesen
+  - mpchc
+  - nogba
+#  - notepadplusplus
+  - photoshop
+  - premierepro
+#  - snes9x
+  - vbam
+  - vegaspro
+  - vlc
+  - zoom
+
+# This section lets you choose the music program to check on the presence software. Please note that this will only work on Windows Systems.
+# Any program will work as long it shows the artist and song name on the Windows Media Control. Even Chromium Based Browsers or Firefox will work.
+# macOS Systems by default will use Apple Music/iTunes as the primary program to use on the presence software.
+
+# Please specify the program by it's executable name and it's extension, e.g. Spotify.exe
+
+musicProgram: Amazon Music.exe
+
+# This is where you specify the Alpha-2 country code where the program will use the TIDAL API or iTunes API to grab the artwork to put on the presence.
+# This will also be used to grab the song link information from Songwhip
+
+# To disable checking for artwork, put none below.
+
+musicArtworkCountry: US
+
+# This is where you have to get your player url. You can get this by going into a room and going on to the wiimmfi.de website and then clicking on your friend code in the Mario Kart Wii Rooms List
+
+wiimmfiPlayerURL: https://wiimmfi.de/stats/mkw/room/p600487228
+
+# This is where you enter in your wiimmfi friend code. This is used to find data on the status of your game.
+
+wiimmfiFriendCode: 0736-1493-1260
+
+# You can specify how you want LogRPC to grab your Wiimmfi Data as a Presence (browser, headless, headlessjson)
+# Please note that the headless method requires a FlareSolverr proxy server running!
+
+wiimmfiPresenceType: headlessjson
+
+# This section is where you change the FlaverSolverr URL if you're running it on a different system.
+# This only applies to the wiimmfiPresenceType with the option headless.
+
+flareSolverrURL: http://127.0.0.1:8191/v1
+flareSolverrSession: 1
+
+# This section is where you can specify HR Reader settings. Currently supports Pulsoid and HypeRate.
+# Supported devices can be found at https://www.blog.pulsoid.net/monitors?from=mheader or https://www.hyperate.io/supported-devices
+# To use in your presence, use the variable ${hrRate}
+
+# This section specifies the reader you are using (pulsoid, hyperate)
+
+hrReader: hyperate
+pulsoidWidgetId: 679b43d1-5fbd-4031-97cc-d0b0cb430a09
+hypeRateId: 123A
+
+# This sections specifies if you would like to enable the HR Reader for the Beat Saber Presence
+
+enableHrReaderForBeatSaber: true
+
+# This section is where you can add your own custom manual preset presences
+
+manualPresetPresences:
+  - Logicism is Sleeping
+  - Logicism is AFK
+  - Logicism is busy coding PabloBot
+  - Logicism is currently cooking
+  - Logicism is busy with homework
+  - Logicism is not at Home
+  - Logicism is attending a Family Party
+  - Logicism is on a Gaming Fast
+  - Logicism is at College
+  - Logicism is at Work
+  - Logicism is busy studying
+  - Logicism is busy working
+
+# This is where you enter in your friend codes. This is shown on the manual game console presences.
+
+nintendo3dsFriendCode: 3245-6543-9653
+wiiUNNID: LogicismTV
+nintendoSwitchFriendCode: SW-4468-2652-9305
+overwatchUsername: Logicism#2299
+
+# This section allows you to disable automated presences in the menu
+
+extensionDisabled: false
+beatSaberDisabled: false
+wiimmfiDisabled: false
+deSmuMEDisabled: false
+
+# This section allows you to disable manual preset presences in the menu
+
+nintendo3dsDisabled: false
+wiiUDisabled: false
+nintendoSwitchDisabled: false
+
+overwatchDisabled: false

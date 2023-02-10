@@ -1,0 +1,559 @@
+Mystery Zone (EVERYWHERE)
+Mystery Zone (NOTHING)
+Underground
+Jubilife City
+Jubilife City Mart
+Jubilife City Gym
+Jubilife City PKMN Center
+Jubilife City PKMN Center
+Poketch Co.
+Poketch Co. -02
+Poketch Co. -03
+Jubilife TV
+Jubilife TV -02
+Jubilife TV -03
+Jubilife TV -04
+Jubilife TV -05
+Jubilife TV -06
+Jubilife TV -07
+Jubilife TV -08
+Jubilife City R3-01
+Jubilife City R3-02
+Jubilife City R3-03
+Jubilife City R3-04
+Jubilife City R3-05
+Jubilife City R3-06
+Jubilife City R3-07
+Jubilife City R3-08
+Jubilife City R3-09
+GTS
+Trainers' School
+Jubilife City R8-01
+Jubilife City R9-01
+Jubilife City R10-01
+Canalave City
+Canalave City Mart
+Canalave City Gym
+Canalave City PKMN Center
+Canalave City PKMN Center
+Canalave Library
+Canalave Library -02
+Canalave Library -03
+Canalave City R2-01
+Canalave City R3-01
+Canalave City R4-01
+Canalave City R5-01
+Oreburgh City
+Oreburgh City Mart
+Oreburgh City Gym
+Oreburgh City PKMN Center
+Oreburgh City PKMN Center
+Oreburgh City R1-01
+Oreburgh City R1-02
+Oreburgh City R1-03
+Oreburgh City R1-04
+Oreburgh City R2-01
+Oreburgh City R2-02
+Oreburgh City R2-03
+Oreburgh City R2-04
+Oreburgh City R3-01
+Mining Museum
+Oreburgh City R5-01
+Oreburgh City R6-01
+Oreburgh City R6-02
+Oreburgh City R6-03
+Oreburgh City R7-01
+Eterna City
+Eterna City Mart
+Eterna City Gym
+Eterna City Gym
+Eterna City PKMN Center
+Eterna City PKMN Center
+Cycle Shop
+Eterna City R2-01
+Eterna City R2-02
+Eterna City R2-03
+Eterna City R2-04
+Eterna City R3-01
+Eterna City R3-02
+Eterna City R3-03
+Eterna City R3-04
+Route 206
+Eterna City R5-01
+Eterna City R6-01
+Eterna City R7-01
+Eterna City R8-01
+Eterna City R9-01
+Hearthome City
+Hearthome City Mart
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City Gym
+Hearthome City PKMN Center
+Hearthome City PKMN Center
+Hearthome City R1-01
+Hearthome City R1-02
+Hearthome City R1-03
+Hearthome City R2-01
+Hearthome City R3-01
+Hearthome City R4-01
+Route 208
+Route 209
+Route 212
+Hearthome City R8-01
+Hearthome City R8-02
+Hearthome City R8-03
+Hearthome City R9-01
+Poffin House
+Contest Hall -01
+Contest Hall -02
+Foreign Building
+Pastoria City
+Pastoria City Mart
+Pastoria City Gym
+Pastoria City PKMN Center
+Pastoria City PKMN Center
+Pastoria City R1-01
+Pastoria City R1-02
+Pastoria City R2-01
+Pastoria City R3-01
+Pastoria City R4-01
+Pastoria City R5-01
+Pastoria City R6-01
+Veilstone City
+Veilstone City Gym
+Veilstone City PKMN Center
+Veilstone City PKMN Center
+Game Corner
+Veilstone Store -01
+Veilstone Store -02
+Veilstone Store -03
+Veilstone Store -04
+Veilstone Store -05
+Veilstone Store -06
+Veilstone City R3-01
+Veilstone City R4-01
+Veilstone City R5-01
+Veilstone City R6-01
+Veilstone City R7-01
+Veilstone City R8-01
+Route 215
+Sunyshore City
+Sunyshore City PKMN Center
+Sunyshore City PKMN Center
+Sunyshore City Mart
+Sunyshore City Gym
+Sunyshore City Gym
+Sunyshore City Gym
+Sunyshore Market
+Sunyshore City R2-01
+Sunyshore City R3-01
+Sunyshore City R4-01
+Sunyshore City R5-01
+Sunyshore City R6-01
+Sunyshore City R7-01
+Vista Lighthouse -01
+Snowpoint City
+Snowpoint City Mart
+Snowpoint City Gym
+Snowpoint City PKMN Center
+Snowpoint City PKMN Center
+Snowpoint City R1-01
+Snowpoint City R2-01
+Pokemon League
+Pokemon League PKMN Center
+Pokemon League PKMN Center
+Pokemon League -01
+Pokemon League -02
+Pokemon League -03
+Pokemon League -04
+Pokemon League -05
+Pokemon League -06
+Pokemon League -07
+Pokemon League -08
+Pokemon League -09
+Pokemon League -10
+Pokemon League -11
+Pokemon League -12
+Pokemon League -13
+Fight Area
+Fight Area PKMN Center
+Fight Area PKMN Center
+Fight Area Mart
+Battle Park
+Route 225
+Fight Area
+Fight Area
+Mystery Zone (Fight Area)
+Oreburgh Mine
+Oreburgh Mine R1-01
+Oreburgh Mine R1-02
+Valley Windworks
+Valley Windworks -01
+Eterna Forest
+Eterna Forest -01
+Fuego Ironworks
+Fuego Ironworks -01
+Mystery Zone (Mt. Coronet)
+Mt. Coronet
+Mt. Coronet -01
+Mt. Coronet -02
+Mt. Coronet -03
+Mt. Coronet -04
+Mt. Coronet -05
+Mt. Coronet -06
+Mt. Coronet -07
+Mt. Coronet -08
+Mt. Coronet -09
+Mt. Coronet -10
+Mt. Coronet -11
+Mt. Coronet -12
+Spear Pillar
+Spear Pillar
+Mystery Zone (Mt. Coronet)
+Great Marsh
+Mystery Zone (Great Marsh)
+Solaceon Ruins -01
+Solaceon Ruins -02
+Solaceon Ruins -03
+Solaceon Ruins -04
+Solaceon Ruins -05
+Solaceon Ruins -06
+Solaceon Ruins -07
+Solaceon Ruins -08
+Solaceon Ruins -09
+Solaceon Ruins -10
+Solaceon Ruins -11
+Solaceon Ruins -12
+Solaceon Ruins -13
+Solaceon Ruins -14
+Solaceon Ruins -15
+Solaceon Ruins -16
+Solaceon Ruins -17
+Solaceon Ruins -18
+Mystery Zone (Victory Road)
+Victory Road -01
+Victory Road -02
+Victory Road -03
+Victory Road -04
+Victory Road -05
+Victory Road -06
+Mystery Zone (Pal Park)
+Pal Park -01
+Mystery Zone (Amity Square)
+Amity Square -01
+Ravaged Path -01
+Mystery Zone (Floaroma Meadow)
+Floaroma Meadow -01
+Floaroma Meadow -02
+Oreburgh Gate -01
+Oreburgh Gate -02
+Fullmoon Island 
+Fullmoon Island -01
+Stark Mountain
+Stark Mountain -01
+Stark Mountain -02
+Stark Mountain -03
+Mystery Zone (Sendoff Spring)
+Sendoff Spring -01
+Turnback Cave -02
+Turnback Cave -03
+Turnback Cave -04
+Turnback Cave -05
+Turnback Cave -06
+Turnback Cave -07
+Flower Paradise
+Mystery Zone (Flower Paradise)
+Mystery Zone (D19A)
+Mystery Zone (D19B)
+Snowpoint Temple -01
+Snowpoint Temple -02
+Snowpoint Temple -03
+Snowpoint Temple -04
+Snowpoint Temple -05
+Snowpoint Temple -06
+Wayward Cave -01
+Wayward Cave -02
+Ruin Maniac Cave -01
+Trophy Garden -01
+Iron Island
+Iron Island -01
+Iron Island -02
+Iron Island -03
+Iron Island -04
+Iron Island -05
+Iron Island -06
+Old Chateau -01
+Old Chateau -02
+Old Chateau -03
+Old Chateau -04
+Old Chateau -05
+Old Chateau -06
+Old Chateau -07
+Old Chateau -08
+Old Chateau -09
+Mystery Zone (Old Chateau)
+Galactic HQ -01
+Galactic HQ -02
+Galactic HQ -03
+Galactic HQ -04
+Galactic HQ -05
+Galactic HQ -06
+Lake Verity -01
+Lake Verity -02
+Verity Cavern
+Lake Valor -01
+Lake Valor -02
+Valor Cavern
+Lake Acuity -01
+Lake Acuity -02
+Acuity Cavern
+Newmoon Island
+Newmoon Island -01
+Battle Park
+Battle Park -01
+Mystery Zone (Battle Tower)
+Mystery Zone (Battle Tower)
+Battle Tower -03
+Battle Tower -04
+Battle Tower -05
+Battle Tower -06
+Battle Tower -07
+Battle Tower -08
+Mystery Zone (DIRECT2)
+Mystery Zone (DIRECT4)
+Verity Lakefront
+Verity Lakefront -01
+Valor Lakefront
+Restaurant -01
+Grand Lake R1-01
+Grand Lake R2-02
+Acuity Lakefront
+Spring Path
+Route 201
+Route 202
+Route 203
+Route 204 A
+Route 204 B
+Route 205 A
+Route 205 A -01
+Route 205 B
+Route 206 
+Route 206 -01
+Mystery Zone (Route 206)
+Route 207
+Route 208
+Route 208 -01
+Route 209
+Route 209 -01
+Route 209 -02
+Route 209 -03
+Route 209 -04
+Route 209 -05
+Route 210 A
+Route 210 B
+Route 210 B -01
+Route 211 A
+Route 211 B 
+Route 212 A
+Pokemon Mansion -01
+Pokemon Mansion -02
+Pokemon Mansion -03
+Route 212 B
+Route 212 B -01
+Route 213
+Route 213 -01
+Footstep House
+Grand Lake R3-01
+Grand Lake R4-01
+Grand Lake R5-01
+Grand Lake R6-01
+Route 214
+Route 214 -01
+Route 215
+Route 216
+Route 216 -01
+Route 217
+Route 217 R1-01
+Route 217 R2-01
+Route 218
+Route 218 R1-01
+Route 218 R2-01
+Route 219
+Route 221
+Pal Park -01
+Route 221 
+Route 222
+Route 222 R1-01
+Route 222 R2-01
+Route 222 R3-01
+Route 224
+Route 225
+Mystery Zone (R226A)
+Mystery Zone (R226B)
+Route 227
+Mystery Zone (R227A)
+Mystery Zone (R227B)
+Route 228
+Route 229
+Mystery Zone (R230)
+Mystery Zone (R232)
+Mystery Zone (RECORD)
+Twinleaf Town
+Twinleaf Town R1-01
+Twinleaf Town R1-02
+Twinleaf Town R2-01
+Twinleaf Town R2-02
+Twinleaf Town R3-01
+Twinleaf Town R4-01
+Sandgem Town
+Sandgem Town Mart
+Sandgem Town PKMN Center
+Sandgem Town PKMN Center
+Sandgem Town R1-01
+Sandgem Town R2-01
+Sandgem Town R2-02
+Sandgem Town R3-01
+Floaroma Town
+Floaroma Town Mart
+Floaroma Town PKMN Center
+Floaroma Town PKMN Center
+Flower Shop
+Floaroma Town R2-01
+Floaroma Town R3-01
+Solaceon Town
+Solaceon Town Mart
+Solaceon Town PKMN Center
+Solaceon Town PKMN Center
+Pokemon Day Care
+Solaceon Town R2-01
+Solaceon Town R3-01
+Solaceon Town R4-01
+Solaceon Town R5-01
+Celestic Town
+Celestic Town PKMN Center
+Celestic Town PKMN Center
+Celestic Town R1-01
+Celestic Town R2-01
+Celestic Town R3-01
+Celestic Town R4-01
+Celestic Town R5-01
+Survival Area
+Survival Area Mart
+Survival Area PKMN Center
+Survival Area PKMN Center
+Survival Area R1-01
+Survival Area R2-01
+Survival Area R3-01
+Resort Area
+Resort Area Mart
+Resort Area PKMN Center
+Resort Area PKMN Center
+Resort Area R1-01
+Resort Area R1-02
+Resort Area R1-03
+Resort Area R2-01
+Resort Area R3-01
+Mystery Zone (UNION)
+Route 220
+Route 223
+Route 226
+Mystery Zone (W229)
+Route 230
+Seabreak Path
+Mystery Zone (W233)
+Jubilife City PKMN Center
+Canalave City PKMN Center
+Oreburgh City PKMN Center
+Eterna City PKMN Center
+Hearthome City PKMN Center
+Pastoria City PKMN Center
+Veilstone City PKMN Center
+Sunyshore City PKMN Center
+Snowpoint City PKMN Center
+Pokemon League PKMN Center
+Fight Area PKMN Center
+Sandgem Town PKMN Center
+Floaroma Town PKMN Center
+Solaceon Town PKMN Center
+Celestic Town PKMN Center
+Survival Area PKMN Center
+Resort Area PKMN Center
+Canalave City R6-01
+Cafe
+Battle Tower R2-07
+Galactic HQ R1-07
+Pokemon League R1-14
+Pokemon League R1-15
+Galactic HQ R1-08
+Route 225 -01
+Route 226 -01
+Route 227 -01
+Route 228 R1-01
+Route 228 R2-01
+Route 228 R3-01
+Great Marsh R2-01
+Great Marsh R2-02
+Great Marsh R2-03
+Great Marsh R2-04
+Great Marsh R2-05
+Great Marsh R2-06
+Hall of Origin
+Hall of Origin -02
+Ruin Maniac Cave R1-02
+Maniac Tunnel R1-03
+Iron Island R2-01
+Solaceon Ruins R1-19
+Vista Lighthouse -02
+Jubilife City R8-02
+Turnback Cave -08
+Turnback Cave -09
+Turnback Cave -10
+Turnback Cave -11
+Turnback Cave -12
+Turnback Cave -13 
+Turnback Cave -14
+Turnback Cave -15
+Turnback Cave -16
+Turnback Cave -17
+Turnback Cave -18
+Turnback Cave -19
+Turnback Cave -20
+Turnback Cave -21
+Turnback Cave -22
+Turnback Cave -23
+Turnback Cave -24
+Turnback Cave -25
+Turnback Cave -26
+Turnback Cave -27
+Turnback Cave -28
+Turnback Cave -29
+Turnback Cave -30
+Turnback Cave -31
+Turnback Cave -32
+Turnback Cave -33
+Turnback Cave -34
+Turnback Cave -35
+Turnback Cave -36
+Turnback Cave -37
+Turnback Cave -38
+Turnback Cave -39
+Turnback Cave -40
+Turnback Cave -41
+Turnback Cave -42
+Turnback Cave -43
+Turnback Cave -44
+Turnback Cave -45
+Turnback Cave -46
+Turnback Cave -47
+Contest Hall -03
