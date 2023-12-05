@@ -90,6 +90,8 @@ public class UpdatePresenceHandler extends EventHandler {
                 presence = new AcrobatPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("vegas140_") || ((JSONData) e.getData()).getDetails().equals("vegas140") || ((JSONData) e.getData()).getDetails().startsWith("vegas150_") || ((JSONData) e.getData()).getDetails().equals("vegas150") || ((JSONData) e.getData()).getDetails().startsWith("vegas160_") || ((JSONData) e.getData()).getDetails().equals("vegas160") || ((JSONData) e.getData()).getDetails().startsWith("vegas170_") || ((JSONData) e.getData()).getDetails().equals("vegas170") || ((JSONData) e.getData()).getDetails().startsWith("vegas180_") || ((JSONData) e.getData()).getDetails().equals("vegas180") || ((JSONData) e.getData()).getDetails().startsWith("vegas190_") || ((JSONData) e.getData()).getDetails().equals("vegas190") || ((JSONData) e.getData()).getDetails().startsWith("vegas200_") || ((JSONData) e.getData()).getDetails().equals("vegas200")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("vegaspro")) {
                 presence = new MAGIXVEGASProPresence(e.getData());
+            } else if ((((JSONData) e.getData()).getDetails().startsWith("Resolve_") || ((JSONData) e.getData()).getDetails().equals("Resolve"))) {
+                presence = new DaVinciResolvePresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("Zoom_") || ((JSONData) e.getData()).getDetails().equals("Zoom")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("zoom")) {
                 presence = new ZoomPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("WINWORD_") || ((JSONData) e.getData()).getDetails().equals("WINWORD")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("microsoftoffice")) {
@@ -103,17 +105,17 @@ public class UpdatePresenceHandler extends EventHandler {
             } else if ((((JSONData) e.getData()).getDetails().startsWith("vlc_") || ((JSONData) e.getData()).getDetails().equals("vlc")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("vlc")) {
                 presence = new VLCPresence(e.getData());
             } else if (((JSONData) e.getData()).getDetails().startsWith("soffice.bin_") || ((JSONData) e.getData()).getDetails().equals("soffice.bin")) {
-                if (e.getData().getTitle().endsWith(" - LibreOffice Writer") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficewriter")) {
+                if (e.getData().getTitle().endsWith(" — LibreOffice Writer") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficewriter")) {
                     presence = new LibreWriterPresence(e.getData());
-                } else if (e.getData().getTitle().endsWith(" - LibreOffice Calc") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficecalc")) {
+                } else if ((e.getData().getTitle().endsWith(" - LibreOffice Calc") || e.getData().getTitle().endsWith(" — LibreOffice Calc")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficecalc")) {
                     presence = new LibreCalcPresence(e.getData());
-                } else if (e.getData().getTitle().endsWith(" - LibreOffice Impress") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficeimpress")) {
+                } else if ((e.getData().getTitle().endsWith(" - LibreOffice Impress") || e.getData().getTitle().endsWith(" — LibreOffice Impress")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficeimpress")) {
                     presence = new LibreImpressPresence(e.getData());
-                } else if (e.getData().getTitle().endsWith(" - LibreOffice Draw") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficedraw")) {
+                } else if ((e.getData().getTitle().endsWith(" - LibreOffice Draw") || e.getData().getTitle().endsWith(" — LibreOffice Draw")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficedraw")) {
                     presence = new LibreDrawPresence(e.getData());
-                } else if (e.getData().getTitle().endsWith(" - LibreOffice Base") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficebase")) {
+                } else if ((e.getData().getTitle().endsWith(" - LibreOffice Base") || e.getData().getTitle().endsWith(" — LibreOffice Base")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficebase")) {
                     presence = new LibreBasePresence(e.getData());
-                } else if (e.getData().getTitle().endsWith(" - LibreOffice Math") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficemath")) {
+                } else if ((e.getData().getTitle().endsWith(" - LibreOffice Math") || e.getData().getTitle().endsWith(" — LibreOffice Math")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficemath")) {
                     presence = new LibreMathPresence(e.getData());
                 }
             } else if ((((JSONData) e.getData()).getDetails().startsWith("notepad++_") || ((JSONData) e.getData()).getDetails().equals("notepad++")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("notepadplusplus")) {

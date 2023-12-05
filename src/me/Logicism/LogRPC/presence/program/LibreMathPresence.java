@@ -14,7 +14,7 @@ public class LibreMathPresence extends Presence {
     public String getDetails() {
         JSONData data = (JSONData) this.data;
 
-        if (data.getTitle().contains(" - LibreOffice Math")) {
+        if (data.getTitle().contains(" - LibreOffice Math") || data.getTitle().contains(" — LibreOffice Math")) {
             return data.getTitle().substring(0, data.getTitle().length() - " - LibreOffice Math".length());
         } else {
             return "Homepage";

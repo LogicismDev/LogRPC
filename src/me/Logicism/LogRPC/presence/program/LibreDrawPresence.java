@@ -14,7 +14,7 @@ public class LibreDrawPresence extends Presence {
     public String getDetails() {
         JSONData data = (JSONData) this.data;
 
-        if (data.getTitle().contains(" - LibreOffice Draw")) {
+        if (data.getTitle().contains(" - LibreOffice Draw") || data.getTitle().contains(" — LibreOffice Draw")) {
             return data.getTitle().substring(0, data.getTitle().length() - " - LibreOffice Draw".length());
         } else {
             return "Homepage";

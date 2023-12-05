@@ -14,7 +14,7 @@ public class LibreImpressPresence extends Presence {
     public String getDetails() {
         JSONData data = (JSONData) this.data;
 
-        if (data.getTitle().contains(" - LibreOffice Impress")) {
+        if (data.getTitle().contains(" - LibreOffice Impress") || data.getTitle().contains(" — LibreOffice Impress")) {
             return data.getTitle().substring(0, data.getTitle().length() - " - LibreOffice Impress".length());
         } else {
             return "Homepage";

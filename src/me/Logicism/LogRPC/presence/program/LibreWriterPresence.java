@@ -14,7 +14,7 @@ public class LibreWriterPresence extends Presence {
     public String getDetails() {
         JSONData data = (JSONData) this.data;
 
-        if (data.getTitle().contains(" - LibreOffice Writer")) {
+        if (data.getTitle().contains(" - LibreOffice Writer") || data.getTitle().contains(" — LibreOffice Writer")) {
             return data.getTitle().substring(0, data.getTitle().length() - " - LibreOffice Writer".length());
         } else {
             return "Homepage";

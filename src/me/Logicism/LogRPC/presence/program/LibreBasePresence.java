@@ -14,7 +14,7 @@ public class LibreBasePresence extends Presence {
     public String getDetails() {
         JSONData data = (JSONData) this.data;
 
-        if (data.getTitle().contains(" - LibreOffice Base")) {
+        if (data.getTitle().contains(" - LibreOffice Base") || data.getTitle().contains(" — LibreOffice Base")) {
             return data.getTitle().substring(0, data.getTitle().length() - " - LibreOffice Base".length());
         } else {
             return "Homepage";
