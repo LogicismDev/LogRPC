@@ -28,7 +28,8 @@ A Rich Presence program to show your activity on Discord
          - Microsoft Office (Word, PowerPoint, Excel)
          - LibreOffice (Writer, Calc, Impress, Draw, Base, Math)
          - Media Player Classic
-         - Sony Vegas Pro 14.0
+         - MAGIX VEGAS Pro 14.0 - 20.0
+         - DaVinci Resolve
          - VLC Media Player
          - Zoom Meetings
       * Credits go to: 
@@ -36,6 +37,7 @@ A Rich Presence program to show your activity on Discord
          * angeloanan on GitHub for MPC-HC Discord Presence Application IDs
          * Pigpog on GitHub for VLC Discord Presence Application IDs
          * FizzyApple12 on GitHub for Beat Saber Discord Presence Application IDs
+         * shadoweG on GitHub for DaVinci Resolve Discord Presence Application IDs
 
     * Music (Windows/macOS):
       * Windows: Uses a Python Script with Embedded Python to grab the song information from the Windows Media Control Bar using WinRT API. Artwork is grabbed from TIDAL, and secondarily iTunes.
