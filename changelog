@@ -32,7 +32,3 @@ musicProgram: Amazon Music.exe
 # To disable checking for artwork, put none below.
 
 musicArtworkCountry: US
-
-1.7 - December 19, 2022
-
-- Fixed Nintendo Switch Presence Missing Large Image Keys
