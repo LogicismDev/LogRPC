@@ -1,3 +1,10 @@
+1.92 - June 15, 2024
+
+- Fixed Dailymotion Presence
+- Fixed Disney+ Presence
+- Fixed Instagram Presence
+- Fixed Twitch Presence
+
 1.91 - December 5, 2023
 
 - Fixed LibreOffice Presences
@@ -8,27 +15,3 @@
 - Fixed Download Links and Updater. Apologies for the inconvenience!
 - Changed Song Link API to more reliable service, Odesli
 - Reduced amount of requests made to Odesli
-
-1.8 - January 13, 2023
-
-- Updated Adobe Rich Presences
-- Fixed loading for macOS and Linux
-- Created Windows Installer for LogRPC. If you prefer installing it, download it from the website.
-- Created macOS Application for LogRPC. Download the dmg file from the website to use.
-- Added support for MAGIX Vegas Pro versions 15 to 20
-- Added Music Presence Support for Windows and macOS. Add these configuration lines below:
-
-# This section lets you choose the music program to check on the presence software. Please note that this will only work on Windows Systems.
-# Any program will work as long it shows the artist and song name on the Windows Media Control. Even Chromium Based Browsers or Firefox will work.
-# macOS Systems by default will use Apple Music/iTunes as the primary program to use on the presence software.
-
-# Please specify the program by it's executable name and it's extension, e.g. Spotify.exe
-
-musicProgram: Amazon Music.exe
-
-# This is where you specify the Alpha-2 country code where the program will use the TIDAL API or iTunes API to grab the artwork to put on the presence.
-# This will also be used to grab the song link information from Songwhip
-
-# To disable checking for artwork, put none below.
-
-musicArtworkCountry: US

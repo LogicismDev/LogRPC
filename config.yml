@@ -7,7 +7,7 @@
 #              ##       ##     ## ##    ##  ##    ##  ##        ##    ##
 #              ########  #######   ######   ##     ## ##         ######
 #
-#                             Version 1.91 by Logicism
+#                             Version 1.92 by Logicism
 #              A Rich Presence program to show your activity on Discord
 
 # Check for updates on startup
@@ -16,10 +16,10 @@ checkForUpdates: true
 # This section allows you to modify the default fallback presence or default startup presence
 
 defaultClientID: "389249289223929856"
-defaultDetails: "LogRPC v1.91"
+defaultDetails: "LogRPC v1.92"
 defaultState: "Coded in Java and JavaScript"
 defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
-defaultLargeImageText: "LogRPC v1.91"
+defaultLargeImageText: "LogRPC v1.92"
 defaultSmallImageKey: "null"
 defaultSmallImageText: "null"
 
