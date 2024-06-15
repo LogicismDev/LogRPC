@@ -24,7 +24,7 @@ public class DailymotionPresence extends Presence {
         } else if (data.getURL().startsWith("https://www.dailymotion.com/library")) {
             return "Browsing Library";
         } else if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            Element titleElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div > div > div:nth-child(1) > div > div.col.large-5.WatchingSafeZone__videoInfoActionsSection___2rrHC > div > div > div > div > div:nth-child(2) > div > h1");
+            Element titleElement = data.getHTMLDocument().selectFirst("#media-title");
 
             try {
                 return titleElement.ownText();
@@ -35,8 +35,6 @@ public class DailymotionPresence extends Presence {
             return "Browsing Channel Videos";
         } else if (data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/playlists") || data.getURL().contains("/playlists?sort="))) {
             return "Browsing Channel Playlists";
-        } else if (data.getURL().substring(0, "https://www.dailymotion.com/".length()).length() != 2 && !data.getURL().startsWith("https://www.dailymotion.com/signin")) {
-            return "Browsing Channel";
         }
 
         return "Browsing Dailymotion";
@@ -51,11 +49,11 @@ public class DailymotionPresence extends Presence {
 
             return searchTextElement.text();
         } else if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            Element titleElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div > div > div:nth-child(1) > div > div.col.large-5.WatchingSafeZone__videoInfoActionsSection___2rrHC > div > div > div > div > div:nth-child(3) > div > a > div");
+            Element titleElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.NewWatchingDiscovery__watchingSection___3Bzey > div > div.WatchingSection__safeZone___w2sTV > div:nth-child(1) > div:nth-child(2) > div > div > div.NewVideoInfo__channelLineWrapper___3SHpY > div.NewChannelLine__channelLine___3A2fN.NewChannelLine__channelContainer___2o6cP > a > div");
 
             return titleElement.text();
-        } else if (data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/videos") || data.getURL().contains("/videos?sort=")) || data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/playlists") || data.getURL().contains("/playlists?sort=")) || data.getURL().substring(0, "https://www.dailymotion.com/".length()).length() != 2 && !data.getURL().startsWith("https://www.dailymotion.com/signin")) {
-            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.ChannelHeader__header___1zf7_.Header__header___3Lb4q > div.ChannelHeader__wrapper___3mRCh > div:nth-child(1) > div > h1 > a");
+        } else if (data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/videos") || data.getURL().contains("/videos?sort=")) || data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/playlists") || data.getURL().contains("/playlists?sort="))) {
+            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.ChannelHeader__container___3oX3T > div > div > div.ChannelHeaderInfo__channelInfoContainer___22LxP > div.ChannelHeaderInfo__channelInfos___2p5yG > h1");
 
             return channelElement.text();
         }
@@ -79,30 +77,22 @@ public class DailymotionPresence extends Presence {
     public String getSmallImageKey() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            if (data.getHTMLDocument().html().contains("<use xlink:href=\"#dmp_Play\" style=\"pointer-events: none;\">")) {
-                return "pause";
-            } else {
-                return "play";
-            }
-        } else {
+        if (!(data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist"))) {
             return "reading";
         }
+
+        return "";
     }
 
     @Override
     public String getSmallImageText() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            if (data.getHTMLDocument().html().contains("<use xlink:href=\"#dmp_Play\" style=\"pointer-events: none;\">")) {
-                return "Paused";
-            } else {
-                return "Playing";
-            }
-        } else {
+        if (!(data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist"))) {
             return "Reading";
         }
+
+        return "";
     }
 
     @Override
@@ -113,7 +103,7 @@ public class DailymotionPresence extends Presence {
             return "Watch Video";
         } else if (data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
             return "View Playlist";
-        } else if (data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/videos") || data.getURL().contains("/videos?sort=")) || data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/playlists") || data.getURL().contains("/playlists?sort=")) || data.getURL().substring(0, "https://www.dailymotion.com/".length()).length() != 2 && !data.getURL().startsWith("https://www.dailymotion.com/signin")) {
+        } else if (data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/videos") || data.getURL().contains("/videos?sort=")) || data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/playlists") || data.getURL().contains("/playlists?sort="))) {
             return "View Channel";
         } else {
             return null;
@@ -143,7 +133,7 @@ public class DailymotionPresence extends Presence {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div > div > div:nth-child(1) > div > div.col.large-5.WatchingSafeZone__videoInfoActionsSection___2rrHC > div > div > div > div > div:nth-child(3) > div > a");
+            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.NewWatchingDiscovery__watchingSection___3Bzey > div > div.WatchingSection__safeZone___w2sTV > div:nth-child(1) > div:nth-child(2) > div > div > div.NewVideoInfo__channelLineWrapper___3SHpY > div.NewChannelLine__channelLine___3A2fN.NewChannelLine__channelContainer___2o6cP > a");
 
             return "https://www.dailymotion.com" + channelElement.attr("href");
         } else {
@@ -153,73 +143,6 @@ public class DailymotionPresence extends Presence {
 
     @Override
     public long getStartTimestamp() {
-        BrowserHTMLData data = (BrowserHTMLData) this.data;
-
-        if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            if (data.getHTMLDocument().html().contains("<use xlink:href=\"#dmp_Pause\" style=\"pointer-events: none;\">")) {
-                Element timeElement = data.getHTMLDocument().selectFirst("#render_root_regular > div.np_SplitView > div.np_SplitView-left > div > div.np_Player-row--bottom > div > span.np_TimerContent-current");
-
-                if (timeElement.ownText().split(":").length == 3) {
-                    String hours = timeElement.ownText().split(":")[0];
-                    String minutes = timeElement.ownText().split(":")[1];
-                    String seconds = timeElement.ownText().split(":")[2];
-
-                    long lhours = Long.parseLong(hours) * 60 * 60;
-                    long lminutes = Long.parseLong(minutes) * 60;
-                    long lseconds = Long.parseLong(seconds);
-                    long time = Long.sum(Long.sum(lhours, lminutes), lseconds) * 1000L;
-
-                    return time;
-                } else if (timeElement.ownText().split(":").length == 2) {
-                    String minutes = timeElement.ownText().split(":")[0];
-                    String seconds = timeElement.ownText().split(":")[1];
-
-                    long lminutes = Long.parseLong(minutes) * 60;
-                    long lseconds = Long.parseLong(seconds);
-                    long time = Long.sum(lminutes, lseconds) * 1000L;
-
-                    return time;
-                }
-            } else if (data.getHTMLDocument().html().contains("<use xlink:href=\"#dmp_Play\" style=\"pointer-events: none;\">")) {
-                return -1;
-            }
-        }
-
         return 0;
-    }
-
-    @Override
-    public long getEndTimestamp() {
-        BrowserHTMLData data = (BrowserHTMLData) this.data;
-
-        if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            if (data.getHTMLDocument().html().contains("<use xlink:href=\"#dmp_Pause\" style=\"pointer-events: none;\">")) {
-                Element timeElement = data.getHTMLDocument().selectFirst("#render_root_regular > div.np_SplitView > div.np_SplitView-left > div > div.np_Player-row--bottom > div > span.np_TimerContent-duration");
-
-                if (timeElement.ownText().split(":").length == 3) {
-                    String hours = timeElement.ownText().split(":")[0];
-                    String minutes = timeElement.ownText().split(":")[1];
-                    String seconds = timeElement.ownText().split(":")[2];
-
-                    long lhours = Long.parseLong(hours) * 60 * 60;
-                    long lminutes = Long.parseLong(minutes) * 60;
-                    long lseconds = Long.parseLong(seconds);
-                    long time = Long.sum(Long.sum(lhours, lminutes), lseconds) * 1000L;
-
-                    return time;
-                } else if (timeElement.ownText().split(":").length == 2) {
-                    String minutes = timeElement.ownText().split(":")[0];
-                    String seconds = timeElement.ownText().split(":")[1];
-
-                    long lminutes = Long.parseLong(minutes) * 60;
-                    long lseconds = Long.parseLong(seconds);
-                    long time = Long.sum(lminutes, lseconds) * 1000L;
-
-                    return time;
-                }
-            }
-        }
-
-        return -1;
     }
 }

@@ -69,7 +69,7 @@ public class TwitchPresence extends Presence {
                         }
                     }
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#root > div.Layout-sc-nxg1ff-0.bGJmZt > div.Layout-sc-nxg1ff-0.bSuLAT > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-588ddc-0.persistent-player > div > div.Layout-sc-nxg1ff-0.video-player > div > div.Layout-sc-nxg1ff-0.video-ref > div > div > div:nth-child(5) > div > div.Layout-sc-nxg1ff-0.cAeMPm > div > div:nth-child(1) > div > p");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div > a > div.Layout-sc-1xcs6mc-0.ScHaloIndicator-sc-18imt3g-1.gpeKh.tw-halo__indicator > div > div > div > div > p");
                     if (videoElement != null && liveElement != null) {
                         Elements titleElements = data.getHTMLDocument().getElementsByTag("h2");
                         Element titleElement = null;
@@ -139,9 +139,9 @@ public class TwitchPresence extends Presence {
                         }
                     }
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#root > div.Layout-sc-nxg1ff-0.bGJmZt > div.Layout-sc-nxg1ff-0.bSuLAT > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-588ddc-0.persistent-player > div > div.Layout-sc-nxg1ff-0.video-player > div > div.Layout-sc-nxg1ff-0.video-ref > div > div > div:nth-child(5) > div > div.Layout-sc-nxg1ff-0.cAeMPm > div > div:nth-child(1) > div > p");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div > a > div.Layout-sc-1xcs6mc-0.ScHaloIndicator-sc-18imt3g-1.gpeKh.tw-halo__indicator > div > div > div > div > p");
                     if (videoElement != null && liveElement != null) {
-                        Element titleElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div > div > div.Layout-sc-nxg1ff-0.jYkTYc > div.Layout-sc-nxg1ff-0.cuTDLl.metadata-layout__support > div.Layout-sc-nxg1ff-0.gcwIMz > a > h1");
+                        Element titleElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.evfzyg > div.Layout-sc-1xcs6mc-0.denZNh.metadata-layout__support > div.Layout-sc-1xcs6mc-0.jjAyLi > div > a > h1");
 
                         return titleElement.ownText();
                     } else {
@@ -204,7 +204,7 @@ public class TwitchPresence extends Presence {
                         }
                     }
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#root > div.Layout-sc-nxg1ff-0.bGJmZt > div.Layout-sc-nxg1ff-0.bSuLAT > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-588ddc-0.persistent-player > div > div.Layout-sc-nxg1ff-0.video-player > div > div.Layout-sc-nxg1ff-0.video-ref > div > div > div:nth-child(5) > div > div.Layout-sc-nxg1ff-0.cAeMPm > div > div:nth-child(1) > div > p");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div > a > div.Layout-sc-1xcs6mc-0.ScHaloIndicator-sc-18imt3g-1.gpeKh.tw-halo__indicator > div > div > div > div > p");
                     if (videoElement != null && liveElement != null) {
                         return "live";
                     }
@@ -287,7 +287,7 @@ public class TwitchPresence extends Presence {
                         }
                     }
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#root > div.Layout-sc-nxg1ff-0.bGJmZt > div.Layout-sc-nxg1ff-0.bSuLAT > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-588ddc-0.persistent-player > div > div.Layout-sc-nxg1ff-0.video-player > div > div.Layout-sc-nxg1ff-0.video-ref > div > div > div:nth-child(5) > div > div.Layout-sc-nxg1ff-0.cAeMPm > div > div:nth-child(1) > div > p");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div > a > div.Layout-sc-1xcs6mc-0.ScHaloIndicator-sc-18imt3g-1.gpeKh.tw-halo__indicator > div > div > div > div > p");
                     if (videoElement != null && liveElement != null) {
                         return "Watch Stream";
                     } else {

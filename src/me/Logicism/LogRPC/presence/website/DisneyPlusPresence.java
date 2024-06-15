@@ -42,8 +42,8 @@ public class DisneyPlusPresence extends Presence {
             return "Browsing Disney+ Search";
         } else if (data.getURL().contains("/groupwatch/")) {
             return "Starting Disney+ GroupWatch";
-        } else if (data.getURL().contains("/video/")) {
-            Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__header > div.title-bug-area > div > button.control-icon-btn.title-btn > div");
+        } else if (data.getURL().contains("/video/") || data.getURL().contains("/play/")) {
+            Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__header > div.title-bug-area > div > button.control-icon-btn.title-btn > div.title-field.body-copy");
             if (element != null) {
                 return element.text();
             } else {
@@ -58,7 +58,7 @@ public class DisneyPlusPresence extends Presence {
     public String getState() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("/video/")) {
+        if (data.getURL().contains("/video/") || data.getURL().contains("/play/")) {
             Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__header > div.title-bug-area > div > button.control-icon-btn.title-btn > div.subtitle-field");
             if (element != null) {
                 return element.text();
@@ -83,7 +83,7 @@ public class DisneyPlusPresence extends Presence {
     public String getSmallImageKey() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("/video/")) {
+        if (data.getURL().contains("/video/") || data.getURL().contains("/play/")) {
             Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.play-icon.play-pause-icon");
             Element element1 = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.pause-icon.play-pause-icon");
 
@@ -101,7 +101,7 @@ public class DisneyPlusPresence extends Presence {
     public String getSmallImageText() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("/video/")) {
+        if (data.getURL().contains("/video/") || data.getURL().contains("/play/")) {
             Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.play-icon.play-pause-icon");
             Element element1 = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.pause-icon.play-pause-icon");
 
@@ -132,7 +132,7 @@ public class DisneyPlusPresence extends Presence {
 
         if (data.getURL().contains("/groupwatch/")) {
             return data.getURL();
-        } else if (data.getURL().contains("/video/") && data.getURL().contains("?groupwatchId=")) {
+        } else if ((data.getURL().contains("/video/") || data.getURL().contains("/play/")) && data.getURL().contains("?groupwatchId=")) {
             return (data.getURL().contains("hotstar") ? "https://www.hotstar.com/groupwatch/" : "https://www.disneyplus.com/groupwatch/") + data.getURL().split("\\?groupwatchId=")[1];
         }
 
@@ -143,7 +143,7 @@ public class DisneyPlusPresence extends Presence {
     public int getPartySize() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("/video/") && data.getURL().contains("?groupwatchId=")) {
+        if ((data.getURL().contains("/video/") || data.getURL().contains("/play/")) && data.getURL().contains("?groupwatchId=")) {
             Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div.overlay.overlay__controls.overlay__controls--visually-hide > div > div.controls__header > div.group-profiles-control > button > div > div");
 
             return Integer.parseInt(element.text());
@@ -156,7 +156,7 @@ public class DisneyPlusPresence extends Presence {
     public int getPartyMax() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("/video/") && data.getURL().contains("?groupwatchId=")) {
+        if ((data.getURL().contains("/video/") || data.getURL().contains("/play/")) && data.getURL().contains("?groupwatchId=")) {
             return 7;
         }
 
@@ -167,7 +167,7 @@ public class DisneyPlusPresence extends Presence {
     public long getStartTimestamp() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("/video/")) {
+        if (data.getURL().contains("/video/") || data.getURL().contains("/play/")) {
             Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.play-icon.play-pause-icon");
             Element element1 = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.pause-icon.play-pause-icon");
 
@@ -185,7 +185,7 @@ public class DisneyPlusPresence extends Presence {
     public long getEndTimestamp() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("/video/")) {
+        if (data.getURL().contains("/video/") || data.getURL().contains("/play/")) {
             Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.play-icon.play-pause-icon");
             Element element1 = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__footer.display-flex > div.controls__footer__wrapper.display-flex > div.controls__center > button.control-icon-btn.pause-icon.play-pause-icon");
 
