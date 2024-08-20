@@ -1,3 +1,7 @@
+1.93 - August 20, 2024
+
+- Fixed VLC Presence Crashing
+
 1.92 - June 15, 2024
 
 - Fixed Dailymotion Presence
@@ -9,9 +13,3 @@
 
 - Fixed LibreOffice Presences
 - Added DaVinci Resolve Presence
-
-1.9 - February 10, 2023
-
-- Fixed Download Links and Updater. Apologies for the inconvenience!
-- Changed Song Link API to more reliable service, Odesli
-- Reduced amount of requests made to Odesli

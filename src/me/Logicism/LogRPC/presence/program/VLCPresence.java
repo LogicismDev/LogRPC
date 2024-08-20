@@ -7,7 +7,7 @@ import me.Logicism.LogRPC.presence.Presence;
 public class VLCPresence extends Presence {
 
     public VLCPresence(PresenceData data) {
-        super(410664151334256663L, data);
+        super(721748388143562852L, data);
     }
 
     @Override

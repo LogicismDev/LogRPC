@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v1.92-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v1.92-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v1.92-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.92)
+[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v1.92-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v1.92-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v1.92-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.93)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
@@ -35,7 +35,6 @@ A Rich Presence program to show your activity on Discord
       * Credits go to: 
          * MechaDragonX on GitHub for DOSBox, FCEUX, Fusion, SNES9X, VisualBoyAdvance-M, MAME Discord Presence Application IDs
          * angeloanan on GitHub for MPC-HC Discord Presence Application IDs
-         * Pigpog on GitHub for VLC Discord Presence Application IDs
          * FizzyApple12 on GitHub for Beat Saber Discord Presence Application IDs
          * shadoweG on GitHub for DaVinci Resolve Discord Presence Application IDs
 
