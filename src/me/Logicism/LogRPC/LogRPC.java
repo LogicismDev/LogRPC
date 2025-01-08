@@ -3,10 +3,7 @@ package me.Logicism.LogRPC;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.jagrosh.discordipc.IPCClient;
-import com.jagrosh.discordipc.entities.ActivityType;
-import com.jagrosh.discordipc.entities.Callback;
-import com.jagrosh.discordipc.entities.RichPresence;
-import com.jagrosh.discordipc.entities.User;
+import com.jagrosh.discordipc.entities.*;
 import com.jagrosh.discordipc.entities.pipe.PipeStatus;
 import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 import com.sun.jna.Native;
@@ -944,6 +941,31 @@ public class LogRPC {
         }
     }
 
+    public void reconnectClient() {
+        if (client != null) {
+            if (client.getStatus() == PipeStatus.CONNECTED) {
+                return;
+            }
+
+            ExecutorService rpcReconnectExecutor = Executors.newSingleThreadExecutor();
+            rpcReconnectExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    int timeout = 0;
+                    while (client.getStatus() == PipeStatus.DISCONNECTED || client.getStatus() == PipeStatus.CLOSED) {
+                        timeout += 5;
+                        try {
+                            Thread.sleep(timeout * 1000L);
+
+                            client.connect();
+                        } catch (InterruptedException | NoDiscordClientException e) {
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     public void reinitializeClient() {
         if (client != null) {
             try {
@@ -959,9 +981,8 @@ public class LogRPC {
 
                 client.connect();
             } catch (NoDiscordClientException | RuntimeException e) {
-                JOptionPane.showMessageDialog(null, "Discord must be open to use this Program!", "LogRPC", JOptionPane.ERROR_MESSAGE);
-
-                System.exit(0);
+                getDiscordMenuItem().setLabel("Discord - Disconnected");
+                reconnectClient();
             }
         }
     }
