@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.music;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -8,6 +9,11 @@ public class TIDALMusicPresence extends Presence {
 
     public TIDALMusicPresence(PresenceData data) {
         super(584458858731405315L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.LISTENING;
     }
 
     @Override
@@ -40,20 +46,6 @@ public class TIDALMusicPresence extends Presence {
         JSONData data = (JSONData) this.data;
 
         return data.getAttribute("album") + " - " + super.getLargeImageText();
-    }
-
-    @Override
-    public long getStartTimestamp() {
-        JSONData data = (JSONData) this.data;
-
-        return data.getIntAttribute("position") * 1000L;
-    }
-
-    @Override
-    public long getEndTimestamp() {
-        JSONData data = (JSONData) this.data;
-
-        return data.getIntAttribute("end_time") * 1000L;
     }
 
     @Override

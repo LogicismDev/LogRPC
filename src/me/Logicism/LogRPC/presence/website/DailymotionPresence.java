@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.website;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -9,6 +10,11 @@ public class DailymotionPresence extends Presence {
 
     public DailymotionPresence(PresenceData data) {
         super(611668948131512321L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.WATCHING;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.program;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -7,6 +8,11 @@ import me.Logicism.LogRPC.presence.Presence;
 public class DaVinciResolvePresence extends Presence {
     public DaVinciResolvePresence(PresenceData data) {
         super(1004088618857549844L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

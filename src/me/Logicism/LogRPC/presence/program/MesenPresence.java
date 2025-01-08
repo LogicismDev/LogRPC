@@ -17,7 +17,7 @@ public class MesenPresence extends Presence {
         if (data.getTitle().equals("Mesen")) {
             return "No Game Open";
         } else if (data.getTitle().startsWith("Mesen - ")) {
-            return data.getTitle().substring(0, "Mesen - ".length());
+            return data.getTitle().substring("Mesen - ".length());
         }
 
         return "none";

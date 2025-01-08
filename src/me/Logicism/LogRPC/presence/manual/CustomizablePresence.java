@@ -1,10 +1,12 @@
 package me.Logicism.LogRPC.presence.manual;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
 
 public class CustomizablePresence extends Presence implements PresenceData {
 
+    private ActivityType activityType;
     private String details;
     private String state;
     private String largeImageKey;
@@ -20,12 +22,13 @@ public class CustomizablePresence extends Presence implements PresenceData {
     private int partySize;
     private int maxPartySize;
 
-    public CustomizablePresence(long clientID, String details, String state, String largeImageKey,
+    public CustomizablePresence(long clientID, ActivityType activityType, String details, String state, String largeImageKey,
                                 String largeImageText, String smallImageKey, String smallImageText,
                                 String mainButtonText, String mainButtonURL, String secondaryButtonText,
                                 String secondaryButtonURL, long startTimestamp, long endTimestamp, int partySize, int maxPartySize) {
         super(clientID);
 
+        this.activityType = activityType;
         this.details = details;
         this.state = state;
         this.largeImageKey = largeImageKey;
@@ -40,6 +43,11 @@ public class CustomizablePresence extends Presence implements PresenceData {
         this.endTimestamp = endTimestamp;
         this.partySize = partySize;
         this.maxPartySize = maxPartySize;
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return activityType;
     }
 
     @Override

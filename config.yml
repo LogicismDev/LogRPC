@@ -14,7 +14,9 @@
 checkForUpdates: true
 
 # This section allows you to modify the default fallback presence or default startup presence
+# Acceptable defaultActivityType values: PLAYING, WATCHING, LISTENING, COMPETING
 
+defaultActivityType: "WATCHING"
 defaultClientID: "389249289223929856"
 defaultDetails: "LogRPC v1.93"
 defaultState: "Coded in Java and JavaScript"

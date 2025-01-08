@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.website;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -12,6 +13,11 @@ public class DisneyPlusPresence extends Presence {
 
     public DisneyPlusPresence(PresenceData data) {
         super(630236276829716483L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.WATCHING;
     }
 
     @Override

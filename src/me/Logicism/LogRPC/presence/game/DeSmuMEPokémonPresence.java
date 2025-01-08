@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.game;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.DeSmuMEData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -8,6 +9,11 @@ public class DeSmuMEPokémonPresence extends Presence {
 
     public DeSmuMEPokémonPresence(PresenceData data) {
         super(510206500052926496L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.game;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
@@ -11,6 +12,11 @@ public class WiimmfiPresence extends Presence {
 
     public WiimmfiPresence(PresenceData data) {
         super(553230242987245569L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

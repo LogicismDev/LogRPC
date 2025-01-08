@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.game;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.BeatSaberData;
 import me.Logicism.LogRPC.core.data.PresenceData;
@@ -9,6 +10,11 @@ public class BeatSaberPresence extends Presence {
 
     public BeatSaberPresence(PresenceData data) {
         super(708741346403287113L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

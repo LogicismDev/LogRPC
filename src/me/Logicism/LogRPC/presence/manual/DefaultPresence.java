@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.manual;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.presence.Presence;
 
@@ -7,6 +8,11 @@ public class DefaultPresence extends Presence {
 
     public DefaultPresence() {
         super(Long.parseLong(LogRPC.INSTANCE.getConfig().getDefaultClientID()));
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return LogRPC.INSTANCE.getConfig().getDefaultDetails().isEmpty() || LogRPC.INSTANCE.getConfig().getDefaultDetails().equals("null") ? ActivityType.PLAYING : ActivityType.valueOf(LogRPC.INSTANCE.getConfig().getDefaultActivityType());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.program;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -11,13 +12,18 @@ public class FCEUXPresence extends Presence {
     }
 
     @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
+    }
+
+    @Override
     public String getDetails() {
         JSONData data = (JSONData) this.data;
 
         if (!data.getTitle().contains(":") && data.getTitle().startsWith("FCEUX")) {
             return "No Game Open";
         } else if (data.getTitle().split(":").length != 1) {
-            return data.getTitle().split(":")[1];
+            return data.getTitle().substring((data.getTitle().split(":")[0] + ": ").length());
         }
 
         return "none";
@@ -26,6 +32,15 @@ public class FCEUXPresence extends Presence {
     @Override
     public String getLargeImageKey() {
         return "fceux";
+    }
+
+    @Override
+    public String getLargeImageText() {
+        if (data.getTitle().split(":").length != 1) {
+            return data.getTitle().split(":")[0] + " - " + super.getLargeImageText();
+        }
+
+        return "FCEUX - " + super.getLargeImageText();
     }
 
     @Override

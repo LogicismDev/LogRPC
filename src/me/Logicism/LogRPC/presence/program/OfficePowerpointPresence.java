@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.program;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -8,6 +9,11 @@ public class OfficePowerpointPresence extends Presence {
 
     public OfficePowerpointPresence(PresenceData data) {
         super(820903906120171540L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.event;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import com.jagrosh.discordipc.entities.RichPresence;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
@@ -170,6 +171,8 @@ public class UpdatePresenceHandler extends EventHandler {
         }
 
         if (presence != null) {
+            builder.setActivityType(presence.getActivityType());
+
             if (!presence.getState().isEmpty()) {
                 try {
                     builder.setState(new String(presence.getState().getBytes(StandardCharsets.UTF_8), Charset.defaultCharset().name()));
@@ -231,7 +234,7 @@ public class UpdatePresenceHandler extends EventHandler {
             }
 
             if (presence.getPartySize() > 0 && presence.getPartyMax() > 0) {
-                builder.setParty("logrpc-" + LogRPC.VERSION, presence.getPartySize(), presence.getPartyMax());
+                builder.setParty("logrpc-" + LogRPC.VERSION, presence.getPartySize(), presence.getPartyMax(), "PRIVATE");
             }
 
             if (!presence.getDetails().isEmpty()) {

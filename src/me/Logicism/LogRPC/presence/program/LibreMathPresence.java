@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.program;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -8,6 +9,11 @@ public class LibreMathPresence extends Presence {
 
     public LibreMathPresence(PresenceData data) {
         super(820978236858826753L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

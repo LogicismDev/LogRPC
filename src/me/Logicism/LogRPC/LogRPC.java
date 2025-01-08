@@ -3,6 +3,7 @@ package me.Logicism.LogRPC;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.jagrosh.discordipc.IPCClient;
+import com.jagrosh.discordipc.entities.ActivityType;
 import com.jagrosh.discordipc.entities.Callback;
 import com.jagrosh.discordipc.entities.RichPresence;
 import com.jagrosh.discordipc.entities.User;
@@ -659,7 +660,7 @@ public class LogRPC {
                 presetPresencesMenu.getItem(i).addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new CustomizablePresence(Long.parseLong(config.getDefaultClientID()), presetPresencesMenu.getItem(finalI).getLabel(), "", config.getDefaultLargeImageKey(), "LogRPC v" + LogRPC.VERSION, null, null, config.getDefaultMainButtonText(), config.getDefaultMainButtonURL(), config.getDefaultSecondaryButtonText(), config.getDefaultSecondaryButtonURL(), 0, -1, -1, -1)));
+                        eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new CustomizablePresence(Long.parseLong(config.getDefaultClientID()), ActivityType.valueOf(config.getDefaultActivityType()), presetPresencesMenu.getItem(finalI).getLabel(), "", config.getDefaultLargeImageKey(), "LogRPC v" + LogRPC.VERSION, null, null, config.getDefaultMainButtonText(), config.getDefaultMainButtonURL(), config.getDefaultSecondaryButtonText(), config.getDefaultSecondaryButtonURL(), 0, -1, -1, -1)));
                     }
                 });
             }

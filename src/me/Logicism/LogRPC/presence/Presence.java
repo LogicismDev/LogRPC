@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.PresenceData;
 
@@ -15,6 +16,10 @@ public abstract class Presence {
     public Presence(long clientID, PresenceData data) {
         this.clientID = clientID;
         this.data = data;
+    }
+
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     public String getDetails() {

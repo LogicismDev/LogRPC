@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.program;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -19,6 +20,11 @@ public class AcrobatPresence extends Presence {
         } else {
             return "Adobe Acrobat Reader";
         }
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.WATCHING;
     }
 
     @Override

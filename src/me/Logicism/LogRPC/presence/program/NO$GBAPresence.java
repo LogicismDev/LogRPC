@@ -1,11 +1,17 @@
 package me.Logicism.LogRPC.presence.program;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.presence.Presence;
 
 public class NO$GBAPresence extends Presence {
 
     public NO$GBAPresence() {
         super(862184084871839755L);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

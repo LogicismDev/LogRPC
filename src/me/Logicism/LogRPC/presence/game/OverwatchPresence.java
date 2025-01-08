@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.game;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
@@ -9,6 +10,11 @@ public class OverwatchPresence extends Presence {
 
     public OverwatchPresence(PresenceData data) {
         super(583356928688783369L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.PLAYING;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.music;
 
+import com.jagrosh.discordipc.entities.ActivityType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -8,6 +9,11 @@ public class DeezerMusicPresence extends Presence {
 
     public DeezerMusicPresence(PresenceData data) {
         super(769757579177623563L, data);
+    }
+
+    @Override
+    public ActivityType getActivityType() {
+        return ActivityType.LISTENING;
     }
 
     @Override

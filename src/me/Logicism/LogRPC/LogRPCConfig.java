@@ -6,6 +6,8 @@ public class LogRPCConfig {
 
     private boolean checkForUpdates;
 
+    private String defaultActivityType;
+
     private String defaultClientID;
 
     private String defaultDetails;
@@ -90,6 +92,10 @@ public class LogRPCConfig {
 
     public boolean isCheckForUpdates() {
         return checkForUpdates;
+    }
+
+    public String getDefaultActivityType() {
+        return defaultActivityType;
     }
 
     public String getDefaultClientID() {
