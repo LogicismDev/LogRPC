@@ -926,8 +926,7 @@ public class LogRPC {
     }
 
     public void setUser(User user) {
-
-        getDiscordMenuItem().setLabel("Discord - " + client.getCurrentUser().getName() + "#" + client.getCurrentUser().getDiscriminator());
+        getDiscordMenuItem().setLabel("Discord - " + user.getGlobalName() + " (" + user.getName() + ")");
     }
 
     public RichPresence.Builder getPresence() {
