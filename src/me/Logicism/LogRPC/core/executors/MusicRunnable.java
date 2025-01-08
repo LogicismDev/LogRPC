@@ -6,6 +6,7 @@ import me.Logicism.LogRPC.core.presence.PresenceType;
 import me.Logicism.LogRPC.event.UpdatePresenceEvent;
 import me.Logicism.LogRPC.network.BrowserClient;
 import me.Logicism.LogRPC.network.BrowserData;
+import me.Logicism.LogRPC.presence.music.TIDALMusicPresence;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.internal.StringUtil;
@@ -20,6 +21,8 @@ import java.net.URLEncoder;
 import java.util.*;
 
 public class MusicRunnable implements Runnable {
+
+    private int cachedPlaybackStatus = 0;
 
     private String cachedAlbumName = "";
     private String cachedAlbumArtistName = "";
@@ -67,6 +70,7 @@ public class MusicRunnable implements Runnable {
                     String line = scanner.nextLine();
 
                     JSONObject jsonObject = new JSONObject(line);
+
                     if (System.getProperty("os.name").startsWith("Windows")) {
                         if (jsonObject.getInt("playback_status") == 4) {
                             String album_artwork_url = "";
@@ -153,7 +157,6 @@ public class MusicRunnable implements Runnable {
                                         }
                                     }
 
-                                    System.out.println("WORK");
                                     cachedAlbumName = jsonObject.getString("album");
                                     cachedAlbumArtistName = jsonObject.getString("album_artist");
                                     cachedArtworkURL = album_artwork_url;
@@ -163,8 +166,6 @@ public class MusicRunnable implements Runnable {
                                     song_url = cachedSongURL;
                                 }
                             }
-
-                            System.out.println(jsonObject);
 
                             try {
                                 LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MUSIC, new JSONData(new JSONObject().put("title", jsonObject.getString("title")).put("details", jsonObject.getString("artist")).put("album", jsonObject.getString("album")).put("album_artist", jsonObject.getString("album_artist")).put("app_name", jsonObject.getString("app_name")).put("album_artwork_url", album_artwork_url).put("song_url", song_url).put("start_time", jsonObject.getInt("start_time")).put("end_time", jsonObject.getInt("end_time")).put("position", jsonObject.getInt("position")))));
@@ -235,6 +236,8 @@ public class MusicRunnable implements Runnable {
                             }
                         }
                     }
+
+                    cachedPlaybackStatus = jsonObject.getInt("playback_status");
                 }
 
                 scanner.close();
@@ -250,12 +253,18 @@ public class MusicRunnable implements Runnable {
         Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36");
         headers.put("x-tidal-token", "CzET4vdadNUFQ5JU");
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/search/albums?query=" + URLEncoder.encode(title + " - " + artist, "UTF-8") + "&countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=1"), headers);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/search/albums?query=" + URLEncoder.encode(artist + " - " + title, "UTF-8") + "&countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=20"), headers);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject TIDALResponse = new JSONObject(response);
 
         if (TIDALResponse.getInt("totalNumberOfItems") == 0) {
             return null;
+        } else {
+            for (int i = 0; i < TIDALResponse.getInt("limit"); i++) {
+                if (TIDALResponse.getJSONArray("items").getJSONObject(i).getJSONObject("artist").getString("name").equals(artist) && TIDALResponse.getJSONArray("items").getJSONObject(i).getString("title").equals(title)) {
+                    return TIDALResponse.getJSONArray("items").getJSONObject(i);
+                }
+            }
         }
 
         return TIDALResponse.getJSONArray("items").getJSONObject(0);
@@ -265,12 +274,18 @@ public class MusicRunnable implements Runnable {
         Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36");
         headers.put("x-tidal-token", "CzET4vdadNUFQ5JU");
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/search/tracks?query=" + URLEncoder.encode(title + " - " + artist, "UTF-8") + "&countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=1"), headers);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/search/tracks?query=" + URLEncoder.encode(artist + " - " + title, "UTF-8").replace("+", "%20") + "&countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=20"), headers);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject TIDALResponse = new JSONObject(response);
 
         if (TIDALResponse.getInt("totalNumberOfItems") == 0) {
             return null;
+        } else {
+            for (int i = 0; i < TIDALResponse.getInt("limit"); i++) {
+                if (TIDALResponse.getJSONArray("items").getJSONObject(i).getJSONObject("artist").getString("name").equals(artist) && TIDALResponse.getJSONArray("items").getJSONObject(i).getString("title").equals(title)) {
+                    return TIDALResponse.getJSONArray("items").getJSONObject(i);
+                }
+            }
         }
 
         return TIDALResponse.getJSONArray("items").getJSONObject(0);
@@ -280,7 +295,7 @@ public class MusicRunnable implements Runnable {
         Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36");
         headers.put("x-tidal-token", "CzET4vdadNUFQ5JU");
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/albums/" + identifier + "?countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=1"), headers);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/albums/" + identifier + "?countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=20"), headers);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject TIDALResponse = new JSONObject(response);
 
@@ -295,7 +310,7 @@ public class MusicRunnable implements Runnable {
         Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36");
         headers.put("x-tidal-token", "CzET4vdadNUFQ5JU");
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/tracks/" + identifier + "?countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=1"), headers);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://api.tidal.com/v1/tracks/" + identifier + "?countryCode=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry().toUpperCase() + "&limit=20"), headers);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject TIDALResponse = new JSONObject(response);
 
@@ -307,35 +322,43 @@ public class MusicRunnable implements Runnable {
     }
 
     private JSONObject getiTunesAlbumInfo(String title, String artist) throws IOException {
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/search?term=" + URLEncoder.encode(title + " - " + artist, "UTF-8") + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=album&limit=1"), null);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/search?term=" + URLEncoder.encode(artist + " - " + title, "UTF-8") + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=album&limit=20"), null);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject iTunesResponse = new JSONObject(response);
 
         if (iTunesResponse.getInt("resultCount") == 0) {
-            System.out.println("https://itunes.apple.com/search?term=" + URLEncoder.encode(title + " - " + artist, "UTF-8") + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=album&limit=1");
-            System.out.println(iTunesResponse);
             return null;
+        } else {
+            for (int i = 0; i < 20; i++) {
+                if (iTunesResponse.getJSONArray("results").getJSONObject(i).getString("artistName").equals(artist) && iTunesResponse.getJSONArray("results").getJSONObject(i).getString("collectionName").equals(title)) {
+                    return iTunesResponse.getJSONArray("results").getJSONObject(i);
+                }
+            }
         }
 
         return iTunesResponse.getJSONArray("results").getJSONObject(0);
     }
 
     private JSONObject getiTunesTrackInfo(String title, String artist) throws IOException {
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/search?term=" + URLEncoder.encode(title + " - " + artist, "UTF-8") + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=song&limit=1"), null);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/search?term=" + URLEncoder.encode(artist + " - " + title, "UTF-8") + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=song&limit=20"), null);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject iTunesResponse = new JSONObject(response);
 
         if (iTunesResponse.getInt("resultCount") == 0) {
-            System.out.println("https://itunes.apple.com/search?term=" + URLEncoder.encode(title + " - " + artist, "UTF-8") + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=song&limit=1");
-            System.out.println(iTunesResponse);
             return null;
+        } else {
+            for (int i = 0; i < 20; i++) {
+                if (iTunesResponse.getJSONArray("results").getJSONObject(i).getString("artistName").equals(artist) && iTunesResponse.getJSONArray("results").getJSONObject(i).getString("collectionName").equals(title)) {
+                    return iTunesResponse.getJSONArray("results").getJSONObject(i);
+                }
+            }
         }
 
         return iTunesResponse.getJSONArray("results").getJSONObject(0);
     }
 
     private JSONObject getiTunesTrackInfo(long identifier) throws IOException {
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/lookup?id=" + identifier + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=song&limit=1"), null);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/lookup?id=" + identifier + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=song&limit=20"), null);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject iTunesResponse = new JSONObject(response);
 
@@ -347,7 +370,7 @@ public class MusicRunnable implements Runnable {
     }
 
     private JSONObject getiTunesAlbumInfo(long identifier) throws IOException {
-        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/lookup?id=" + identifier + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=song&limit=1"), null);
+        BrowserData data = BrowserClient.executeGETRequest(new URL("https://itunes.apple.com/lookup?id=" + identifier + "&country=" + LogRPC.INSTANCE.getConfig().getMusicArtworkCountry() + "&entity=song&limit=20"), null);
         String response = BrowserClient.requestToString(data.getResponse());
         JSONObject iTunesResponse = new JSONObject(response);
 
