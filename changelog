@@ -1,3 +1,44 @@
+2.0 - January 8, 2025
+
+- Fixed TIDAL API parsing incorrect Album Name, Artwork and Inaccurate results
+- Removed TIDAL Timestamps due to inaccuracy
+- Update Display Username from deprecated Username and Discriminator, to Display Name and Username in Menu
+- Added Auto-Reconnect Feature, so if your Discord does disconnect randomly, or close and open, then LogRPC should still be able to reconnect once it's open
+- Added Last Presence Type Remembered on Startup
+- Added Last DeSmuME RPC File Remembered on Startup
+- Added Watching, Listening and Competing Presence Types. The current website presences and media player programs hold the watching presence types and the current music presence types hold the listening types. No programs or websites use the competing presence (yet)
+- Added PotPlayer Program Presence. You can add it in the enabledPrograms as potplayer
+- Fixed Davinci Resolve still being enabled despite disabled in the enabledPrograms. If you need to enable it, add davinciresolve in enabledPrograms
+- Added VLC Media Player and MPC-HC Extended Presences using their Web UI.
+- Added PotPlayer Presence
+- Fixed Mesen, X.com, Instagram, Dailymotion, Twitch Presences
+- Changed Twitter to X.com
+- Modify the configuration lines applicable to these:
+# This section allows you to modify the default fallback presence or default startup presence
+# Acceptable defaultActivityType values: PLAYING, WATCHING, LISTENING, COMPETING
+
+defaultActivityType: "WATCHING"
+defaultClientID: "389249289223929856"
+defaultDetails: "LogRPC v2.0"
+defaultState: "Coded in Java and JavaScript"
+defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
+defaultLargeImageText: "LogRPC v2.0"
+defaultSmallImageKey: "null"
+defaultSmallImageText: "null"
+- Add these configuration lines below:
+# This section enables or disables saving the DeSmuME RPC File on exit, thus each time allowing you to choose the file every time.
+enableSavingDeSmuMEFile: true
+
+# This section is where you can modify the media player section.
+# VLC and MPC-HC require the web interface to be enabled. If you are worried of enabling it, make sure it's set to localhost only.
+
+vlcWebInterfaceHost: 127.0.0.1
+vlcWebInterfacePort: 8080
+vlcWebInterfacePassword: changeme
+
+mpchcWebInterfaceHost: 127.0.0.1
+mpchcWebInterfacePort: 13579
+
 1.93 - August 20, 2024
 
 - Fixed VLC Presence Crashing
@@ -8,8 +49,3 @@
 - Fixed Disney+ Presence
 - Fixed Instagram Presence
 - Fixed Twitch Presence
-
-1.91 - December 5, 2023
-
-- Fixed LibreOffice Presences
-- Added DaVinci Resolve Presence

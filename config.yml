@@ -7,7 +7,7 @@
 #              ##       ##     ## ##    ##  ##    ##  ##        ##    ##
 #              ########  #######   ######   ##     ## ##         ######
 #
-#                             Version 1.93 by Logicism
+#                             Version 2.0 by Logicism
 #              A Rich Presence program to show your activity on Discord
 
 # Check for updates on startup
@@ -17,7 +17,7 @@ checkForUpdates: true
 lastPresenceOnStartup: true
 
 # Override last presence if lastPresenceOnStartup is true
-# Acceptable overrideLastPresenceType values: NONE, PROGRAM, MUSIC, EXTENSION, BEAT_SABER, WIIMMFI, DESMUME
+# Acceptable overrideLastPresenceType values: NONE, PROGRAM, MUSIC, EXTENSION, BEAT_SABER, WIIMMFI, DESMUME, VLC_MEDIA_PLAYER, MPCHC_MEDIA_PLAYER
 # NONE will use the last presence it has saved upon exit
 overrideLastPresenceType: NONE
 
@@ -26,10 +26,10 @@ overrideLastPresenceType: NONE
 
 defaultActivityType: "WATCHING"
 defaultClientID: "389249289223929856"
-defaultDetails: "LogRPC v1.93"
+defaultDetails: "LogRPC v2.0"
 defaultState: "Coded in Java and JavaScript"
 defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
-defaultLargeImageText: "LogRPC v1.93"
+defaultLargeImageText: "LogRPC v2.0"
 defaultSmallImageKey: "null"
 defaultSmallImageText: "null"
 
@@ -51,6 +51,7 @@ enabledPrograms:
   - acrobat
   - aftereffects
   - beatsaber
+  - davinci
   - desmume
   - dosbox
   - dreamweaver
@@ -75,6 +76,7 @@ enabledPrograms:
   - nogba
 #  - notepadplusplus
   - photoshop
+  - potplayer
   - premierepro
 #  - snes9x
   - vbam
@@ -130,6 +132,19 @@ hypeRateId: 123A
 
 enableHrReaderForBeatSaber: true
 
+# This section enables or disables saving the DeSmuME RPC File on exit, thus each time allowing you to choose the file every time.
+enableSavingDeSmuMEFile: true
+
+# This section is where you can modify the media player section.
+# VLC and MPC-HC require the web interface to be enabled. If you are worried of enabling it, make sure it's set to localhost only.
+
+vlcWebInterfaceHost: 127.0.0.1
+vlcWebInterfacePort: 8080
+vlcWebInterfacePassword: changeme
+
+mpchcWebInterfaceHost: 127.0.0.1
+mpchcWebInterfacePort: 13579
+
 # This section is where you can add your own custom manual preset presences
 
 manualPresetPresences:
@@ -159,6 +174,7 @@ extensionDisabled: false
 beatSaberDisabled: false
 wiimmfiDisabled: false
 deSmuMEDisabled: false
+mediaPlayerDisabled: false
 
 # This section allows you to disable manual preset presences in the menu
 

@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v1.93-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v1.93-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v1.93-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v1.93)
+[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v2.0-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v2.0-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v2.0-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v2.0)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
@@ -28,6 +28,7 @@ A Rich Presence program to show your activity on Discord
          - Microsoft Office (Word, PowerPoint, Excel)
          - LibreOffice (Writer, Calc, Impress, Draw, Base, Math)
          - Media Player Classic
+         - PotPlayer
          - MAGIX VEGAS Pro 14.0 - 20.0
          - DaVinci Resolve
          - VLC Media Player
@@ -78,5 +79,13 @@ A Rich Presence program to show your activity on Discord
     * DeSmuME (Pokémon Gen 4):
       * Grabs data from a lua script to track map information on the emulator.
        * Supports only Diamond, Pearl, and Platinum ROMs. Credits go to kiwi515 on GitHub for the script
+    
+    * Media Player:
+      * VLC Media Player:
+        * Grabs media title, uses filename as fallback.
+        * Uses the Lua HTTP Interface to grab media information, such as play state and position.
+      * Media Player Classic:
+        * Uses filename as title.
+        * Uses the Web Interface to grab media information, such as play state and position.
 
 If you would like to request a program, game, website or presence to be added, DM Logicism at his Discord (Logicism#9308)
