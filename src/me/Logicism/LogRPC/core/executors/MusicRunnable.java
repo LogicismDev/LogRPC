@@ -6,7 +6,6 @@ import me.Logicism.LogRPC.core.presence.PresenceType;
 import me.Logicism.LogRPC.event.UpdatePresenceEvent;
 import me.Logicism.LogRPC.network.BrowserClient;
 import me.Logicism.LogRPC.network.BrowserData;
-import me.Logicism.LogRPC.presence.music.TIDALMusicPresence;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.internal.StringUtil;
@@ -270,7 +269,7 @@ public class MusicRunnable implements Runnable {
         if (TIDALResponse.getInt("totalNumberOfItems") == 0) {
             return null;
         } else {
-            for (int i = 0; i < TIDALResponse.getInt("limit"); i++) {
+            for (int i = 0; i < TIDALResponse.getJSONArray("items").length(); i++) {
                 if (TIDALResponse.getJSONArray("items").getJSONObject(i).getJSONObject("artist").getString("name").equals(artist) && TIDALResponse.getJSONArray("items").getJSONObject(i).getString("title").equals(title)) {
                     return TIDALResponse.getJSONArray("items").getJSONObject(i);
                 }
@@ -291,7 +290,7 @@ public class MusicRunnable implements Runnable {
         if (TIDALResponse.getInt("totalNumberOfItems") == 0) {
             return null;
         } else {
-            for (int i = 0; i < TIDALResponse.getInt("limit"); i++) {
+            for (int i = 0; i < TIDALResponse.getJSONArray("items").length(); i++) {
                 if (TIDALResponse.getJSONArray("items").getJSONObject(i).getJSONObject("artist").getString("name").equals(artist) && TIDALResponse.getJSONArray("items").getJSONObject(i).getString("title").equals(title)) {
                     return TIDALResponse.getJSONArray("items").getJSONObject(i);
                 }
@@ -339,7 +338,7 @@ public class MusicRunnable implements Runnable {
         if (iTunesResponse.getInt("resultCount") == 0) {
             return null;
         } else {
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < iTunesResponse.getJSONArray("results").length(); i++) {
                 if (iTunesResponse.getJSONArray("results").getJSONObject(i).getString("artistName").equals(artist) && iTunesResponse.getJSONArray("results").getJSONObject(i).getString("collectionName").equals(title)) {
                     return iTunesResponse.getJSONArray("results").getJSONObject(i);
                 }
@@ -357,7 +356,7 @@ public class MusicRunnable implements Runnable {
         if (iTunesResponse.getInt("resultCount") == 0) {
             return null;
         } else {
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < iTunesResponse.getJSONArray("results").length(); i++) {
                 if (iTunesResponse.getJSONArray("results").getJSONObject(i).getString("artistName").equals(artist) && iTunesResponse.getJSONArray("results").getJSONObject(i).getString("collectionName").equals(title)) {
                     return iTunesResponse.getJSONArray("results").getJSONObject(i);
                 }
