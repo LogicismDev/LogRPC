@@ -80,7 +80,7 @@ public class HypeRateWebSocketClient extends WebSocketClient {
             presence.setDetails(object.getString("state").replace("${hrRate}", String.valueOf(hr)));
         }
 
-        LogRPC.INSTANCE.setPresence(null, presence, false);
+        LogRPC.INSTANCE.setPresence(presence, false);
     }
 
     public void setPresence(RichPresence.Builder presence) {
