@@ -30,6 +30,10 @@ public class JSONData implements PresenceData {
         return details;
     }
 
+    public boolean contains(String key) {
+        return data.has(key);
+    }
+
     public String getAttribute(String key) {
         try {
             return data.getString(key);
