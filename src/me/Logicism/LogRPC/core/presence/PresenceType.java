@@ -7,5 +7,7 @@ public enum PresenceType {
     EXTENSION,
     BEAT_SABER,
     WIIMMFI,
-    DESMUME
+    DESMUME,
+    VLC_MEDIA_PLAYER,
+    MPCHC_MEDIA_PLAYER
 }

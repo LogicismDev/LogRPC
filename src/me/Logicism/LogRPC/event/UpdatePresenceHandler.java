@@ -1,6 +1,5 @@
 package me.Logicism.LogRPC.event;
 
-import com.jagrosh.discordipc.entities.ActivityType;
 import com.jagrosh.discordipc.entities.RichPresence;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
@@ -62,7 +61,7 @@ public class UpdatePresenceHandler extends EventHandler {
                     presence = new TwitchPresence(e.getData());
                 } else if (url.getHost().equals("www.dailymotion.com") && ((BrowserHTMLData) e.getData()).isEnabled("dailymotion")) {
                     presence = new DailymotionPresence(e.getData());
-                } else if (url.getHost().equals("twitter.com") && ((BrowserHTMLData) e.getData()).isEnabled("twitter")) {
+                } else if (url.getHost().equals("x.com") && ((BrowserHTMLData) e.getData()).isEnabled("twitter")) {
                     presence = new TwitterPresence(e.getData());
                 } else if (url.getHost().equals("www.instagram.com") && ((BrowserHTMLData) e.getData()).isEnabled("instagram")) {
                     presence = new InstagramPresence(e.getData());
@@ -91,7 +90,7 @@ public class UpdatePresenceHandler extends EventHandler {
                 presence = new AcrobatPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("vegas140_") || ((JSONData) e.getData()).getDetails().equals("vegas140") || ((JSONData) e.getData()).getDetails().startsWith("vegas150_") || ((JSONData) e.getData()).getDetails().equals("vegas150") || ((JSONData) e.getData()).getDetails().startsWith("vegas160_") || ((JSONData) e.getData()).getDetails().equals("vegas160") || ((JSONData) e.getData()).getDetails().startsWith("vegas170_") || ((JSONData) e.getData()).getDetails().equals("vegas170") || ((JSONData) e.getData()).getDetails().startsWith("vegas180_") || ((JSONData) e.getData()).getDetails().equals("vegas180") || ((JSONData) e.getData()).getDetails().startsWith("vegas190_") || ((JSONData) e.getData()).getDetails().equals("vegas190") || ((JSONData) e.getData()).getDetails().startsWith("vegas200_") || ((JSONData) e.getData()).getDetails().equals("vegas200")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("vegaspro")) {
                 presence = new MAGIXVEGASProPresence(e.getData());
-            } else if ((((JSONData) e.getData()).getDetails().startsWith("Resolve_") || ((JSONData) e.getData()).getDetails().equals("Resolve"))) {
+            } else if ((((JSONData) e.getData()).getDetails().startsWith("Resolve_") || ((JSONData) e.getData()).getDetails().equals("Resolve")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("davinciresolve")) {
                 presence = new DaVinciResolvePresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("Zoom_") || ((JSONData) e.getData()).getDetails().equals("Zoom")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("zoom")) {
                 presence = new ZoomPresence(e.getData());
@@ -105,6 +104,8 @@ public class UpdatePresenceHandler extends EventHandler {
                 presence = new MPCHCPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("vlc_") || ((JSONData) e.getData()).getDetails().equals("vlc")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("vlc")) {
                 presence = new VLCPresence(e.getData());
+            } else if ((((JSONData) e.getData()).getDetails().startsWith("potplayer_") || ((JSONData) e.getData()).getDetails().equals("potplayer") || ((JSONData) e.getData()).getDetails().startsWith("potplayer64_") || ((JSONData) e.getData()).getDetails().equals("potplayer64") || ((JSONData) e.getData()).getDetails().startsWith("potplayermini_") || ((JSONData) e.getData()).getDetails().equals("potplayermini") || ((JSONData) e.getData()).getDetails().startsWith("potplayermini64_") || ((JSONData) e.getData()).getDetails().equals("potplayermini64")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("potplayer")) {
+                presence = new PotPlayerPresence(e.getData());
             } else if (((JSONData) e.getData()).getDetails().startsWith("soffice.bin_") || ((JSONData) e.getData()).getDetails().equals("soffice.bin")) {
                 if (e.getData().getTitle().endsWith(" — LibreOffice Writer") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficewriter")) {
                     presence = new LibreWriterPresence(e.getData());
@@ -168,6 +169,10 @@ public class UpdatePresenceHandler extends EventHandler {
             presence = new WiimmfiPresence(e.getData());
         } else if (e.getType() == PresenceType.DESMUME) {
             presence = new DeSmuMEPokémonPresence(e.getData());
+        } else if (e.getType() == PresenceType.VLC_MEDIA_PLAYER) {
+            presence = new VLCPresence(e.getData());
+        } else if (e.getType() == PresenceType.MPCHC_MEDIA_PLAYER) {
+            presence = new MPCHCPresence(e.getData());
         }
 
         if (presence != null) {
@@ -243,7 +248,7 @@ public class UpdatePresenceHandler extends EventHandler {
                 if (e.getInstance().getClientID() != presence.getClientID()) {
                     e.getInstance().setClientID(presence.getClientID());
 
-                    e.getInstance().setPresence(e.getType(), builder, true);
+                    e.getInstance().setPresence(builder, true);
 
                     e.getInstance().reinitializeClient();
                 } else {
@@ -267,10 +272,10 @@ public class UpdatePresenceHandler extends EventHandler {
                                     LogRPC.INSTANCE.setHypeRateWebSocketClient(null);
                                 }
 
-                                e.getInstance().setPresence(e.getType(), builder, false);
+                                e.getInstance().setPresence(builder, false);
                             } else {
                                 if (LogRPC.INSTANCE.getHypeRateWebSocketClient() == null) {
-                                    e.getInstance().setPresence(e.getType(), builder, true);
+                                    e.getInstance().setPresence(builder, true);
 
                                     LogRPC.INSTANCE.setHypeRateWebSocketClient(new HypeRateWebSocketClient());
                                     LogRPC.INSTANCE.getHypeRateWebSocketClient().connect();
@@ -286,10 +291,10 @@ public class UpdatePresenceHandler extends EventHandler {
                                 LogRPC.INSTANCE.setHypeRateWebSocketClient(null);
                             }
 
-                            e.getInstance().setPresence(e.getType(), builder, false);
+                            e.getInstance().setPresence(builder, false);
                         } else {
                             if (LogRPC.INSTANCE.getHypeRateWebSocketClient() == null) {
-                                e.getInstance().setPresence(e.getType(), builder, true);
+                                e.getInstance().setPresence(builder, true);
 
                                 LogRPC.INSTANCE.setHypeRateWebSocketClient(new HypeRateWebSocketClient());
                                 LogRPC.INSTANCE.getHypeRateWebSocketClient().connect();

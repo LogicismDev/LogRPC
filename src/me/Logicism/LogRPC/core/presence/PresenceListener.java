@@ -2,11 +2,10 @@ package me.Logicism.LogRPC.core.presence;
 
 import com.jagrosh.discordipc.IPCClient;
 import com.jagrosh.discordipc.IPCListener;
-import com.jagrosh.discordipc.entities.pipe.PipeStatus;
-import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.executors.DeSmuMERunnable;
+import me.Logicism.LogRPC.core.executors.MediaPlayerRunnable;
 import me.Logicism.LogRPC.core.executors.MusicRunnable;
 import me.Logicism.LogRPC.core.executors.ProgramRunnable;
 import me.Logicism.LogRPC.event.UpdatePresenceEvent;
@@ -18,7 +17,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class PresenceListener implements IPCListener {
@@ -27,10 +25,9 @@ public class PresenceListener implements IPCListener {
     public void onReady(IPCClient client) {
         if (LogRPC.INSTANCE.getPresence() == null) {
             try {
-
                 if (LogRPC.INSTANCE.getConfig().isLastPresenceOnStartup()) {
                     PresenceType type = PresenceType.valueOf(LogRPC.INSTANCE.getConfig().getOverrideLastPresenceType().equals("NONE") ? LogRPC.INSTANCE.getCachedData().get("Last Presence") : LogRPC.INSTANCE.getConfig().getOverrideLastPresenceType());
-
+                    System.out.println(type.name());
                     if (type != PresenceType.MANUAL) {
                         LogRPC.INSTANCE.getManualMenuItem().setState(false);
 
@@ -125,6 +122,28 @@ public class PresenceListener implements IPCListener {
 
                                 LogRPC.INSTANCE.setDesmumeExecutor(Executors.newSingleThreadExecutor());
                                 LogRPC.INSTANCE.getDesmumeExecutor().execute(new DeSmuMERunnable());
+                            case VLC_MEDIA_PLAYER:
+                                LogRPC.INSTANCE.getVLCMediaPlayerMenuItem().setState(true);
+
+                                LogRPC.INSTANCE.getDefaultPresenceMenuItem().setEnabled(false);
+                                LogRPC.INSTANCE.getSetManualMenuItem().setEnabled(false);
+                                LogRPC.INSTANCE.getPresetPresencesMenu().setEnabled(false);
+                                LogRPC.INSTANCE.getGameConsolesMenu().setEnabled(false);
+                                LogRPC.INSTANCE.getPCGamesMenu().setEnabled(false);
+
+                                LogRPC.INSTANCE.setMediaPlayerExecutor(Executors.newSingleThreadExecutor());
+                                LogRPC.INSTANCE.getMediaPlayerExecutor().execute(new MediaPlayerRunnable());
+                            case MPCHC_MEDIA_PLAYER:
+                                LogRPC.INSTANCE.getMPCHCMediaPlayerMenuItem().setState(true);
+
+                                LogRPC.INSTANCE.getDefaultPresenceMenuItem().setEnabled(false);
+                                LogRPC.INSTANCE.getSetManualMenuItem().setEnabled(false);
+                                LogRPC.INSTANCE.getPresetPresencesMenu().setEnabled(false);
+                                LogRPC.INSTANCE.getGameConsolesMenu().setEnabled(false);
+                                LogRPC.INSTANCE.getPCGamesMenu().setEnabled(false);
+
+                                LogRPC.INSTANCE.setMediaPlayerExecutor(Executors.newSingleThreadExecutor());
+                                LogRPC.INSTANCE.getMediaPlayerExecutor().execute(new MediaPlayerRunnable());
                         }
                     }
                 }
@@ -134,7 +153,7 @@ public class PresenceListener implements IPCListener {
                 jsonException.printStackTrace();
             }
         } else {
-            LogRPC.INSTANCE.setPresence(null, LogRPC.INSTANCE.getPresence(), false);
+            LogRPC.INSTANCE.setPresence(LogRPC.INSTANCE.getPresence(), false);
         }
 
         LogRPC.INSTANCE.setUser(client.getCurrentUser());

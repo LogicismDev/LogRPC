@@ -13,10 +13,7 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.StdCallLibrary;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.event.EventManager;
-import me.Logicism.LogRPC.core.executors.DeSmuMERunnable;
-import me.Logicism.LogRPC.core.executors.MusicRunnable;
-import me.Logicism.LogRPC.core.executors.ProgramRunnable;
-import me.Logicism.LogRPC.core.executors.WiimmfiRunnable;
+import me.Logicism.LogRPC.core.executors.*;
 import me.Logicism.LogRPC.core.gui.OverwatchMap;
 import me.Logicism.LogRPC.core.presence.PresenceListener;
 import me.Logicism.LogRPC.core.presence.PresenceType;
@@ -73,6 +70,9 @@ public class LogRPC {
     private CheckboxMenuItem beatSaberMenuItem;
     private CheckboxMenuItem wiimmfiMenuItem;
     private CheckboxMenuItem desmumeMenuItem;
+    private Menu mediaPlayerMenu;
+    private CheckboxMenuItem vlcMediaPlayerMenuItem;
+    private CheckboxMenuItem mpchcMediaPlayerMenuItem;
 
     private MenuItem defaultPresence;
     private MenuItem setManualMenuItem;
@@ -84,6 +84,7 @@ public class LogRPC {
     private ExecutorService musicExecutor;
     private ExecutorService wiimmfiExecutor;
     private ExecutorService desmumeExecutor;
+    private ExecutorService mediaPlayerExecutor;
 
     private File desmumeRPCFile;
     private List<String> desmumeMapHeaders;
@@ -102,12 +103,12 @@ public class LogRPC {
     private HypeRateWebSocketClient hypeRateWebSocketClient;
 
     private Map<String, String> cachedData;
-    private PresenceType lastPresenceUsed;
 
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+                 InstantiationException e) {
             e.printStackTrace();
         }
 
@@ -205,6 +206,9 @@ public class LogRPC {
                 oos.writeObject(cachedData);
                 oos.close();
             }
+            if (cachedData.containsKey("DeSmuME RPC File") && config.isEnableSavingDeSmuMEFile() && !config.isDeSmuMEDisabled()) {
+                desmumeRPCFile = new File(cachedData.get("DeSmuME RPC File"));
+            }
 
             if (!config.isDeSmuMEDisabled()) {
                 desmumeMapHeaders = IOUtils.readLines(LogRPC.class.getClassLoader().getResourceAsStream("desmume_mapheaders.txt"), StandardCharsets.UTF_8);
@@ -283,6 +287,9 @@ public class LogRPC {
             beatSaberMenuItem = new CheckboxMenuItem("Beat Saber - Disconnected");
             wiimmfiMenuItem = new CheckboxMenuItem("Wiimmfi (Mario Kart Wii)", false);
             desmumeMenuItem = new CheckboxMenuItem("DeSmuME (Pokémon Gen 4)", false);
+            mediaPlayerMenu = new Menu("Media Players");
+            vlcMediaPlayerMenuItem = new CheckboxMenuItem("VLC Media Player");
+            mpchcMediaPlayerMenuItem = new CheckboxMenuItem("MPC-HC / MPC-BE");
 
             discordMenuItem.addItemListener(new ItemListener() {
                 @Override
@@ -338,6 +345,11 @@ public class LogRPC {
                     if (desmumeExecutor != null) {
                         desmumeExecutor = null;
                     }
+                    vlcMediaPlayerMenuItem.setState(false);
+                    mpchcMediaPlayerMenuItem.setState(false);
+                    if (mediaPlayerExecutor != null) {
+                        mediaPlayerExecutor = null;
+                    }
 
                     manualMenuItem.setState(true);
 
@@ -352,6 +364,8 @@ public class LogRPC {
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
                     }
+
+                    saveCachedData(PresenceType.MANUAL, desmumeRPCFile);
                 }
             });
             programMenuItem.addItemListener(new ItemListener() {
@@ -373,6 +387,11 @@ public class LogRPC {
                         if (desmumeExecutor != null) {
                             desmumeExecutor = null;
                         }
+                        vlcMediaPlayerMenuItem.setState(false);
+                        mpchcMediaPlayerMenuItem.setState(false);
+                        if (mediaPlayerExecutor != null) {
+                            mediaPlayerExecutor = null;
+                        }
 
                         programMenuItem.setState(true);
 
@@ -390,6 +409,8 @@ public class LogRPC {
 
                         programExecutor = Executors.newSingleThreadExecutor();
                         programExecutor.execute(new ProgramRunnable());
+
+                        saveCachedData(PresenceType.PROGRAM, desmumeRPCFile);
                     } else {
                         JOptionPane.showMessageDialog(null, "Program Presence is not supported (yet) on Mac/Linux Systems!");
                     }
@@ -413,6 +434,11 @@ public class LogRPC {
                     if (desmumeExecutor != null) {
                         desmumeExecutor = null;
                     }
+                    vlcMediaPlayerMenuItem.setState(false);
+                    mpchcMediaPlayerMenuItem.setState(false);
+                    if (mediaPlayerExecutor != null) {
+                        mediaPlayerExecutor = null;
+                    }
 
                     musicMenuItem.setState(true);
 
@@ -430,6 +456,8 @@ public class LogRPC {
 
                     musicExecutor = Executors.newSingleThreadExecutor();
                     musicExecutor.execute(new MusicRunnable());
+
+                    saveCachedData(PresenceType.MUSIC, desmumeRPCFile);
                 }
             });
             chromeMenuItem.addItemListener(new ItemListener() {
@@ -453,6 +481,11 @@ public class LogRPC {
                     if (desmumeExecutor != null) {
                         desmumeExecutor = null;
                     }
+                    vlcMediaPlayerMenuItem.setState(false);
+                    mpchcMediaPlayerMenuItem.setState(false);
+                    if (mediaPlayerExecutor != null) {
+                        mediaPlayerExecutor = null;
+                    }
 
                     chromeMenuItem.setState(true);
 
@@ -467,6 +500,8 @@ public class LogRPC {
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
                     }
+
+                    saveCachedData(PresenceType.EXTENSION, desmumeRPCFile);
                 }
             });
             beatSaberMenuItem.addItemListener(new ItemListener() {
@@ -490,6 +525,11 @@ public class LogRPC {
                     if (desmumeExecutor != null) {
                         desmumeExecutor = null;
                     }
+                    vlcMediaPlayerMenuItem.setState(false);
+                    mpchcMediaPlayerMenuItem.setState(false);
+                    if (mediaPlayerExecutor != null) {
+                        mediaPlayerExecutor = null;
+                    }
 
                     beatSaberMenuItem.setState(true);
 
@@ -504,6 +544,8 @@ public class LogRPC {
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
                     }
+
+                    saveCachedData(PresenceType.BEAT_SABER, desmumeRPCFile);
                 }
             });
             wiimmfiMenuItem.addItemListener(new ItemListener() {
@@ -523,6 +565,11 @@ public class LogRPC {
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
                         desmumeExecutor = null;
+                    }
+                    vlcMediaPlayerMenuItem.setState(false);
+                    mpchcMediaPlayerMenuItem.setState(false);
+                    if (mediaPlayerExecutor != null) {
+                        mediaPlayerExecutor = null;
                     }
 
                     wiimmfiMenuItem.setState(true);
@@ -549,6 +596,8 @@ public class LogRPC {
                             ex.printStackTrace();
                         }
                     }
+
+                    saveCachedData(PresenceType.WIIMMFI, desmumeRPCFile);
                 }
             });
             desmumeMenuItem.addItemListener(new ItemListener() {
@@ -593,6 +642,11 @@ public class LogRPC {
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
                     }
+                    vlcMediaPlayerMenuItem.setState(false);
+                    mpchcMediaPlayerMenuItem.setState(false);
+                    if (mediaPlayerExecutor != null) {
+                        mediaPlayerExecutor = null;
+                    }
 
                     desmumeMenuItem.setState(true);
 
@@ -610,6 +664,100 @@ public class LogRPC {
 
                     desmumeExecutor = Executors.newSingleThreadExecutor();
                     desmumeExecutor.execute(new DeSmuMERunnable());
+
+                    saveCachedData(PresenceType.DESMUME, desmumeRPCFile);
+                }
+            });
+            vlcMediaPlayerMenuItem.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    manualMenuItem.setState(false);
+                    programMenuItem.setState(false);
+                    if (programExecutor != null) {
+                        programExecutor = null;
+                    }
+                    musicMenuItem.setState(false);
+                    if (musicExecutor != null) {
+                        musicExecutor = null;
+                    }
+                    chromeMenuItem.setState(false);
+                    beatSaberMenuItem.setState(false);
+                    wiimmfiMenuItem.setState(false);
+                    if (wiimmfiExecutor != null) {
+                        wiimmfiExecutor = null;
+                    }
+                    desmumeMenuItem.setState(false);
+                    if (desmumeExecutor != null) {
+                        desmumeExecutor = null;
+                    }
+                    mpchcMediaPlayerMenuItem.setState(false);
+
+                    vlcMediaPlayerMenuItem.setState(true);
+
+                    defaultPresence.setEnabled(false);
+                    setManualMenuItem.setEnabled(false);
+                    presetPresencesMenu.setEnabled(false);
+                    gameConsolesMenu.setEnabled(false);
+                    pcGamesMenu.setEnabled(false);
+
+                    try {
+                        eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                    } catch (JSONException jsonException) {
+                        jsonException.printStackTrace();
+                    }
+
+                    if (mediaPlayerExecutor == null) {
+                        mediaPlayerExecutor = Executors.newSingleThreadExecutor();
+                        mediaPlayerExecutor.execute(new MediaPlayerRunnable());
+                    }
+
+                    saveCachedData(PresenceType.VLC_MEDIA_PLAYER, desmumeRPCFile);
+                }
+            });
+            mpchcMediaPlayerMenuItem.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    manualMenuItem.setState(false);
+                    programMenuItem.setState(false);
+                    if (programExecutor != null) {
+                        programExecutor = null;
+                    }
+                    musicMenuItem.setState(false);
+                    if (musicExecutor != null) {
+                        musicExecutor = null;
+                    }
+                    chromeMenuItem.setState(false);
+                    beatSaberMenuItem.setState(false);
+                    wiimmfiMenuItem.setState(false);
+                    if (wiimmfiExecutor != null) {
+                        wiimmfiExecutor = null;
+                    }
+                    desmumeMenuItem.setState(false);
+                    if (desmumeExecutor != null) {
+                        desmumeExecutor = null;
+                    }
+                    vlcMediaPlayerMenuItem.setState(false);
+
+                    mpchcMediaPlayerMenuItem.setState(true);
+
+                    defaultPresence.setEnabled(false);
+                    setManualMenuItem.setEnabled(false);
+                    presetPresencesMenu.setEnabled(false);
+                    gameConsolesMenu.setEnabled(false);
+                    pcGamesMenu.setEnabled(false);
+
+                    try {
+                        eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                    } catch (JSONException jsonException) {
+                        jsonException.printStackTrace();
+                    }
+
+                    if (mediaPlayerExecutor == null) {
+                        mediaPlayerExecutor = Executors.newSingleThreadExecutor();
+                        mediaPlayerExecutor.execute(new MediaPlayerRunnable());
+                    }
+
+                    saveCachedData(PresenceType.MPCHC_MEDIA_PLAYER, desmumeRPCFile);
                 }
             });
 
@@ -624,6 +772,9 @@ public class LogRPC {
             popupMenu.add(beatSaberMenuItem);
             popupMenu.add(wiimmfiMenuItem);
             popupMenu.add(desmumeMenuItem);
+            mediaPlayerMenu.add(vlcMediaPlayerMenuItem);
+            mediaPlayerMenu.add(mpchcMediaPlayerMenuItem);
+            popupMenu.add(mediaPlayerMenu);
 
             if (config.isExtensionDisabled()) {
                 chromeMenuItem.setEnabled(false);
@@ -640,6 +791,7 @@ public class LogRPC {
 
             programMenuItem.setEnabled(System.getProperty("os.name").startsWith("Windows"));
             musicMenuItem.setEnabled(System.getProperty("os.name").startsWith("Windows") || System.getProperty("os.name").startsWith("Mac OS X"));
+            mpchcMediaPlayerMenuItem.setEnabled(System.getProperty("os.name").startsWith("Windows"));
 
             popupMenu.addSeparator();
 
@@ -780,6 +932,7 @@ public class LogRPC {
             client.setListener(new PresenceListener());
         } catch (ClassNotFoundException | IllegalStateException | IOException | AWTException e) {
             JOptionPane.showMessageDialog(null, "Cannot Load Program! " + e.getMessage(), "LogRPC", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
             System.exit(0);
         }
     }
@@ -832,6 +985,14 @@ public class LogRPC {
         return desmumeMenuItem;
     }
 
+    public CheckboxMenuItem getVLCMediaPlayerMenuItem() {
+        return vlcMediaPlayerMenuItem;
+    }
+
+    public CheckboxMenuItem getMPCHCMediaPlayerMenuItem() {
+        return mpchcMediaPlayerMenuItem;
+    }
+
     public MenuItem getDefaultPresenceMenuItem() {
         return defaultPresence;
     }
@@ -882,6 +1043,14 @@ public class LogRPC {
 
     public void setDesmumeExecutor(ExecutorService desmumeExecutor) {
         this.desmumeExecutor = desmumeExecutor;
+    }
+
+    public ExecutorService getMediaPlayerExecutor() {
+        return mediaPlayerExecutor;
+    }
+
+    public void setMediaPlayerExecutor(ExecutorService mediaPlayerExecutor) {
+        this.mediaPlayerExecutor = mediaPlayerExecutor;
     }
 
     public File getDesmumeRPCFile() {
@@ -980,30 +1149,36 @@ public class LogRPC {
         return presence;
     }
 
-    public void setPresence(PresenceType type, RichPresence.Builder presence, boolean setOnly) {
+    public void setPresence(RichPresence.Builder presence, boolean setOnly) {
         this.presence = presence;
-
-        if (type != null) {
-            this.lastPresenceUsed = type;
-
-            try {
-                File cachedDataFile = new File("LogRPC.dat");
-
-                cachedData.replace("Last Presence", lastPresenceUsed.name());
-
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(cachedDataFile));
-                oos.writeObject(cachedData);
-                oos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
 
         if (!setOnly) {
             boolean presenceDisabled = false;
             if (client != null && !presenceDisabled && client.getStatus() == PipeStatus.CONNECTED) {
                 client.sendRichPresence(presence.build(), new Callback(e -> System.out.println("Success"), err -> System.out.println(err)));
             }
+        }
+    }
+
+    public void saveCachedData(PresenceType type, File desmumeRPCFile) {
+        try {
+            File cachedDataFile = new File("LogRPC.dat");
+
+            cachedData.replace("Last Presence", type.name());
+
+            if (desmumeRPCFile != null && config.isEnableSavingDeSmuMEFile() && !config.isDeSmuMEDisabled()) {
+                if (cachedData.containsKey("DeSmuME RPC File")) {
+                    cachedData.replace("DeSmuME RPC File", desmumeRPCFile.getAbsolutePath());
+                } else {
+                    cachedData.put("DeSmuME RPC File", desmumeRPCFile.getAbsolutePath());
+                }
+            }
+
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(cachedDataFile));
+            oos.writeObject(cachedData);
+            oos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

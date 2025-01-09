@@ -66,6 +66,18 @@ public class LogRPCConfig {
 
     private boolean enableHrReaderForBeatSaber;
 
+    private boolean enableSavingDeSmuMEFile;
+
+    private String vlcWebInterfaceHost;
+
+    private int vlcWebInterfacePort;
+
+    private String vlcWebInterfacePassword;
+
+    private String mpchcWebInterfaceHost;
+
+    private int mpchcWebInterfacePort;
+
     private List<String> manualPresetPresences;
 
     private String nintendo3dsFriendCode;
@@ -83,6 +95,8 @@ public class LogRPCConfig {
     private boolean wiimmfiDisabled;
 
     private boolean deSmuMEDisabled;
+
+    private boolean mediaPlayerDisabled;
 
     private boolean nintendo3dsDisabled;
 
@@ -218,6 +232,30 @@ public class LogRPCConfig {
         return enableHrReaderForBeatSaber;
     }
 
+    public boolean isEnableSavingDeSmuMEFile() {
+        return enableSavingDeSmuMEFile;
+    }
+
+    public String getVlcWebInterfaceHost() {
+        return vlcWebInterfaceHost;
+    }
+
+    public int getVlcWebInterfacePort() {
+        return vlcWebInterfacePort;
+    }
+
+    public String getVlcWebInterfacePassword() {
+        return vlcWebInterfacePassword;
+    }
+
+    public String getMpchcWebInterfaceHost() {
+        return mpchcWebInterfaceHost;
+    }
+
+    public int getMpchcWebInterfacePort() {
+        return mpchcWebInterfacePort;
+    }
+
     public List<String> getManualPresetPresences() {
         return manualPresetPresences;
     }
@@ -262,6 +300,10 @@ public class LogRPCConfig {
 
     public boolean isWiimmfiDisabled() {
         return wiimmfiDisabled;
+    }
+
+    public boolean isMediaPlayerDisabled() {
+        return mediaPlayerDisabled;
     }
 
     public boolean isOverwatchDisabled() {
