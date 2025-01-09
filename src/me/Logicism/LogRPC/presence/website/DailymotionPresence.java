@@ -51,15 +51,15 @@ public class DailymotionPresence extends Presence {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (data.getURL().startsWith("https://www.dailymotion.com/search")) {
-            Element searchTextElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div > div > div.Search__headerContainer___MFxvg > div > span > b");
+            Element searchTextElement = data.getHTMLDocument().selectFirst("#root > div > header > div > div.ResponsiveSubheader__searchBarContainer___2SoeX > div > button > span");
 
             return searchTextElement.text();
         } else if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            Element titleElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.NewWatchingDiscovery__watchingSection___3Bzey > div > div.WatchingSection__safeZone___w2sTV > div:nth-child(1) > div:nth-child(2) > div > div > div.NewVideoInfo__channelLineWrapper___3SHpY > div.NewChannelLine__channelLine___3A2fN.NewChannelLine__channelContainer___2o6cP > a > div");
+            Element titleElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.NewWatchingDiscovery__watchingSection___3Bzey > div > div.WatchingSection__safeZone___w2sTV > div > div:nth-child(2) > div > div > div.NewVideoInfo__channelLineWrapper___3SHpY > div:nth-child(1) > div > a > div");
 
             return titleElement.text();
         } else if (data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/videos") || data.getURL().contains("/videos?sort=")) || data.getURL().startsWith("https://www.dailymotion.com") && (data.getURL().endsWith("/playlists") || data.getURL().contains("/playlists?sort="))) {
-            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.ChannelHeader__container___3oX3T > div > div > div.ChannelHeaderInfo__channelInfoContainer___22LxP > div.ChannelHeaderInfo__channelInfos___2p5yG > h1");
+            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div > div.ChannelHeader__container___3oX3T > div:nth-child(2) > div.ChannelHeaderInfo__channelInfoContainer___22LxP > div > div.ChannelHeaderInfo__channelDisplayNameContainer___29sVB > div.ChannelHeaderInfo__userName___3OU4F > h1");
 
             return channelElement.text();
         }
@@ -139,7 +139,7 @@ public class DailymotionPresence extends Presence {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
-            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.NewWatchingDiscovery__watchingSection___3Bzey > div > div.WatchingSection__safeZone___w2sTV > div:nth-child(1) > div:nth-child(2) > div > div > div.NewVideoInfo__channelLineWrapper___3SHpY > div.NewChannelLine__channelLine___3A2fN.NewChannelLine__channelContainer___2o6cP > a");
+            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.NewWatchingDiscovery__watchingSection___3Bzey > div > div.WatchingSection__safeZone___w2sTV > div > div:nth-child(2) > div > div > div.NewVideoInfo__channelLineWrapper___3SHpY > div:nth-child(1) > div > a");
 
             return "https://www.dailymotion.com" + channelElement.attr("href");
         } else {
