@@ -89,20 +89,20 @@ public class MusicRunnable implements Runnable {
                             }
 
                             if (result != null) {
-                                if (result.getJSONArray("artists").length() > 1) {
-                                    List<String> artistNames = new ArrayList<>();
-                                    for (int i = 0; i < result.getJSONArray("artists").length(); i++) {
-                                        artistNames.add(result.getJSONArray("artists").getJSONObject(i).getString("name"));
-                                    }
-
-                                    jsonObject.remove("artist");
-                                    jsonObject.put("artist", StringUtil.join(artistNames, ", "));
-                                }
-
                                 if (jsonObject.getString("album").isEmpty() || jsonObject.getString("album_artist").isEmpty()) {
                                     JSONObject result1;
                                     if (result.has("id")) {
                                         result1 = getTIDALAlbumInfo(result.getJSONObject("album").getLong("id"));
+
+                                        if (result.getJSONArray("artists").length() > 1) {
+                                            List<String> artistNames = new ArrayList<>();
+                                            for (int i = 0; i < result.getJSONArray("artists").length(); i++) {
+                                                artistNames.add(result.getJSONArray("artists").getJSONObject(i).getString("name"));
+                                            }
+
+                                            jsonObject.remove("artist");
+                                            jsonObject.put("artist", StringUtil.join(artistNames, ", "));
+                                        }
 
                                         if (result1 != null) {
                                             if (jsonObject.getString("album").isEmpty()) {
