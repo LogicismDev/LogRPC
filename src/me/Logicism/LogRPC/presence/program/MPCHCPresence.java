@@ -35,13 +35,16 @@ public class MPCHCPresence extends Presence {
     @Override
     public String getSmallImageKey() {
         JSONData data = (JSONData) this.data;
-        switch (data.getIntAttribute("details")) {
-            case 0:
-                return "https://cdn.rcd.gg/PreMiD/resources/stop.png";
-            case 1:
-                return "https://cdn.rcd.gg/PreMiD/resources/pause.png";
-            case 2:
-                return "https://cdn.rcd.gg/PreMiD/resources/play.png";
+
+        if (data.contains("playbackState")) {
+            switch (data.getIntAttribute("playbackState")) {
+                case 0:
+                    return "https://cdn.rcd.gg/PreMiD/resources/stop.png";
+                case 1:
+                    return "https://cdn.rcd.gg/PreMiD/resources/pause.png";
+                case 2:
+                    return "https://cdn.rcd.gg/PreMiD/resources/play.png";
+            }
         }
 
         return super.getSmallImageKey();
@@ -50,13 +53,16 @@ public class MPCHCPresence extends Presence {
     @Override
     public String getSmallImageText() {
         JSONData data = (JSONData) this.data;
-        switch (data.getIntAttribute("playbackState")) {
-            case 0:
-                return "Stopped";
-            case 1:
-                return "Paused";
-            case 2:
-                return "Playing";
+
+        if (data.contains("playbackState")) {
+            switch (data.getIntAttribute("playbackState")) {
+                case 0:
+                    return "Stopped";
+                case 1:
+                    return "Paused";
+                case 2:
+                    return "Playing";
+            }
         }
 
         return super.getSmallImageText();
@@ -66,10 +72,12 @@ public class MPCHCPresence extends Presence {
     public long getStartTimestamp() {
         JSONData data = (JSONData) this.data;
 
-        if (data.contains("start_time") && data.getIntAttribute("playbackState") == 2) {
-            return data.getIntAttribute("start_time");
-        } else if (data.getIntAttribute("playbackState") == 0 || data.getIntAttribute("playbackState") == 1) {
-            return -1;
+        if (data.contains("playbackState")) {
+            if (data.contains("start_time") && data.getIntAttribute("playbackState") == 2) {
+                return data.getIntAttribute("start_time");
+            } else if (data.getIntAttribute("playbackState") == 0 || data.getIntAttribute("playbackState") == 1) {
+                return -1;
+            }
         }
         return 0;
     }
@@ -78,8 +86,10 @@ public class MPCHCPresence extends Presence {
     public long getEndTimestamp() {
         JSONData data = (JSONData) this.data;
 
-        if (data.contains("end_time") && data.getIntAttribute("playbackState") == 2) {
-            return data.getIntAttribute("end_time");
+        if (data.contains("playbackState")) {
+            if (data.contains("end_time") && data.getIntAttribute("playbackState") == 2) {
+                return data.getIntAttribute("end_time");
+            }
         }
         return super.getEndTimestamp();
     }

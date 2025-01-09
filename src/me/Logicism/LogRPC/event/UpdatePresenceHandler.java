@@ -104,7 +104,7 @@ public class UpdatePresenceHandler extends EventHandler {
                 presence = new MPCHCPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("vlc_") || ((JSONData) e.getData()).getDetails().equals("vlc")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("vlc")) {
                 presence = new VLCPresence(e.getData());
-            } else if ((((JSONData) e.getData()).getDetails().startsWith("potplayer_") || ((JSONData) e.getData()).getDetails().equals("potplayer") || ((JSONData) e.getData()).getDetails().startsWith("potplayer64_") || ((JSONData) e.getData()).getDetails().equals("potplayer64") || ((JSONData) e.getData()).getDetails().startsWith("potplayermini_") || ((JSONData) e.getData()).getDetails().equals("potplayermini") || ((JSONData) e.getData()).getDetails().startsWith("potplayermini64_") || ((JSONData) e.getData()).getDetails().equals("potplayermini64")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("potplayer")) {
+            } else if ((((JSONData) e.getData()).getDetails().startsWith("PotPlayer_") || ((JSONData) e.getData()).getDetails().equals("PotPlayer") || ((JSONData) e.getData()).getDetails().startsWith("PotPlayer64_") || ((JSONData) e.getData()).getDetails().equals("PotPlayer64") || ((JSONData) e.getData()).getDetails().startsWith("PotPlayerMini_") || ((JSONData) e.getData()).getDetails().equals("PotPlayerMini") || ((JSONData) e.getData()).getDetails().startsWith("PotPlayerMini64_") || ((JSONData) e.getData()).getDetails().equals("PotPlayerMini64")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("potplayer")) {
                 presence = new PotPlayerPresence(e.getData());
             } else if (((JSONData) e.getData()).getDetails().startsWith("soffice.bin_") || ((JSONData) e.getData()).getDetails().equals("soffice.bin")) {
                 if (e.getData().getTitle().endsWith(" — LibreOffice Writer") && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("libreofficewriter")) {
@@ -179,51 +179,27 @@ public class UpdatePresenceHandler extends EventHandler {
             builder.setActivityType(presence.getActivityType());
 
             if (!presence.getState().isEmpty()) {
-                try {
-                    builder.setState(new String(presence.getState().getBytes(StandardCharsets.UTF_8), Charset.defaultCharset().name()));
-                } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                }
+                builder.setState(new String(presence.getState().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
             }
 
-            try {
-                builder.setDetails(new String(presence.getDetails().getBytes(StandardCharsets.UTF_8), Charset.defaultCharset().name()));
-            } catch (UnsupportedEncodingException ex) {
-                ex.printStackTrace();
-            }
+            builder.setDetails(new String(presence.getDetails().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
 
             if (presence.getLargeImageKey() != null && !presence.getLargeImageKey().isEmpty()) {
-                try {
-                    builder.setLargeImage(presence.getLargeImageKey(),
-                            new String(presence.getLargeImageText().getBytes(StandardCharsets.UTF_8), Charset.defaultCharset().name()));
-                } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                }
+                builder.setLargeImage(presence.getLargeImageKey(),
+                        new String(presence.getLargeImageText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
 
                 if (presence.getSmallImageKey() != null && !presence.getSmallImageKey().isEmpty()) {
-                    try {
-                        builder.setSmallImage(presence.getSmallImageKey(),
-                                new String(presence.getSmallImageText().getBytes(StandardCharsets.UTF_8), Charset.defaultCharset().name()));
-                    } catch (UnsupportedEncodingException ex) {
-                        ex.printStackTrace();
-                    }
+                    builder.setSmallImage(presence.getSmallImageKey(),
+                            new String(presence.getSmallImageText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
                 }
             }
 
             if (presence.getMainButtonText() != null) {
-                try {
-                    builder.setMainButtonText(new String(presence.getMainButtonText().getBytes(StandardCharsets.UTF_8), Charset.defaultCharset().name())).setMainButtonURL(presence.getMainButtonURL());
-                } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                }
+                builder.setMainButtonText(new String(presence.getMainButtonText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setMainButtonURL(presence.getMainButtonURL());
             }
 
             if (presence.getSecondaryButtonText() != null) {
-                try {
-                    builder.setSecondaryButtonText(new String(presence.getSecondaryButtonText().getBytes(StandardCharsets.UTF_8), Charset.defaultCharset().name())).setSecondaryButtonURL(presence.getSecondaryButtonURL());
-                } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                }
+                builder.setSecondaryButtonText(new String(presence.getSecondaryButtonText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setSecondaryButtonURL(presence.getSecondaryButtonURL());
             }
 
             if (presence.getStartTimestamp() != -1) {

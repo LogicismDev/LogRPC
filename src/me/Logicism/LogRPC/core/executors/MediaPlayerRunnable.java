@@ -45,7 +45,7 @@ public class MediaPlayerRunnable implements Runnable {
                     switch (playbackState) {
                         case "playing":
                         case "paused":
-                            title = document.getElementsByTag("information").first().getElementsByAttributeValue("name", "filename").first().text();
+                            title = document.getElementsByTag("information").first().getElementsByAttributeValue("name", "title").size() != 0 ? document.getElementsByTag("information").first().getElementsByAttributeValue("name", "title").first().text() : document.getElementsByTag("information").first().getElementsByAttributeValue("name", "filename").first().text();
                             start_time = document.getElementsByTag("time").text();
                             end_time = document.getElementsByTag("length").text();
                             break;
