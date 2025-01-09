@@ -200,7 +200,7 @@ public class LogRPC {
                 ois.close();
             } else {
                 cachedData = new HashMap<>();
-                cachedData.put("Last Presence", config.getOverrideLastPresenceType() != "NONE" ? config.getOverrideLastPresenceType() : "MANUAL");
+                cachedData.put("Last Presence", !config.getOverrideLastPresenceType().equals("NONE") ? config.getOverrideLastPresenceType() : "MANUAL");
 
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(cachedDataFile));
                 oos.writeObject(cachedData);
