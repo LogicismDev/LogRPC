@@ -243,7 +243,7 @@ public class UpdatePresenceHandler extends EventHandler {
                 if (e.getInstance().getClientID() != presence.getClientID()) {
                     e.getInstance().setClientID(presence.getClientID());
 
-                    e.getInstance().setPresence(builder, true);
+                    e.getInstance().setPresence(e.getType(), builder, true);
 
                     e.getInstance().reinitializeClient();
                 } else {
@@ -267,10 +267,10 @@ public class UpdatePresenceHandler extends EventHandler {
                                     LogRPC.INSTANCE.setHypeRateWebSocketClient(null);
                                 }
 
-                                e.getInstance().setPresence(builder, false);
+                                e.getInstance().setPresence(e.getType(), builder, false);
                             } else {
                                 if (LogRPC.INSTANCE.getHypeRateWebSocketClient() == null) {
-                                    e.getInstance().setPresence(builder, true);
+                                    e.getInstance().setPresence(e.getType(), builder, true);
 
                                     LogRPC.INSTANCE.setHypeRateWebSocketClient(new HypeRateWebSocketClient());
                                     LogRPC.INSTANCE.getHypeRateWebSocketClient().connect();
@@ -286,10 +286,10 @@ public class UpdatePresenceHandler extends EventHandler {
                                 LogRPC.INSTANCE.setHypeRateWebSocketClient(null);
                             }
 
-                            e.getInstance().setPresence(builder, false);
+                            e.getInstance().setPresence(e.getType(), builder, false);
                         } else {
                             if (LogRPC.INSTANCE.getHypeRateWebSocketClient() == null) {
-                                e.getInstance().setPresence(builder, true);
+                                e.getInstance().setPresence(e.getType(), builder, true);
 
                                 LogRPC.INSTANCE.setHypeRateWebSocketClient(new HypeRateWebSocketClient());
                                 LogRPC.INSTANCE.getHypeRateWebSocketClient().connect();

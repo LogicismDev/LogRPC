@@ -37,10 +37,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -103,6 +100,9 @@ public class LogRPC {
     private int owPartySize = 1;
 
     private HypeRateWebSocketClient hypeRateWebSocketClient;
+
+    private Map<String, String> cachedData;
+    private PresenceType lastPresenceUsed;
 
     public static void main(String[] args) {
         try {
@@ -191,6 +191,20 @@ public class LogRPC {
         try {
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             config = mapper.readValue(new File("config.yml"), LogRPCConfig.class);
+
+            File cachedDataFile = new File("LogRPC.dat");
+            if (cachedDataFile.exists()) {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cachedDataFile));
+                cachedData = (Map<String, String>) ois.readObject();
+                ois.close();
+            } else {
+                cachedData = new HashMap<>();
+                cachedData.put("Last Presence", config.getOverrideLastPresenceType() != "NONE" ? config.getOverrideLastPresenceType() : "MANUAL");
+
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(cachedDataFile));
+                oos.writeObject(cachedData);
+                oos.close();
+            }
 
             if (!config.isDeSmuMEDisabled()) {
                 desmumeMapHeaders = IOUtils.readLines(LogRPC.class.getClassLoader().getResourceAsStream("desmume_mapheaders.txt"), StandardCharsets.UTF_8);
@@ -551,9 +565,13 @@ public class LogRPC {
                                     desmumeRPCFile = chooser.getSelectedFile();
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Invalid File!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+
+                                    return;
                                 }
                             } catch (IOException ex) {
                                 JOptionPane.showMessageDialog(null, "Can't Open File! " + ex.getMessage(), "LogRPC", JOptionPane.ERROR_MESSAGE);
+
+                                return;
                             }
                         } else {
                             return;
@@ -760,7 +778,7 @@ public class LogRPC {
 
             client = new IPCClient(clientID);
             client.setListener(new PresenceListener());
-        } catch (IllegalStateException | IOException | AWTException e) {
+        } catch (ClassNotFoundException | IllegalStateException | IOException | AWTException e) {
             JOptionPane.showMessageDialog(null, "Cannot Load Program! " + e.getMessage(), "LogRPC", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
@@ -834,6 +852,14 @@ public class LogRPC {
         return pcGamesMenu;
     }
 
+    public ExecutorService getProgramExecutor() {
+        return programExecutor;
+    }
+
+    public void setProgramExecutor(ExecutorService programExecutor) {
+        this.programExecutor = programExecutor;
+    }
+
     public ExecutorService getMusicExecutor() {
         return musicExecutor;
     }
@@ -842,8 +868,28 @@ public class LogRPC {
         this.musicExecutor = musicExecutor;
     }
 
+    public ExecutorService getWiimmfiExecutor() {
+        return wiimmfiExecutor;
+    }
+
+    public void setWiimmfiExecutor(ExecutorService wiimmfiExecutor) {
+        this.wiimmfiExecutor = wiimmfiExecutor;
+    }
+
+    public ExecutorService getDesmumeExecutor() {
+        return desmumeExecutor;
+    }
+
+    public void setDesmumeExecutor(ExecutorService desmumeExecutor) {
+        this.desmumeExecutor = desmumeExecutor;
+    }
+
     public File getDesmumeRPCFile() {
         return desmumeRPCFile;
+    }
+
+    public void setDesmumeRPCFile(File desmumeRPCFile) {
+        this.desmumeRPCFile = desmumeRPCFile;
     }
 
     public List<String> getDesmumeMapHeaders() {
@@ -918,6 +964,10 @@ public class LogRPC {
         this.hypeRateWebSocketClient = hypeRateWebSocketClient;
     }
 
+    public Map<String, String> getCachedData() {
+        return cachedData;
+    }
+
     public IPCClient getClient() {
         return client;
     }
@@ -930,8 +980,24 @@ public class LogRPC {
         return presence;
     }
 
-    public void setPresence(RichPresence.Builder presence, boolean setOnly) {
+    public void setPresence(PresenceType type, RichPresence.Builder presence, boolean setOnly) {
         this.presence = presence;
+
+        if (type != null) {
+            this.lastPresenceUsed = type;
+
+            try {
+                File cachedDataFile = new File("LogRPC.dat");
+
+                cachedData.replace("Last Presence", lastPresenceUsed.name());
+
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(cachedDataFile));
+                oos.writeObject(cachedData);
+                oos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         if (!setOnly) {
             boolean presenceDisabled = false;

@@ -13,6 +13,14 @@
 # Check for updates on startup
 checkForUpdates: true
 
+# Apply last presence used on startup
+lastPresenceOnStartup: true
+
+# Override last presence if lastPresenceOnStartup is true
+# Acceptable overrideLastPresenceType values: NONE, PROGRAM, MUSIC, EXTENSION, BEAT_SABER, WIIMMFI, DESMUME
+# NONE will use the last presence it has saved upon exit
+overrideLastPresenceType: NONE
+
 # This section allows you to modify the default fallback presence or default startup presence
 # Acceptable defaultActivityType values: PLAYING, WATCHING, LISTENING, COMPETING
 

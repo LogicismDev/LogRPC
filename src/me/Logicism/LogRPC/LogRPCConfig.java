@@ -6,6 +6,10 @@ public class LogRPCConfig {
 
     private boolean checkForUpdates;
 
+    private boolean lastPresenceOnStartup;
+
+    private String overrideLastPresenceType;
+
     private String defaultActivityType;
 
     private String defaultClientID;
@@ -92,6 +96,14 @@ public class LogRPCConfig {
 
     public boolean isCheckForUpdates() {
         return checkForUpdates;
+    }
+
+    public boolean isLastPresenceOnStartup() {
+        return lastPresenceOnStartup;
+    }
+
+    public String getOverrideLastPresenceType() {
+        return overrideLastPresenceType;
     }
 
     public String getDefaultActivityType() {
