@@ -8,8 +8,8 @@ import me.Logicism.LogRPC.presence.Presence;
 
 public class NintendoSwitchPresence extends Presence {
 
-    public NintendoSwitchPresence(PresenceData data) {
-        super(864486650271629312L, data);
+    public NintendoSwitchPresence(long clientId, PresenceData data) {
+        super(clientId, data);
     }
 
     @Override

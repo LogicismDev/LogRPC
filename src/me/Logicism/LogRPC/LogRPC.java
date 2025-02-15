@@ -73,6 +73,8 @@ public class LogRPC {
     private Menu mediaPlayerMenu;
     private CheckboxMenuItem vlcMediaPlayerMenuItem;
     private CheckboxMenuItem mpchcMediaPlayerMenuItem;
+    private Menu autoGameConsolesMenu;
+    private CheckboxMenuItem nintendoSwitchMenuItem;
 
     private MenuItem defaultPresence;
     private MenuItem setManualMenuItem;
@@ -290,6 +292,8 @@ public class LogRPC {
             mediaPlayerMenu = new Menu("Media Players");
             vlcMediaPlayerMenuItem = new CheckboxMenuItem("VLC Media Player");
             mpchcMediaPlayerMenuItem = new CheckboxMenuItem("MPC-HC / MPC-BE");
+            autoGameConsolesMenu = new CheckboxMenuItem("Game Consoles (Auto)")
+            nintendoSwitchMenuItem = new CheckboxMenuItem("Nintendo Switch");
 
             discordMenuItem.addItemListener(new ItemListener() {
                 @Override
@@ -836,7 +840,7 @@ public class LogRPC {
             popupMenu.add(setManualMenuItem);
             popupMenu.add(presetPresencesMenu);
 
-            gameConsolesMenu = new Menu("Game Consoles");
+            gameConsolesMenu = new Menu("Game Consoles (Manual)");
 
             MenuItem nintendo3ds = new MenuItem("Nintendo 3DS");
             nintendo3ds.addActionListener(new ActionListener() {
