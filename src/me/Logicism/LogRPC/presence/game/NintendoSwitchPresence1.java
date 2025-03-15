@@ -6,10 +6,10 @@ import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
 
-public class NintendoSwitchPresence extends Presence {
+public class NintendoSwitchPresence1 extends Presence {
 
-    public NintendoSwitchPresence(PresenceData data) {
-        super(864486650271629312L, data);
+    public NintendoSwitchPresence1(PresenceData data) {
+        super(1030141196686856262L, data);
     }
 
     @Override

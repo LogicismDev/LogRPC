@@ -100,7 +100,7 @@ public class GameSearchDialog extends JDialog {
             }
         } else if (platform.equals("Nintendo Switch")) {
             try {
-                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("title", comboBox1.getSelectedItem()).put("details", "NintendoSwitchPresence" + (LogRPC.INSTANCE.getNintendoSwitchGames().get(comboBox1.getSelectedIndex()).split(",")[1].equals("1") ? "1" : LogRPC.INSTANCE.getNintendoSwitchGames().get(comboBox1.getSelectedIndex()).split(",")[1].equals("2") ? "2" : "")).put("largeImageKey", LogRPC.INSTANCE.getNintendoSwitchGames().get(comboBox1.getSelectedIndex()).split(",")[0]))));
+                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("title", comboBox1.getSelectedItem()).put("details", "NintendoSwitchPresence" + (LogRPC.INSTANCE.getNintendoSwitchGames().get(comboBox1.getSelectedIndex()).split(",")[1].equals("1") ? "1" : "")).put("largeImageKey", LogRPC.INSTANCE.getNintendoSwitchGames().get(comboBox1.getSelectedIndex()).split(",")[0]))));
             } catch (JSONException ex) {
                 ex.printStackTrace();
             }

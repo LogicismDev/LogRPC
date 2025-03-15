@@ -9,6 +9,5 @@ public enum PresenceType {
     WIIMMFI,
     DESMUME,
     VLC_MEDIA_PLAYER,
-    MPCHC_MEDIA_PLAYER,
-    NINTENDO_SWITCH
+    MPCHC_MEDIA_PLAYER
 }
