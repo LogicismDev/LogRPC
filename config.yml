@@ -51,7 +51,7 @@ enabledPrograms:
   - acrobat
   - aftereffects
   - beatsaber
-  - davinci
+  - davinciresolve
   - desmume
   - dosbox
   - dreamweaver
@@ -123,6 +123,9 @@ wiimmfiPresenceType: headlessjson
 flareSolverrURL: http://127.0.0.1:8191/v1
 flareSolverrSession: 1
 
+# This section enables or disables saving the Nintendo Switch Refresh Token on exit, thus each time allowing you to re-login to your Nintendo account each time.
+enableSavingNintendoRefreshToken: true
+
 # This section is where you can specify HR Reader settings. Currently supports Pulsoid and HypeRate.
 # Supported devices can be found at https://www.blog.pulsoid.net/monitors?from=mheader or https://www.hyperate.io/supported-devices
 # To use in your presence, use the variable ${hrRate}
@@ -178,6 +181,7 @@ overwatchUsername: Logicism#2299
 extensionDisabled: false
 beatSaberDisabled: false
 wiimmfiDisabled: false
+nintendoSwitchAutoDisabled: false
 deSmuMEDisabled: false
 mediaPlayerDisabled: false
 

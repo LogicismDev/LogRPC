@@ -22,13 +22,27 @@ import me.Logicism.LogRPC.event.UpdatePresenceHandler;
 import me.Logicism.LogRPC.gui.*;
 import me.Logicism.LogRPC.network.*;
 import me.Logicism.LogRPC.presence.manual.CustomizablePresence;
+import me.friwi.jcefmaven.CefAppBuilder;
+import me.friwi.jcefmaven.CefInitializationException;
+import me.friwi.jcefmaven.UnsupportedPlatformException;
 import org.apache.commons.io.IOUtils;
+import org.cef.CefApp;
+import org.cef.CefClient;
+import org.cef.browser.CefBrowser;
+import org.cef.browser.CefFrame;
+import org.cef.callback.CefCallback;
+import org.cef.callback.CefSchemeHandlerFactory;
+import org.cef.handler.CefLoadHandlerAdapter;
+import org.cef.handler.CefResourceHandler;
+import org.cef.handler.CefResourceHandlerAdapter;
+import org.cef.network.CefRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.Style;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,10 +54,16 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LogRPC {
 
@@ -73,6 +93,10 @@ public class LogRPC {
     private Menu mediaPlayerMenu;
     private CheckboxMenuItem vlcMediaPlayerMenuItem;
     private CheckboxMenuItem mpchcMediaPlayerMenuItem;
+<<<<<<< HEAD
+=======
+    private CheckboxMenuItem nintendoSwitchMenuItem;
+>>>>>>> a055b59 (Preliminary Nintendo Switch RPC Presence Code)
 
     private MenuItem defaultPresence;
     private MenuItem setManualMenuItem;
@@ -85,6 +109,10 @@ public class LogRPC {
     private ExecutorService wiimmfiExecutor;
     private ExecutorService desmumeExecutor;
     private ExecutorService mediaPlayerExecutor;
+    private ExecutorService nintendoSwitchExecutor;
+
+    private String nintendoRefreshToken;
+    private CefApp cefApp;
 
     private File desmumeRPCFile;
     private List<String> desmumeMapHeaders;
@@ -211,6 +239,10 @@ public class LogRPC {
             if (cachedData.containsKey("DeSmuME RPC File") && config.isEnableSavingDeSmuMEFile() && !config.isDeSmuMEDisabled()) {
                 desmumeRPCFile = new File(cachedData.get("DeSmuME RPC File"));
             }
+            if (cachedData.containsKey("DeSmuME RPC File") && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                nintendoRefreshToken = cachedData.get("Nintendo Refresh Token");
+            }
+
 
             if (!config.isDeSmuMEDisabled()) {
                 desmumeMapHeaders = IOUtils.readLines(LogRPC.class.getClassLoader().getResourceAsStream("desmume_mapheaders.txt"), StandardCharsets.UTF_8);
@@ -272,6 +304,7 @@ public class LogRPC {
                     JOptionPane.showMessageDialog(null, "Unable to grab the Nintendo Switch games database, try again later!", "LogRPC", JOptionPane.ERROR_MESSAGE);
                 }
             }
+<<<<<<< HEAD
             if (!config.isNintendoSwitch2Disabled()) {
                 try {
                     BrowserData data = BrowserClient.executeGETRequest(new URL("https://raw.githubusercontent.com/ninstar/Rich-Presence-U-DB/main/titles/bee.csv"), null);
@@ -289,6 +322,35 @@ public class LogRPC {
                     nintendoSwitch2Games.addAll(lines);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Unable to grab the Nintendo Switch games database, try again later!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+=======
+            if (!config.isNintendoSwitchAutoDisabled()) {
+                try {
+                    File browserDataDirectory = new File("browser-data");
+                    File browserDataCacheDirectory = new File("browser-data/cache");
+                    File browserDataInstallDirectory = new File("browser-data/install");
+                    if (!browserDataDirectory.exists()) {
+                        browserDataDirectory.mkdir();
+                    }
+                    if (!browserDataCacheDirectory.exists()) {
+                        browserDataCacheDirectory.mkdir();
+                    }
+                    if (!browserDataInstallDirectory.exists()) {
+                        browserDataInstallDirectory.mkdir();
+                    }
+
+                    CefAppBuilder builder = new CefAppBuilder();
+                    builder.getCefSettings().windowless_rendering_enabled = false;
+                    builder.getCefSettings().cache_path = browserDataCacheDirectory.getAbsolutePath();
+                    builder.setInstallDir(browserDataInstallDirectory);
+
+                    cefApp = builder.build();
+                } catch (UnsupportedPlatformException | InterruptedException e) {
+                    JOptionPane.showMessageDialog(null, "The Nintendo Switch Auto Feature Browser is not compatible with your OS, please use the manual Switch presence.", "LogRPC", JOptionPane.ERROR_MESSAGE);
+                    nintendoSwitchMenuItem.setEnabled(false);
+                } catch (CefInitializationException e) {
+                    JOptionPane.showMessageDialog(null, "We couldn't initialize the browser backend, please use the manual Switch presence.", "LogRPC", JOptionPane.ERROR_MESSAGE);
+                    nintendoSwitchMenuItem.setEnabled(false);
+>>>>>>> a055b59 (Preliminary Nintendo Switch RPC Presence Code)
                 }
             }
 
@@ -307,6 +369,7 @@ public class LogRPC {
             chromeMenuItem = new CheckboxMenuItem("Extension - Disconnected", false);
             beatSaberMenuItem = new CheckboxMenuItem("Beat Saber - Disconnected");
             wiimmfiMenuItem = new CheckboxMenuItem("Wiimmfi (Mario Kart Wii)", false);
+            nintendoSwitchMenuItem = new CheckboxMenuItem("Nintendo Switch (Auto)");
             desmumeMenuItem = new CheckboxMenuItem("DeSmuME (Pokémon Gen 4)", false);
             mediaPlayerMenu = new Menu("Media Players");
             vlcMediaPlayerMenuItem = new CheckboxMenuItem("VLC Media Player");
@@ -362,6 +425,10 @@ public class LogRPC {
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
                     }
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
+                    }
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
                         desmumeExecutor = null;
@@ -386,7 +453,7 @@ public class LogRPC {
                         jsonException.printStackTrace();
                     }
 
-                    saveCachedData(PresenceType.MANUAL, desmumeRPCFile);
+                    saveCachedData(PresenceType.MANUAL);
                 }
             });
             programMenuItem.addItemListener(new ItemListener() {
@@ -403,6 +470,10 @@ public class LogRPC {
                         wiimmfiMenuItem.setState(false);
                         if (wiimmfiExecutor != null) {
                             wiimmfiExecutor = null;
+                        }
+                        nintendoSwitchMenuItem.setState(false);
+                        if (nintendoSwitchExecutor != null) {
+                            nintendoSwitchExecutor = null;
                         }
                         desmumeMenuItem.setState(false);
                         if (desmumeExecutor != null) {
@@ -431,7 +502,7 @@ public class LogRPC {
                         programExecutor = Executors.newSingleThreadExecutor();
                         programExecutor.execute(new ProgramRunnable());
 
-                        saveCachedData(PresenceType.PROGRAM, desmumeRPCFile);
+                        saveCachedData(PresenceType.PROGRAM);
                     } else {
                         JOptionPane.showMessageDialog(null, "Program Presence is not supported (yet) on Mac/Linux Systems!");
                     }
@@ -450,6 +521,10 @@ public class LogRPC {
                     wiimmfiMenuItem.setState(false);
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
+                    }
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
                     }
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
@@ -478,7 +553,7 @@ public class LogRPC {
                     musicExecutor = Executors.newSingleThreadExecutor();
                     musicExecutor.execute(new MusicRunnable());
 
-                    saveCachedData(PresenceType.MUSIC, desmumeRPCFile);
+                    saveCachedData(PresenceType.MUSIC);
                 }
             });
             chromeMenuItem.addItemListener(new ItemListener() {
@@ -497,6 +572,10 @@ public class LogRPC {
                     wiimmfiMenuItem.setState(false);
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
+                    }
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
                     }
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
@@ -522,7 +601,7 @@ public class LogRPC {
                         jsonException.printStackTrace();
                     }
 
-                    saveCachedData(PresenceType.EXTENSION, desmumeRPCFile);
+                    saveCachedData(PresenceType.EXTENSION);
                 }
             });
             beatSaberMenuItem.addItemListener(new ItemListener() {
@@ -541,6 +620,10 @@ public class LogRPC {
                     wiimmfiMenuItem.setState(false);
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
+                    }
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
                     }
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
@@ -566,7 +649,7 @@ public class LogRPC {
                         jsonException.printStackTrace();
                     }
 
-                    saveCachedData(PresenceType.BEAT_SABER, desmumeRPCFile);
+                    saveCachedData(PresenceType.BEAT_SABER);
                 }
             });
             wiimmfiMenuItem.addItemListener(new ItemListener() {
@@ -583,6 +666,10 @@ public class LogRPC {
                     }
                     chromeMenuItem.setState(false);
                     beatSaberMenuItem.setState(false);
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
+                    }
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
                         desmumeExecutor = null;
@@ -618,7 +705,55 @@ public class LogRPC {
                         }
                     }
 
-                    saveCachedData(PresenceType.WIIMMFI, desmumeRPCFile);
+                    saveCachedData(PresenceType.WIIMMFI);
+                }
+            });
+            nintendoSwitchMenuItem.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    manualMenuItem.setState(false);
+                    programMenuItem.setState(false);
+                    if (programExecutor != null) {
+                        programExecutor = null;
+                    }
+                    musicMenuItem.setState(false);
+                    if (musicExecutor != null) {
+                        musicExecutor = null;
+                    }
+                    chromeMenuItem.setState(false);
+                    beatSaberMenuItem.setState(false);
+                    wiimmfiMenuItem.setState(false);
+                    if (wiimmfiExecutor != null) {
+                        wiimmfiExecutor = null;
+                    }
+                    desmumeMenuItem.setState(false);
+                    if (desmumeExecutor != null) {
+                        desmumeExecutor = null;
+                    }
+                    vlcMediaPlayerMenuItem.setState(false);
+                    mpchcMediaPlayerMenuItem.setState(false);
+                    if (mediaPlayerExecutor != null) {
+                        mediaPlayerExecutor = null;
+                    }
+
+                    nintendoSwitchMenuItem.setState(true);
+
+                    defaultPresence.setEnabled(false);
+                    setManualMenuItem.setEnabled(false);
+                    presetPresencesMenu.setEnabled(false);
+                    gameConsolesMenu.setEnabled(false);
+                    pcGamesMenu.setEnabled(false);
+
+                    try {
+                        eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                    } catch (JSONException jsonException) {
+                        jsonException.printStackTrace();
+                    }
+
+                    nintendoSwitchExecutor = Executors.newSingleThreadExecutor();
+                    nintendoSwitchExecutor.execute(new NintendoSwitchRunnable());
+
+                    saveCachedData(PresenceType.NINTENDO_SWITCH);
                 }
             });
             desmumeMenuItem.addItemListener(new ItemListener() {
@@ -663,6 +798,10 @@ public class LogRPC {
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
                     }
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
+                    }
                     vlcMediaPlayerMenuItem.setState(false);
                     mpchcMediaPlayerMenuItem.setState(false);
                     if (mediaPlayerExecutor != null) {
@@ -686,7 +825,7 @@ public class LogRPC {
                     desmumeExecutor = Executors.newSingleThreadExecutor();
                     desmumeExecutor.execute(new DeSmuMERunnable());
 
-                    saveCachedData(PresenceType.DESMUME, desmumeRPCFile);
+                    saveCachedData(PresenceType.DESMUME);
                 }
             });
             vlcMediaPlayerMenuItem.addItemListener(new ItemListener() {
@@ -706,6 +845,10 @@ public class LogRPC {
                     wiimmfiMenuItem.setState(false);
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
+                    }
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
                     }
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
@@ -732,7 +875,7 @@ public class LogRPC {
                         mediaPlayerExecutor.execute(new MediaPlayerRunnable());
                     }
 
-                    saveCachedData(PresenceType.VLC_MEDIA_PLAYER, desmumeRPCFile);
+                    saveCachedData(PresenceType.VLC_MEDIA_PLAYER);
                 }
             });
             mpchcMediaPlayerMenuItem.addItemListener(new ItemListener() {
@@ -752,6 +895,10 @@ public class LogRPC {
                     wiimmfiMenuItem.setState(false);
                     if (wiimmfiExecutor != null) {
                         wiimmfiExecutor = null;
+                    }
+                    nintendoSwitchMenuItem.setState(false);
+                    if (nintendoSwitchExecutor != null) {
+                        nintendoSwitchExecutor = null;
                     }
                     desmumeMenuItem.setState(false);
                     if (desmumeExecutor != null) {
@@ -778,7 +925,7 @@ public class LogRPC {
                         mediaPlayerExecutor.execute(new MediaPlayerRunnable());
                     }
 
-                    saveCachedData(PresenceType.MPCHC_MEDIA_PLAYER, desmumeRPCFile);
+                    saveCachedData(PresenceType.MPCHC_MEDIA_PLAYER);
                 }
             });
 
@@ -792,6 +939,7 @@ public class LogRPC {
             popupMenu.add(chromeMenuItem);
             popupMenu.add(beatSaberMenuItem);
             popupMenu.add(wiimmfiMenuItem);
+            popupMenu.add(nintendoSwitchMenuItem);
             popupMenu.add(desmumeMenuItem);
             mediaPlayerMenu.add(vlcMediaPlayerMenuItem);
             mediaPlayerMenu.add(mpchcMediaPlayerMenuItem);
@@ -808,6 +956,12 @@ public class LogRPC {
             }
             if (config.isDeSmuMEDisabled()) {
                 desmumeMenuItem.setEnabled(false);
+            }
+            if (config.isMediaPlayerDisabled()) {
+                mediaPlayerMenu.setEnabled(false);
+            }
+            if (config.isNintendoSwitchAutoDisabled()) {
+                nintendoSwitchMenuItem.setEnabled(false);
             }
 
             programMenuItem.setEnabled(System.getProperty("os.name").startsWith("Windows"));
@@ -1013,6 +1167,10 @@ public class LogRPC {
         return wiimmfiMenuItem;
     }
 
+    public CheckboxMenuItem getNintendoSwitchMenuItem() {
+        return nintendoSwitchMenuItem;
+    }
+
     public CheckboxMenuItem getDesmumeMenuItem() {
         return desmumeMenuItem;
     }
@@ -1069,6 +1227,14 @@ public class LogRPC {
         this.wiimmfiExecutor = wiimmfiExecutor;
     }
 
+    public ExecutorService getNintendoSwitchExecutor() {
+        return nintendoSwitchExecutor;
+    }
+
+    public void setNintendoSwitchExecutor(ExecutorService nintendoSwitchExecutor) {
+        this.nintendoSwitchExecutor = nintendoSwitchExecutor;
+    }
+
     public ExecutorService getDesmumeExecutor() {
         return desmumeExecutor;
     }
@@ -1083,6 +1249,14 @@ public class LogRPC {
 
     public void setMediaPlayerExecutor(ExecutorService mediaPlayerExecutor) {
         this.mediaPlayerExecutor = mediaPlayerExecutor;
+    }
+
+    public String getNintendoRefreshToken() {
+        return nintendoRefreshToken;
+    }
+
+    public void setNintendoRefreshToken(String nintendoRefreshToken) {
+        this.nintendoRefreshToken = nintendoRefreshToken;
     }
 
     public File getDesmumeRPCFile() {
@@ -1196,6 +1370,7 @@ public class LogRPC {
         }
     }
 
+<<<<<<< HEAD
     public Map<String, String> readCachedData(File cachedDataFile) throws IOException, ClassNotFoundException {
         Map<String, String> cachedData;
         if (cachedDataFile.exists()) {
@@ -1215,6 +1390,86 @@ public class LogRPC {
     }
 
     public void saveCachedData(PresenceType type, File desmumeRPCFile) {
+=======
+    public Future<String[]> grabNintendoSessionToken() throws IOException, NoSuchAlgorithmException {
+        final String[] nintendoSessionToken = new String[1];
+        final String[] nintendoSessionVerifier = new String[1];
+
+        nintendoSessionToken[0] = "";
+        nintendoSessionVerifier[0] = "";
+
+        JFrame frame = new JFrame();
+        frame.setSize(new Dimension(1100, 600));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setIconImage(ImageIO.read(getClass().getClassLoader().getResourceAsStream("icon.png")).getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+        frame.setTitle("Login to your Nintendo Account");
+
+        CefClient cefClient = cefApp.createClient();
+        cefClient.addLoadHandler(new CefLoadHandlerAdapter() {
+            @Override
+            public void onLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode) {
+                if (frame.getURL().startsWith("npf71b963c1b7b6d119://auth#session_token_code=")) {
+                    System.out.println(frame.getURL());
+                    Pattern pattern = Pattern.compile("(eyJhbGciOiJIUzI1NiJ9\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]*)");
+                    Matcher matcher = pattern.matcher(frame.getURL());
+                    boolean found = matcher.find();
+                    if (found) {
+                        nintendoSessionToken[0] = matcher.group();
+                    } else {
+                        cefApp.dispose();
+                    }
+                } else if (frame.getURL().startsWith("npf71b963c1b7b6d119://auth#error_description=")) {
+                    cefApp.dispose();
+                }
+            }
+        });
+
+        nintendoSessionVerifier[0] = generateRandomStateHash(32);
+        CefBrowser cefBrowser = cefClient.createBrowser("https://accounts.nintendo.com/connect/1.0.0/authorize?client_id=71b963c1b7b6d119&redirect_uri=npf71b963c1b7b6d119%3A%2F%2Fauth&response_type=session_token_code&scope=openid+user+user.birthday+user.mii+user.screenName&session_token_code_challenge=" + Base64.getUrlEncoder().withoutPadding().encodeToString(generateSHA256Hash(nintendoSessionVerifier[0].replace("=", "")).getBytes()).replace("=", "") + "&session_token_code_challenge_method=S256&state=" + generateRandomStateHash(36) + "&theme=login_form", false, false);
+        frame.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
+        frame.setVisible(true);
+
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        return service.submit(() -> {
+            while (nintendoSessionToken[0].isEmpty()) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            frame.dispose();
+            cefBrowser.close(true);
+            cefClient.dispose();
+            cefApp.dispose();
+
+            return new String[]{nintendoSessionToken[0], nintendoSessionVerifier[0]};
+        });
+    }
+
+    private String generateRandomStateHash(int length) {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    private String generateSHA256Hash(String input) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] bytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+
+        return sb.toString();
+    }
+
+    public void saveCachedData(PresenceType type) {
+>>>>>>> a055b59 (Preliminary Nintendo Switch RPC Presence Code)
         try {
             File cachedDataFile = new File("LogRPC.dat");
 
@@ -1225,6 +1480,14 @@ public class LogRPC {
                     cachedData.replace("DeSmuME RPC File", desmumeRPCFile.getAbsolutePath());
                 } else {
                     cachedData.put("DeSmuME RPC File", desmumeRPCFile.getAbsolutePath());
+                }
+            }
+
+            if (nintendoRefreshToken != null && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                if (cachedData.containsKey("Nintendo Refresh Token")) {
+                    cachedData.replace("Nintendo Refresh Token", nintendoRefreshToken);
+                } else {
+                    cachedData.put("Nintendo Refresh Token", nintendoRefreshToken);
                 }
             }
 
