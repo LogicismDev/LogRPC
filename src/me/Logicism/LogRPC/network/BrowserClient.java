@@ -26,7 +26,7 @@ public class BrowserClient {
         int resCode = c.getResponseCode();
         int resLength = c.getContentLength();
 
-        return new BrowserData(c.getURL().toString(), c.getHeaderFields(), resCode, resLength, c.getInputStream() != null ? c.getInputStream() : c.getErrorStream());
+        return new BrowserData(c.getURL().toString(), c.getHeaderFields(), resCode, resLength, c.getResponseCode() == 200 ? c.getInputStream() : c.getErrorStream());
     }
 
     public static BrowserData executePOSTRequest(URL url, String data, Map<String, String> headers) throws IOException {
@@ -53,7 +53,7 @@ public class BrowserClient {
         int resCode = c.getResponseCode();
         int resLength = c.getContentLength();
 
-        return new BrowserData(c.getURL().toString(), c.getHeaderFields(), resCode, resLength, c.getInputStream() != null ? c.getInputStream() : c.getErrorStream());
+        return new BrowserData(c.getURL().toString(), c.getHeaderFields(), resCode, resLength, c.getResponseCode() == 200 ? c.getInputStream() : c.getErrorStream());
     }
 
     public static String requestToString(InputStream is) throws IOException {

@@ -58,6 +58,8 @@ public class LogRPCConfig {
 
     private String flareSolverrSession;
 
+    private boolean enableSavingNintendoRefreshToken;
+
     private String hrReader;
 
     private String pulsoidWidgetId;
@@ -93,6 +95,8 @@ public class LogRPCConfig {
     private boolean beatSaberDisabled;
 
     private boolean wiimmfiDisabled;
+
+    private boolean nintendoSwitchAutoDisabled;
 
     private boolean deSmuMEDisabled;
 
@@ -216,6 +220,10 @@ public class LogRPCConfig {
         return flareSolverrSession;
     }
 
+    public boolean isEnableSavingNintendoRefreshToken() {
+        return enableSavingNintendoRefreshToken;
+    }
+
     public String getHrReader() {
         return hrReader;
     }
@@ -300,6 +308,10 @@ public class LogRPCConfig {
 
     public boolean isWiimmfiDisabled() {
         return wiimmfiDisabled;
+    }
+
+    public boolean isNintendoSwitchAutoDisabled() {
+        return nintendoSwitchAutoDisabled;
     }
 
     public boolean isMediaPlayerDisabled() {

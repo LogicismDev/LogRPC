@@ -4,10 +4,7 @@ import com.jagrosh.discordipc.IPCClient;
 import com.jagrosh.discordipc.IPCListener;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.JSONData;
-import me.Logicism.LogRPC.core.executors.DeSmuMERunnable;
-import me.Logicism.LogRPC.core.executors.MediaPlayerRunnable;
-import me.Logicism.LogRPC.core.executors.MusicRunnable;
-import me.Logicism.LogRPC.core.executors.ProgramRunnable;
+import me.Logicism.LogRPC.core.executors.*;
 import me.Logicism.LogRPC.event.UpdatePresenceEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +72,7 @@ public class PresenceListener implements IPCListener {
                                 LogRPC.INSTANCE.getPCGamesMenu().setEnabled(false);
                                 break;
                             case WIIMMFI:
-                                LogRPC.INSTANCE.getChromeMenuItem().setState(true);
+                                LogRPC.INSTANCE.getWiimmfiMenuItem().setState(true);
 
                                 LogRPC.INSTANCE.getDefaultPresenceMenuItem().setEnabled(false);
                                 LogRPC.INSTANCE.getSetManualMenuItem().setEnabled(false);
@@ -84,32 +81,46 @@ public class PresenceListener implements IPCListener {
                                 LogRPC.INSTANCE.getPCGamesMenu().setEnabled(false);
 
                                 LogRPC.INSTANCE.setWiimmfiExecutor(Executors.newSingleThreadExecutor());
-                                LogRPC.INSTANCE.getWiimmfiExecutor().execute(new MusicRunnable());
+                                LogRPC.INSTANCE.getWiimmfiExecutor().execute(new WiimmfiRunnable());
+                                break;
+                            case NINTENDO_SWITCH:
+                                LogRPC.INSTANCE.getNintendoSwitchMenuItem().setState(true);
+
+                                LogRPC.INSTANCE.getDefaultPresenceMenuItem().setEnabled(false);
+                                LogRPC.INSTANCE.getSetManualMenuItem().setEnabled(false);
+                                LogRPC.INSTANCE.getPresetPresencesMenu().setEnabled(false);
+                                LogRPC.INSTANCE.getGameConsolesMenu().setEnabled(false);
+                                LogRPC.INSTANCE.getPCGamesMenu().setEnabled(false);
+
+                                LogRPC.INSTANCE.setNintendoSwitchExecutor(Executors.newSingleThreadExecutor());
+                                LogRPC.INSTANCE.getNintendoSwitchExecutor().execute(new NintendoSwitchRunnable());
                                 break;
                             case DESMUME:
-                                JFileChooser chooser = new JFileChooser();
-                                chooser.setDialogTitle("Open out.dat");
-                                chooser.setFileFilter(new FileNameExtensionFilter("out.dat DeSmuME File", "dat"));
-                                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                                    try {
-                                        List<String> list = Files.readAllLines(chooser.getSelectedFile().toPath());
-                                        if (list.size() == 3 && chooser.getSelectedFile().getName().equals("out.dat")) {
-                                            LogRPC.INSTANCE.setDesmumeRPCFile(chooser.getSelectedFile());
-                                        } else {
-                                            JOptionPane.showMessageDialog(null, "Invalid File!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+                                if (LogRPC.INSTANCE.getDesmumeRPCFile() == null) {
+                                    JFileChooser chooser = new JFileChooser();
+                                    chooser.setDialogTitle("Open out.dat");
+                                    chooser.setFileFilter(new FileNameExtensionFilter("out.dat DeSmuME File", "dat"));
+                                    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                                        try {
+                                            List<String> list = Files.readAllLines(chooser.getSelectedFile().toPath());
+                                            if (list.size() == 3 && chooser.getSelectedFile().getName().equals("out.dat")) {
+                                                LogRPC.INSTANCE.setDesmumeRPCFile(chooser.getSelectedFile());
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, "Invalid File!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+
+                                                LogRPC.INSTANCE.getManualMenuItem().setState(true);
+                                                return;
+                                            }
+                                        } catch (IOException ex) {
+                                            JOptionPane.showMessageDialog(null, "Can't Open File! " + ex.getMessage(), "LogRPC", JOptionPane.ERROR_MESSAGE);
 
                                             LogRPC.INSTANCE.getManualMenuItem().setState(true);
                                             return;
                                         }
-                                    } catch (IOException ex) {
-                                        JOptionPane.showMessageDialog(null, "Can't Open File! " + ex.getMessage(), "LogRPC", JOptionPane.ERROR_MESSAGE);
-
+                                    } else {
                                         LogRPC.INSTANCE.getManualMenuItem().setState(true);
                                         return;
                                     }
-                                } else {
-                                    LogRPC.INSTANCE.getManualMenuItem().setState(true);
-                                    return;
                                 }
 
                                 LogRPC.INSTANCE.getDesmumeMenuItem().setState(true);
