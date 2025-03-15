@@ -179,27 +179,27 @@ public class UpdatePresenceHandler extends EventHandler {
             builder.setActivityType(presence.getActivityType());
 
             if (!presence.getState().isEmpty()) {
-                builder.setState(new String(presence.getState().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                builder.setState(new String(presence.getState().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
             }
 
-            builder.setDetails(new String(presence.getDetails().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+            builder.setDetails(new String(presence.getDetails().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
 
             if (presence.getLargeImageKey() != null && !presence.getLargeImageKey().isEmpty()) {
                 builder.setLargeImage(presence.getLargeImageKey(),
-                        new String(presence.getLargeImageText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                        new String(presence.getLargeImageText().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
 
                 if (presence.getSmallImageKey() != null && !presence.getSmallImageKey().isEmpty()) {
                     builder.setSmallImage(presence.getSmallImageKey(),
-                            new String(presence.getSmallImageText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                            new String(presence.getSmallImageText().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
                 }
             }
 
             if (presence.getMainButtonText() != null) {
-                builder.setMainButtonText(new String(presence.getMainButtonText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setMainButtonURL(presence.getMainButtonURL());
+                builder.setMainButtonText(new String(presence.getMainButtonText().substring(0, 32).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setMainButtonURL(presence.getMainButtonURL());
             }
 
             if (presence.getSecondaryButtonText() != null) {
-                builder.setSecondaryButtonText(new String(presence.getSecondaryButtonText().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setSecondaryButtonURL(presence.getSecondaryButtonURL());
+                builder.setSecondaryButtonText(new String(presence.getSecondaryButtonText().substring(0, 32).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setSecondaryButtonURL(presence.getSecondaryButtonURL());
             }
 
             if (presence.getStartTimestamp() != -1) {
