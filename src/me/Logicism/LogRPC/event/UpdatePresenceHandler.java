@@ -137,6 +137,7 @@ public class UpdatePresenceHandler extends EventHandler {
             } else if ((((JSONData) e.getData()).getDetails().startsWith("fceux_") || ((JSONData) e.getData()).getDetails().startsWith("fceux")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("fceux")) {
                 presence = new FCEUXPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("snes9x-x64_") || ((JSONData) e.getData()).getDetails().startsWith("snes9x-x64") || ((JSONData) e.getData()).getDetails().startsWith("snes9x_") || ((JSONData) e.getData()).getDetails().startsWith("snes9x")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("snes9x")) {
+                System.out.println("HI");
                 presence = new Snes9xPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("DOSBox_") || ((JSONData) e.getData()).getDetails().startsWith("DOSBox")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("dosbox")) {
                 presence = new DOSBoxPresence(e.getData());
@@ -179,27 +180,27 @@ public class UpdatePresenceHandler extends EventHandler {
             builder.setActivityType(presence.getActivityType());
 
             if (!presence.getState().isEmpty()) {
-                builder.setState(new String(presence.getState().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                builder.setState(new String(presence.getState().length() < 128 ? presence.getState().getBytes(StandardCharsets.UTF_8) : presence.getState().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
             }
 
-            builder.setDetails(new String(presence.getDetails().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+            builder.setDetails(new String(presence.getDetails().length() < 128 ? presence.getDetails().getBytes(StandardCharsets.UTF_8) : presence.getDetails().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
 
             if (presence.getLargeImageKey() != null && !presence.getLargeImageKey().isEmpty()) {
                 builder.setLargeImage(presence.getLargeImageKey(),
-                        new String(presence.getLargeImageText().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                        new String(presence.getLargeImageText().length() < 128 ? presence.getLargeImageText().getBytes(StandardCharsets.UTF_8) : presence.getLargeImageText().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
 
                 if (presence.getSmallImageKey() != null && !presence.getSmallImageKey().isEmpty()) {
                     builder.setSmallImage(presence.getSmallImageKey(),
-                            new String(presence.getSmallImageText().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                            new String(presence.getSmallImageText().length() < 128 ? presence.getSmallImageText().getBytes(StandardCharsets.UTF_8) : presence.getSmallImageText().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
                 }
             }
 
             if (presence.getMainButtonText() != null) {
-                builder.setMainButtonText(new String(presence.getMainButtonText().substring(0, 32).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setMainButtonURL(presence.getMainButtonURL());
+                builder.setMainButtonText(new String(presence.getMainButtonText().length() < 32 ? presence.getMainButtonText().getBytes(StandardCharsets.UTF_8) : presence.getMainButtonText().substring(0, 32).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setMainButtonURL(presence.getMainButtonURL());
             }
 
             if (presence.getSecondaryButtonText() != null) {
-                builder.setSecondaryButtonText(new String(presence.getSecondaryButtonText().substring(0, 32).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setSecondaryButtonURL(presence.getSecondaryButtonURL());
+                builder.setSecondaryButtonText(new String(presence.getSecondaryButtonText().length() < 32 ? presence.getSecondaryButtonText().getBytes(StandardCharsets.UTF_8) : presence.getSecondaryButtonText().substring(0, 32).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)).setSecondaryButtonURL(presence.getSecondaryButtonURL());
             }
 
             if (presence.getStartTimestamp() != -1) {
