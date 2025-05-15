@@ -9,7 +9,7 @@ import me.Logicism.LogRPC.presence.Presence;
 public class WiiUPresence extends Presence {
 
     public WiiUPresence(PresenceData data) {
-        super(864486365218603008L, data);
+        super(1259966953573847130L, data);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class WiiUPresence extends Presence {
     public String getLargeImageKey() {
         JSONData data = (JSONData) this.data;
 
-        return data.getAttribute("largeImageKey") + "_us";
+        return "https://github.com/ninstar/Rich-Presence-U-DB/raw/main/titles/wup/" + data.getAttribute("largeImageKey") + ".us.jpg";
     }
 
     @Override
