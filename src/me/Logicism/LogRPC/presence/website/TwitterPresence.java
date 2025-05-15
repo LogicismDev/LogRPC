@@ -98,8 +98,8 @@ public class TwitterPresence extends Presence {
             }
         } else if (data.getURL().contains("/status/")) {
             if (data.getURL().contains("/photo/")) {
-                Element displayNameElement = data.getHTMLDocument().selectXpath("/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/section/div/div/div[1]/div/div/div[1]/article/div/div/div/div[2]/div[2]/div/div/div/div[1]/div/div/div[1]/div/a/div/div[1]/span/span").first();
-                Element userNameElement = data.getHTMLDocument().selectXpath("/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/section/div/div/div[1]/div/div/div[1]/article/div/div/div/div[2]/div[2]/div/div/div/div[1]/div/div/div[2]/div/div/a/div/span").first();
+                Element displayNameElement = data.getHTMLDocument().selectXpath("/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/section/div/div/div[1]/div[1]/div/article/div/div/div[2]/div[2]/div/div/div[1]/div/div/div[1]/div/a/div/div[1]/span/span").first();
+                Element userNameElement = data.getHTMLDocument().selectXpath("/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/section/div/div/div[1]/div[1]/div/article/div/div/div[2]/div[2]/div/div/div[1]/div/div/div[2]/div/div/a/div/span").first();
 
                 return displayNameElement.text() + " (" + userNameElement.text() + ")";
             } else {
