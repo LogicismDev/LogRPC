@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v2.0-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v2.0-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v2.0-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v2.0)
+[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v2.1-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v2.1-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v2.1-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v2.1)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
@@ -40,13 +40,13 @@ A Rich Presence program to show your activity on Discord
          * shadoweG on GitHub for DaVinci Resolve Discord Presence Application IDs
 
     * Music (Windows/macOS):
-      * Windows: Uses a Python Script with Embedded Python to grab the song information from the Windows Media Control Bar using WinRT API. Artwork is grabbed from TIDAL, and secondarily iTunes.
+      * Windows: Uses a Python Script with Embedded Python to grab the song information from the Windows Media Control Bar using WinRT API. Artwork is grabbed from TIDAL, and secondarily iTunes. For Windows 11 Users, you should read below what the current app IDs are to insert in musicProgram in the config.yml.
         * Specific Rich Presence Programs:
           - Amazon Music (does not display Timestamp)
           - Deezer
-          - iTunes
+          - iTunes (iTunes Users should install [this](https://apps.microsoft.com/detail/9nq3d21qt8ml?hl=en-US&gl=US).)
           - Qobuz
-          - TIDAL
+          - TIDAL (does not display proper Timestamp)
         * Default Rich Presence:
           - Any program that shows information from the Windows Media Control Bar.
       * macOS: Uses a TypeScript Script to grab the song information from Apple Music/iTunes. Artwork is grabbed from iTunes.
@@ -88,4 +88,24 @@ A Rich Presence program to show your activity on Discord
         * Uses filename as title.
         * Uses the Web Interface to grab media information, such as play state and position.
 
-If you would like to request a program, game, website or presence to be added, DM Logicism at his Discord (Logicism#9308)
+## Windows 11 Music App IDs
+
+The following are the App IDs if you are using the Music Presence. The ID should be specified in "musicProgram" in the config.yml
+
+* Deezer: com.deezer.deezer-desktop
+* Amazon Music: Amazon.Music
+* TIDAL: com.squirrel.TIDAL.TIDAL
+* Qobuz: com.squirrel.Qobuz.Qobuz
+* iTunes: 49586DaveAntoine.MediaControllerforiTunes_9bzempp7dntjg!App
+
+## Support
+
+[Discord Server](https://discord.gg/nStuNeZsWz)
+
+If you would like to request a program, game, website or presence to be added, you can join the Discord Server above and then clicking on the role selection LogRPC.
+
+## Donations
+
+[ko-fi.com Donation](https://ko-fi.com/Logicism)
+
+Donations are much appreciated! Thank you for donating!
