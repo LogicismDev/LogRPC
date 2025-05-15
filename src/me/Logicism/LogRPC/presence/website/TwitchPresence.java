@@ -41,7 +41,7 @@ public class TwitchPresence extends Presence {
                         return "Browsing Twitch";
                     }
                 } else if (data.getURL().contains("https://www.twitch.tv/videos")) {
-                    Elements titleElements = data.getHTMLDocument().getElementsByTag("h2");
+                    Elements titleElements = data.getHTMLDocument().select("#live-channel-stream-information > div > div > div.metadata-layout__split-top > div.Layout-sc-1xcs6mc-0.iULZCz > div.Layout-sc-1xcs6mc-0.jPmKIH > p");
                     Element titleElement = null;
                     for (Element e : titleElements) {
                         if (e.hasAttr("data-a-target") && e.attr("data-a-target").equals("stream-title")) {
@@ -66,27 +66,17 @@ public class TwitchPresence extends Presence {
                         return titleElement.text();
                     }
                 } else if (!data.getURL().contains("https://www.twitch.tv/directory") && !data.getURL().contains("https://www.twitch.tv/settings") && !data.getURL().contains("https://www.twitch.tv/p/") && !data.getURL().contains("https://www.twitch.tv/turbo") && !data.getURL().contains("https://www.twitch.tv/popout")) {
-                    Elements videoElements = data.getHTMLDocument().getElementsByTag("div");
-                    Element videoElement = null;
-                    for (Element e : videoElements) {
-                        if (e.hasClass("video-player__overlay")) {
-                            videoElement = e;
-                            break;
-                        }
-                    }
+                    Elements videoElements = data.getHTMLDocument().select("#root > div > div.Layout-sc-1xcs6mc-0.lcpZLv > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-1i43xsx-0.persistent-player > div > div.Layout-sc-1xcs6mc-0.video-player > div > div.Layout-sc-1xcs6mc-0.video-ref > div > div");
+                    Element videoElement = videoElements.first();
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.kYbRHX > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
                     if (videoElement != null && liveElement != null) {
-                        Elements titleElements = data.getHTMLDocument().getElementsByTag("h2");
-                        Element titleElement = null;
-                        for (Element e : titleElements) {
-                            if (e.hasAttr("data-a-target") && e.attr("data-a-target").equals("stream-title")) {
-                                titleElement = e;
-                                break;
-                            }
-                        }
+                        Elements titleElements = data.getHTMLDocument().select("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.kYbRHX > div.Layout-sc-1xcs6mc-0.evfzyg > div.Layout-sc-1xcs6mc-0.iStNQt > div.Layout-sc-1xcs6mc-0.fxsRRM > div > div.Layout-sc-1xcs6mc-0.fAVISI > p");
+                        Element titleElement = titleElements.first();
 
-                        return titleElement.attr("title");
+                        if (titleElement.hasAttr("data-a-target") && titleElement.attr("data-a-target").equals("stream-title")) {
+                            return titleElement.attr("title");
+                        }
                     } else {
                         return "Viewing Channel";
                     }
@@ -136,18 +126,12 @@ public class TwitchPresence extends Presence {
                         return titleElement.text();
                     }
                 } else if (!data.getURL().contains("https://www.twitch.tv/directory") && !data.getURL().contains("https://www.twitch.tv/settings") && !data.getURL().contains("https://www.twitch.tv/p/") && !data.getURL().contains("https://www.twitch.tv/turbo") && !data.getURL().contains("https://www.twitch.tv/popout")) {
-                    Elements videoElements = data.getHTMLDocument().getElementsByTag("div");
-                    Element videoElement = null;
-                    for (Element e : videoElements) {
-                        if (e.hasClass("video-player__overlay")) {
-                            videoElement = e;
-                            break;
-                        }
-                    }
+                    Elements videoElements = data.getHTMLDocument().select("#root > div > div.Layout-sc-1xcs6mc-0.lcpZLv > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-1i43xsx-0.persistent-player > div > div.Layout-sc-1xcs6mc-0.video-player > div > div.Layout-sc-1xcs6mc-0.video-ref > div > div");
+                    Element videoElement = videoElements.first();
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.kYbRHX > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
                     if (videoElement != null && liveElement != null) {
-                        Element titleElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.evfzyg > div.Layout-sc-1xcs6mc-0.denZNh.metadata-layout__support > div.Layout-sc-1xcs6mc-0.jjAyLi > div > a > h1");
+                        Element titleElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.kYbRHX > div.Layout-sc-1xcs6mc-0.evfzyg > div.Layout-sc-1xcs6mc-0.denZNh.metadata-layout__support > div.Layout-sc-1xcs6mc-0.jjAyLi > div > a > h1");
 
                         return titleElement.ownText();
                     } else {
@@ -187,12 +171,19 @@ public class TwitchPresence extends Presence {
 
             if (url.getHost().equals("www.twitch.tv")) {
                 if (data.getURL().contains("https://www.twitch.tv/videos")) {
-                    Elements element = data.getHTMLDocument().getElementsContainingText("Pause (space/k)");
+                    Elements elements = data.getHTMLDocument().select("#channel-player > div > div.Layout-sc-1xcs6mc-0.cFsYRp.player-controls__left-control-group > div.InjectLayout-sc-1i43xsx-0.kBtJDm > button");
+                    Element element = null;
+                    for (Element e : elements) {
+                        if (e.hasAttr("data-a-player-state")) {
+                            element = e;
+                            break;
+                        }
+                    }
 
-                    if (element.size() == 0) {
-                        return "pause";
-                    } else {
+                    if (element != null) {
                         return "play";
+                    } else {
+                        return "pause";
                     }
                 } else if (data.getURL().startsWith("https://www.twitch.tv/moderator/")) {
                     Element liveElement = data.getHTMLDocument().getElementsMatchingOwnText("Live Now").get(0);
@@ -201,16 +192,10 @@ public class TwitchPresence extends Presence {
                         return "live";
                     }
                 } else if (!data.getURL().contains("https://www.twitch.tv/directory") && !data.getURL().contains("https://www.twitch.tv/settings") && !data.getURL().contains("https://www.twitch.tv/p/") && !data.getURL().contains("https://www.twitch.tv/turbo") && !data.getURL().contains("https://www.twitch.tv/popout")) {
-                    Elements videoElements = data.getHTMLDocument().getElementsByTag("div");
-                    Element videoElement = null;
-                    for (Element e : videoElements) {
-                        if (e.hasClass("video-player__overlay")) {
-                            videoElement = e;
-                            break;
-                        }
-                    }
+                    Elements videoElements = data.getHTMLDocument().select("#root > div > div.Layout-sc-1xcs6mc-0.lcpZLv > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-1i43xsx-0.persistent-player > div > div.Layout-sc-1xcs6mc-0.video-player > div > div.Layout-sc-1xcs6mc-0.video-ref > div > div");
+                    Element videoElement = videoElements.first();
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.kYbRHX > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
                     if (videoElement != null && liveElement != null) {
                         return "live";
                     }
@@ -232,12 +217,21 @@ public class TwitchPresence extends Presence {
 
             if (url.getHost().equals("www.twitch.tv")) {
                 if (data.getURL().contains("https://www.twitch.tv/videos")) {
-                    Elements element = data.getHTMLDocument().getElementsContainingText("Pause (space/k)");
+                    Elements elements = data.getHTMLDocument().select("#channel-player > div > div.Layout-sc-1xcs6mc-0.cFsYRp.player-controls__left-control-group > div.InjectLayout-sc-1i43xsx-0.kBtJDm > button");
+                    Element element = null;
+                    for (Element e : elements) {
+                        if (e.hasAttr("data-a-player-state")) {
+                            element = e;
+                            break;
+                        }
+                    }
 
-                    if (element.size() == 0) {
-                        return "Paused";
-                    } else {
-                        return "Playing";
+                    if (element != null) {
+                        if (element.attr("data-a-player-state").equals("paused")) {
+                            return "Paused";
+                        } else {
+                            return "Playing";
+                        }
                     }
                 } else if (data.getURL().startsWith("https://www.twitch.tv/moderator/")) {
                     Element liveElement = data.getHTMLDocument().getElementsMatchingOwnText("Live Now").get(0);
@@ -246,16 +240,10 @@ public class TwitchPresence extends Presence {
                         return "Live";
                     }
                 } else if (!data.getURL().contains("https://www.twitch.tv/directory") && !data.getURL().contains("https://www.twitch.tv/settings") && !data.getURL().contains("https://www.twitch.tv/p/") && !data.getURL().contains("https://www.twitch.tv/turbo") && !data.getURL().contains("https://www.twitch.tv/popout")) {
-                    Elements videoElements = data.getHTMLDocument().getElementsByTag("div");
-                    Element videoElement = null;
-                    for (Element e : videoElements) {
-                        if (e.hasClass("video-player__overlay")) {
-                            videoElement = e;
-                            break;
-                        }
-                    }
+                    Elements videoElements = data.getHTMLDocument().select("#root > div > div.Layout-sc-1xcs6mc-0.lcpZLv > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-1i43xsx-0.persistent-player > div > div.Layout-sc-1xcs6mc-0.video-player > div > div.Layout-sc-1xcs6mc-0.video-ref > div > div");
+                    Element videoElement = videoElements.first();
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.kYbRHX > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
                     if (videoElement != null && liveElement != null) {
                         return "Live";
                     }
@@ -284,16 +272,10 @@ public class TwitchPresence extends Presence {
                         return "Watch Stream";
                     }
                 } else if (!data.getURL().contains("https://www.twitch.tv/directory") && !data.getURL().contains("https://www.twitch.tv/settings") && !data.getURL().contains("https://www.twitch.tv/p/") && !data.getURL().contains("https://www.twitch.tv/turbo") && !data.getURL().contains("https://www.twitch.tv/popout")) {
-                    Elements videoElements = data.getHTMLDocument().getElementsByTag("div");
-                    Element videoElement = null;
-                    for (Element e : videoElements) {
-                        if (e.hasClass("video-player__overlay")) {
-                            videoElement = e;
-                            break;
-                        }
-                    }
+                    Elements videoElements = data.getHTMLDocument().select("#root > div > div.Layout-sc-1xcs6mc-0.lcpZLv > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-1i43xsx-0.persistent-player > div > div.Layout-sc-1xcs6mc-0.video-player > div > div.Layout-sc-1xcs6mc-0.video-ref > div > div");
+                    Element videoElement = videoElements.first();
 
-                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.dRGOOY > div > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
+                    Element liveElement = data.getHTMLDocument().selectFirst("#live-channel-stream-information > div > div > div.Layout-sc-1xcs6mc-0.kYbRHX > div.Layout-sc-1xcs6mc-0.iXRytg > div > div > div.Layout-sc-1xcs6mc-0.kpHsJz.avatar--t0iT1 > a > div > div.Layout-sc-1xcs6mc-0.liveIndicator--x8p4l > div");
                     if (videoElement != null && liveElement != null) {
                         return "Watch Stream";
                     } else {
@@ -333,10 +315,17 @@ public class TwitchPresence extends Presence {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (data.getURL().contains("https://www.twitch.tv/videos")) {
-            Elements element1 = data.getHTMLDocument().getElementsContainingText("Pause (space/k)");
+            Elements elements = data.getHTMLDocument().select("#channel-player > div > div.Layout-sc-1xcs6mc-0.cFsYRp.player-controls__left-control-group > div.InjectLayout-sc-1i43xsx-0.kBtJDm > button");
+            Element vElement = null;
+            for (Element e : elements) {
+                if (e.hasAttr("data-a-player-state")) {
+                    vElement = e;
+                    break;
+                }
+            }
 
-            if (element1.size() != 0) {
-                Element element = data.getHTMLDocument().selectFirst("#root > div.Layout-sc-nxg1ff-0.bGJmZt > div.Layout-sc-nxg1ff-0.bSuLAT > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-588ddc-0.persistent-player > div > div.Layout-sc-nxg1ff-0.video-player > div > div.Layout-sc-nxg1ff-0.video-ref > div > div > div:nth-child(4) > div > div > div > div.Layout-sc-nxg1ff-0.dHrscT.vod-seekbar-time-labels > p:nth-child(1)");
+            if (vElement != null) {
+                Element element = data.getHTMLDocument().selectFirst("#root > div > div.Layout-sc-1xcs6mc-0.lcpZLv > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-1i43xsx-0.persistent-player > div > div.Layout-sc-1xcs6mc-0.video-player > div > div.Layout-sc-1xcs6mc-0.video-ref > div > div > div:nth-child(5) > div > div > div > div.Layout-sc-1xcs6mc-0.iULZCz.vod-seekbar-time-labels > p:nth-child(1)");
 
                 String hours = element.ownText().split(":")[0];
                 String minutes = element.ownText().split(":")[1];
@@ -361,10 +350,17 @@ public class TwitchPresence extends Presence {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (data.getURL().contains("https://www.twitch.tv/videos")) {
-            Elements element1 = data.getHTMLDocument().getElementsContainingText("Pause (space/k)");
+            Elements elements = data.getHTMLDocument().select("#channel-player > div > div.Layout-sc-1xcs6mc-0.cFsYRp.player-controls__left-control-group > div.InjectLayout-sc-1i43xsx-0.kBtJDm > button");
+            Element vElement = null;
+            for (Element e : elements) {
+                if (e.hasAttr("data-a-player-state")) {
+                    vElement = e;
+                    break;
+                }
+            }
 
-            if (element1.size() != 0) {
-                Element element = data.getHTMLDocument().selectFirst("#root > div.Layout-sc-nxg1ff-0.bGJmZt > div.Layout-sc-nxg1ff-0.bSuLAT > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-588ddc-0.persistent-player > div > div.Layout-sc-nxg1ff-0.video-player > div > div.Layout-sc-nxg1ff-0.video-ref > div > div > div:nth-child(4) > div > div > div > div.Layout-sc-nxg1ff-0.dHrscT.vod-seekbar-time-labels > p:nth-child(2)");
+            if (vElement != null) {
+                Element element = data.getHTMLDocument().selectFirst("#root > div > div.Layout-sc-1xcs6mc-0.lcpZLv > div > main > div.root-scrollable.scrollable-area.scrollable-area--suppress-scroll-x > div.simplebar-scroll-content > div > div > div.InjectLayout-sc-1i43xsx-0.persistent-player > div > div.Layout-sc-1xcs6mc-0.video-player > div > div.Layout-sc-1xcs6mc-0.video-ref > div > div > div:nth-child(5) > div > div > div > div.Layout-sc-1xcs6mc-0.iULZCz.vod-seekbar-time-labels > p:nth-child(2)");
 
                 String hours = element.ownText().split(":")[0];
                 String minutes = element.ownText().split(":")[1];
