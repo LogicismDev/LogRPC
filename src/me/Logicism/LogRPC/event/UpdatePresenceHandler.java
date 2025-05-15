@@ -149,17 +149,17 @@ public class UpdatePresenceHandler extends EventHandler {
                 presence = new BeatSaberManualPresence(e.getData());
             }
         } else if (e.getType() == PresenceType.MUSIC) {
-            if (((JSONData) e.getData()).getAttribute("app_name").equals("Amazon Music.exe")) {
+            if (((JSONData) e.getData()).getAttribute("app_name").equals("Amazon Music.exe") || ((JSONData) e.getData()).getAttribute("app_name").equals("Amazon.Music")) {
                 presence = new AmazonMusicPresence(e.getData());
             } else if (((JSONData) e.getData()).getAttribute("app_name").equals("Apple Music")) {
                 presence = new AppleMusicPresence(e.getData());
-            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("Deezer.exe")) {
+            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("Deezer.exe") || ((JSONData) e.getData()).getAttribute("app_name").equals("com.deezer.deezer-desktop")) {
                 presence = new DeezerMusicPresence(e.getData());
-            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("iTunes.exe")) {
+            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("iTunes.exe") || ((JSONData) e.getData()).getAttribute("app_name").equals("49586DaveAntoine.MediaControllerforiTunes_9bzempp7dntjg!App")) {
                 presence = new iTunesMusicPresence(e.getData());
-            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("Qobuz.exe")) {
+            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("Qobuz.exe") || ((JSONData) e.getData()).getAttribute("app_name").equals("com.squirrel.Qobuz.Qobuz")) {
                 presence = new QobuzMusicPresence(e.getData());
-            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("TIDAL.exe")) {
+            } else if (((JSONData) e.getData()).getAttribute("app_name").equals("TIDAL.exe") || ((JSONData) e.getData()).getAttribute("app_name").equals("com.squirrel.TIDAL.TIDAL")) {
                 presence = new TIDALMusicPresence(e.getData());
             } else {
                 presence = new DefaultMusicPresence(e.getData());
