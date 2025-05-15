@@ -1,3 +1,23 @@
+2.1 - May 15, 2025
+
+- Fixed Presence not showing for Java 22 and above.
+- Fixed Nintendo Game Console Presences
+- Fixed Music Presence for Windows 11. The following are the IDs you should enter instead of the executable name for LogRPC to recognize the Presence.
+    - Deezer: com.deezer.deezer-desktop
+    - Amazon Music: Amazon.Music
+    - TIDAL: com.squirrel.TIDAL.TIDAL
+    - Qobuz: com.squirrel.Qobuz.Qobuz
+    - iTunes: 49586DaveAntoine.MediaControllerforiTunes_9bzempp7dntjg!App
+    - iTunes Users should install this software to get iTunes presences. https://www.microsoft.com/store/apps/9NQ3D21QT8ML?cid=storebadge&ocid=badge
+- Fixed Twitch Watching Stream Presence (if not on Mod View)
+- Fixed Twitch Watching Video Presence
+- Fixed X.com Viewing Photo Presence
+- Added Invidious API Fetching Feature for improved YouTube Presences. Add the following configuration lines below:
+# This is where you can enable the Invidious API to fetch the proper Video Name, Thumbnails, and Channel Name if it's showing improperly on your presence.
+
+invidiousAPIEnabled: true
+invidiousAPIInstance: https://invidious.logicism.tv/
+
 2.0 - January 8, 2025
 
 - Fixed TIDAL API parsing incorrect Album Name, Artwork and Inaccurate results
@@ -50,10 +70,3 @@ mpchcWebInterfacePort: 13579
 1.93 - August 20, 2024
 
 - Fixed VLC Presence Crashing
-
-1.92 - June 15, 2024
-
-- Fixed Dailymotion Presence
-- Fixed Disney+ Presence
-- Fixed Instagram Presence
-- Fixed Twitch Presence

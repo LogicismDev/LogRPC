@@ -47,7 +47,7 @@ import java.util.concurrent.Executors;
 
 public class LogRPC {
 
-    public static String VERSION = "2.0";
+    public static String VERSION = "2.1";
 
     public static LogRPC INSTANCE;
 
