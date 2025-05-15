@@ -34,6 +34,10 @@ public class MAGIXVEGASProPresence extends Presence {
             return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 19.0".length()));
         } else if (data.getTitle().contains(" - VEGAS Pro 20.0")) {
             return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 20.0".length()));
+        } else if (data.getTitle().contains(" - VEGAS Pro 21.0")) {
+            return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 20.0".length()));
+        } else if (data.getTitle().contains(" - VEGAS Pro 22.0")) {
+            return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 20.0".length()));
         } else {
             return "Editing a Video";
         }
@@ -49,6 +53,8 @@ public class MAGIXVEGASProPresence extends Presence {
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Vegas_Pro_15.0.png/240px-Vegas_Pro_15.0.png";
         } else if (data.getTitle().contains(" - VEGAS Pro 19.0") || data.getTitle().contains(" - VEGAS Pro 20.0")) {
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Vegas_Pro_19.svg/240px-Vegas_Pro_19.svg.png";
+        } else if (data.getTitle().contains(" - VEGAS Pro 21.0") || data.getTitle().contains(" - VEGAS Pro 22.0")) {
+            return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Vegas_Pro_21_logo.svg/240px-Vegas_Pro_21_logo.svg.png";
         }
 
         return null;
@@ -70,6 +76,10 @@ public class MAGIXVEGASProPresence extends Presence {
             return "Version 19.0 - " + super.getLargeImageText();
         } else if (data.getTitle().contains(" - VEGAS Pro 20.0")) {
             return "Version 20.0 - " + super.getLargeImageText();
+        } else if (data.getTitle().contains(" - VEGAS Pro 21.0")) {
+            return "Version 21.0 - " + super.getLargeImageText();
+        } else if (data.getTitle().contains(" - VEGAS Pro 22.0")) {
+            return "Version 22.0 - " + super.getLargeImageText();
         } else {
             return super.getLargeImageText();
         }
