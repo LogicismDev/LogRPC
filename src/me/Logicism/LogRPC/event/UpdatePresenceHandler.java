@@ -43,8 +43,6 @@ public class UpdatePresenceHandler extends EventHandler {
                     presence = new WiiUPresence(e.getData());
                 } else if (((JSONData) e.getData()).getDetails().equals("NintendoSwitchPresence")) {
                     presence = new NintendoSwitchPresence(e.getData());
-                } else if (((JSONData) e.getData()).getDetails().equals("NintendoSwitchPresence1")) {
-                    presence = new NintendoSwitchPresence1(e.getData());
                 } else if (((JSONData) e.getData()).getDetails().equals("OverwatchPresence")) {
                     presence = new OverwatchPresence(e.getData());
                 }
