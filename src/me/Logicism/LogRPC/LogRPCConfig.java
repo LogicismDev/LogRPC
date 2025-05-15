@@ -48,6 +48,10 @@ public class LogRPCConfig {
 
     private String musicArtworkCountry;
 
+    private boolean invidiousAPIEnabled;
+
+    private String invidiousAPIInstance;
+
     private String wiimmfiPlayerURL;
 
     private String wiimmfiFriendCode;
@@ -194,6 +198,14 @@ public class LogRPCConfig {
 
     public String getMusicArtworkCountry() {
         return musicArtworkCountry;
+    }
+
+    public boolean isInvidiousAPIEnabled() {
+        return invidiousAPIEnabled;
+    }
+
+    public String getInvidiousAPIInstance() {
+        return invidiousAPIInstance;
     }
 
     public String getWiimmfiPlayerURL() {

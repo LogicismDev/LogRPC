@@ -1,19 +1,61 @@
 package me.Logicism.LogRPC.presence.website;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
+import me.Logicism.LogRPC.network.BrowserClient;
+import me.Logicism.LogRPC.network.BrowserData;
 import me.Logicism.LogRPC.presence.Presence;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class YouTubePresence extends Presence {
 
+    private JSONObject invidiousAPIResult;
+
     public YouTubePresence(PresenceData data) {
         super(463097721130188830L, data);
+
+        try {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                if (((BrowserHTMLData) data).getURL().startsWith("https://www.youtube.com/watch?v=") || ((BrowserHTMLData) data).getURL().startsWith("https://www.youtube.com/shorts/")) {
+                    String id = ((BrowserHTMLData) data).getURL().replace("https://www.youtube.com/watch?v=", "").replace("https://www.youtube.com/shorts/", "");
+                    if (id.contains("&")) {
+                        id = id.split("&")[0];
+                    }
+
+                    Map<String, String> headers = new HashMap<>();
+
+                    BrowserData bd = BrowserClient.executeGETRequest(new URL(LogRPC.INSTANCE.getConfig().getInvidiousAPIInstance() + "api/v1/videos/" + id), headers);
+                    invidiousAPIResult = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
+                } else if (((BrowserHTMLData) data).getURL().startsWith("https://www.youtube.com/@") || ((BrowserHTMLData) data).getURL().startsWith("https://www.youtube.com/channel/")) {
+                    Map<String, String> headers = new HashMap<>();
+
+                    String id = ((BrowserHTMLData) data).getURL().replace("https://www.youtube.com/channel/", "").replace("https://www.youtube.com/@", "");
+                    if (((BrowserHTMLData) data).getURL().startsWith("https://www.youtube.com/@")) {
+                        BrowserData bd = BrowserClient.executeGETRequest(new URL(LogRPC.INSTANCE.getConfig().getInvidiousAPIInstance() + "api/v1/search?q=%40" + id + "&type=channel"), headers);
+                        JSONObject jsonObject = new JSONArray(BrowserClient.requestToString(bd.getResponse())).getJSONObject(0);
+
+                        id = jsonObject.getString("authorId").split("/")[0];
+                    }
+
+                    BrowserData bd = BrowserClient.executeGETRequest(new URL(LogRPC.INSTANCE.getConfig().getInvidiousAPIInstance() + "api/v1/channels/" + id), headers);
+                    invidiousAPIResult = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -33,7 +75,7 @@ public class YouTubePresence extends Presence {
             } else {
                 return "Browsing the " + data.getURL().split("/feed/")[1].substring(0, 1).toUpperCase() + data.getURL().split("/feed/")[1].substring(1).split("\\?")[0] + " Page!";
             }
-        } else if (data.getURL().startsWith("https://www.youtube.com/c/") || data.getURL().startsWith("https://www.youtube.com/channel/") || data.getURL().startsWith("https://www.youtube.com/user/")) {
+        } else if (data.getURL().startsWith("https://www.youtube.com/@") || data.getURL().startsWith("https://www.youtube.com/channel/")) {
             if (data.getURL().contains("/videos")) {
                 return "Browsing Channel Videos";
             } else if (data.getURL().contains("/playlists")) {
@@ -54,15 +96,23 @@ public class YouTubePresence extends Presence {
         } else if (data.getURL().startsWith("https://www.youtube.com/premium")) {
             return "Browsing YouTube Premium";
         } else if (data.getURL().startsWith("https://www.youtube.com/watch?v=")) {
-            Element titleElement = data.getHTMLDocument().selectFirst("#container > h1 > yt-formatted-string");
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return invidiousAPIResult.getString("title");
+            } else {
+                Element titleElement = data.getHTMLDocument().selectFirst("#container > h1 > yt-formatted-string");
 
-            try {
-                return titleElement.ownText();
-            } catch (NullPointerException e) {
-                return "";
+                try {
+                    return titleElement.ownText();
+                } catch (NullPointerException e) {
+                    return "";
+                }
             }
         } else if (data.getURL().startsWith("https://www.youtube.com/shorts/")) {
-            return "Browsing YouTube Shorts";
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return invidiousAPIResult.getString("title");
+            } else {
+                return "Browsing YouTube Shorts";
+            }
         }
 
         return "Browsing YouTube";
@@ -72,12 +122,16 @@ public class YouTubePresence extends Presence {
     public String getState() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().startsWith("https://www.youtube.com/c/") || data.getURL().startsWith("https://www.youtube.com/channel/") || data.getURL().startsWith("https://www.youtube.com/user/")) {
-            Elements elements = data.getHTMLDocument().select("#text");
+        if (data.getURL().startsWith("https://www.youtube.com/@") || data.getURL().startsWith("https://www.youtube.com/channel/")) {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return invidiousAPIResult.getString("author");
+            } else {
+                Elements elements = data.getHTMLDocument().select("#text");
 
-            for (Element element : elements) {
-                if (element.hasAttr("title") && element.tagName().equals("yt-formatted-string") && element.hasClass("ytd-channel-name")) {
-                    return element.text();
+                for (Element element : elements) {
+                    if (element.hasAttr("title") && element.tagName().equals("yt-formatted-string") && element.hasClass("ytd-channel-name")) {
+                        return element.text();
+                    }
                 }
             }
         } else if (data.getURL().startsWith("https://www.youtube.com/results")) {
@@ -87,14 +141,22 @@ public class YouTubePresence extends Presence {
                 return "";
             }
         } else if (data.getURL().startsWith("https://www.youtube.com/watch?v=")) {
-            Element titleElement = data.getHTMLDocument().selectFirst("#text > a");
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return invidiousAPIResult.getString("author");
+            } else {
+                Element titleElement = data.getHTMLDocument().selectFirst("#text > a");
 
-            try {
-                return titleElement.text();
-            } catch (NullPointerException e) {
-                Element element = data.getHTMLDocument().selectFirst("#watch7-content > span:nth-child(9) > link:nth-child(2)");
+                try {
+                    return titleElement.text();
+                } catch (NullPointerException e) {
+                    Element element = data.getHTMLDocument().selectFirst("#watch7-content > span:nth-child(9) > link:nth-child(2)");
 
-                return element.attr("content");
+                    return element.attr("content");
+                }
+            }
+        } else if (data.getURL().startsWith("https://www.youtube.com/shorts/")) {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return invidiousAPIResult.getString("author");
             }
         }
 
@@ -112,9 +174,21 @@ public class YouTubePresence extends Presence {
             }
 
             return "https://i1.ytimg.com/vi/" + id + "/sddefault.jpg";
-        } else {
-            return "yt_lg";
+        } else if (data.getURL().startsWith("https://www.youtube.com/@") || data.getURL().startsWith("https://www.youtube.com/channel/")) {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return invidiousAPIResult.getJSONArray("authorThumbnails").getJSONObject(invidiousAPIResult.getJSONArray("authorThumbnails").length() - 1).getString("url");
+            } else {
+                Elements elements = data.getHTMLDocument().select("#page-header > yt-page-header-renderer > yt-page-header-view-model > div > div.page-header-view-model-wiz__page-header-headline > yt-decorated-avatar-view-model > yt-avatar-shape > div > div > div > img");
+
+                for (Element element : elements) {
+                    if (element.hasAttr("src") && element.tagName().equals("img") && element.hasClass("yt-core-image")) {
+                        return element.text();
+                    }
+                }
+            }
         }
+
+        return "yt_lg";
     }
 
     @Override
@@ -151,9 +225,9 @@ public class YouTubePresence extends Presence {
 
         if (data.getURL().startsWith("https://www.youtube.com/watch?v=")) {
             return "Watch Video";
-        } else if (data.getURL().startsWith("https://www.youtube.com/c/") ||
-                data.getURL().startsWith("https://www.youtube.com/channel/") ||
-                data.getURL().startsWith("https://www.youtube.com/user/")) {
+        } else if (data.getURL().startsWith("https://www.youtube.com/shorts/")) {
+            return "Watch Short";
+        } else if (data.getURL().startsWith("https://www.youtube.com/@") || data.getURL().startsWith("https://www.youtube.com/channel/")) {
             return "View Channel";
         } else if (data.getURL().startsWith("https://www.youtube.com/playlist")) {
             return "View Playlist";
@@ -173,7 +247,7 @@ public class YouTubePresence extends Presence {
     public String getSecondaryButtonText() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().startsWith("https://www.youtube.com/watch?v=")) {
+        if (data.getURL().startsWith("https://www.youtube.com/watch?v=") || data.getURL().startsWith("https://www.youtube.com/shorts/")) {
             return "Visit Channel";
         } else {
             return null;
@@ -184,13 +258,23 @@ public class YouTubePresence extends Presence {
     public String getSecondaryButtonURL() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        Element channelElement = data.getHTMLDocument().selectFirst("#text > a");
-        if (data.getURL().startsWith("https://www.youtube.com/watch?v=") && channelElement != null) {
+        if (data.getURL().startsWith("https://www.youtube.com/watch?v=")) {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return "https://www.youtube.com/channel/" + invidiousAPIResult.getString("authorId");
+            } else {
+                Element channelElement = data.getHTMLDocument().selectFirst("#text > a");
+                if (data.getURL().startsWith("https://www.youtube.com/watch?v=") && channelElement != null) {
 
-            return "https://www.youtube.com" + channelElement.attr("href");
-        } else {
-            return null;
+                    return "https://www.youtube.com" + channelElement.attr("href");
+                }
+            }
+        } else if (data.getURL().startsWith("https://www.youtube.com/shorts/")) {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return "https://www.youtube.com/channel/" + invidiousAPIResult.getString("authorId");
+            }
         }
+
+        return null;
     }
 
     @Override
