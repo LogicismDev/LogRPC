@@ -193,19 +193,20 @@ public class LogRPC {
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             config = mapper.readValue(new File("config.yml"), LogRPCConfig.class);
 
-            File cachedDataFile = new File("LogRPC.dat");
-            if (cachedDataFile.exists()) {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cachedDataFile));
-                cachedData = (Map<String, String>) ois.readObject();
-                ois.close();
-            } else {
-                cachedData = new HashMap<>();
-                cachedData.put("Last Presence", !config.getOverrideLastPresenceType().equals("NONE") ? config.getOverrideLastPresenceType() : "MANUAL");
+            File cachedDataFile;
+            if (System.getProperty("os.name").startsWith("Windows") && (System.getProperty("user.dir").substring(1).startsWith(":\\Program Files\\LogRPC") || System.getProperty("user.dir").substring(1).startsWith(":\\Program Files (x86)\\LogRPC"))) {
+                File appDataFolder = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\LogRPC");
 
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(cachedDataFile));
-                oos.writeObject(cachedData);
-                oos.close();
+                if (!appDataFolder.exists()) {
+                    appDataFolder.mkdir();
+                }
+
+                cachedDataFile = new File(appDataFolder, "LogRPC.dat");
+            } else {
+                cachedDataFile = new File("LogRPC.dat");
             }
+            cachedData = readCachedData(cachedDataFile);
+
             if (cachedData.containsKey("DeSmuME RPC File") && config.isEnableSavingDeSmuMEFile() && !config.isDeSmuMEDisabled()) {
                 desmumeRPCFile = new File(cachedData.get("DeSmuME RPC File"));
             }
@@ -1158,6 +1159,24 @@ public class LogRPC {
                 client.sendRichPresence(presence.build(), new Callback(e -> System.out.println("Success"), err -> System.out.println(err)));
             }
         }
+    }
+
+    public Map<String, String> readCachedData(File cachedDataFile) throws IOException, ClassNotFoundException {
+        Map<String, String> cachedData;
+        if (cachedDataFile.exists()) {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cachedDataFile));
+            cachedData = (Map<String, String>) ois.readObject();
+            ois.close();
+        } else {
+            cachedData = new HashMap<>();
+            cachedData.put("Last Presence", !config.getOverrideLastPresenceType().equals("NONE") ? config.getOverrideLastPresenceType() : "MANUAL");
+
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(cachedDataFile));
+            oos.writeObject(cachedData);
+            oos.close();
+        }
+
+        return cachedData;
     }
 
     public void saveCachedData(PresenceType type, File desmumeRPCFile) {
