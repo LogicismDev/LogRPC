@@ -6,6 +6,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class BrowserClient {
@@ -57,7 +58,7 @@ public class BrowserClient {
     }
 
     public static String requestToString(InputStream is) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         String s;
         StringBuilder sb = new StringBuilder();
         while ((s = br.readLine()) != null) {
