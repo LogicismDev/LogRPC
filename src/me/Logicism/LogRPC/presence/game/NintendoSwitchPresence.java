@@ -38,7 +38,7 @@ public class NintendoSwitchPresence extends Presence {
 
     @Override
     public String getSmallImageKey() {
-        return "_tooltip";
+        return "id";
     }
 
     @Override
