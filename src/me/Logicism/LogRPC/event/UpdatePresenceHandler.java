@@ -135,7 +135,6 @@ public class UpdatePresenceHandler extends EventHandler {
             } else if ((((JSONData) e.getData()).getDetails().startsWith("fceux_") || ((JSONData) e.getData()).getDetails().startsWith("fceux")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("fceux")) {
                 presence = new FCEUXPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("snes9x-x64_") || ((JSONData) e.getData()).getDetails().startsWith("snes9x-x64") || ((JSONData) e.getData()).getDetails().startsWith("snes9x_") || ((JSONData) e.getData()).getDetails().startsWith("snes9x")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("snes9x")) {
-                System.out.println("HI");
                 presence = new Snes9xPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("DOSBox_") || ((JSONData) e.getData()).getDetails().startsWith("DOSBox")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("dosbox")) {
                 presence = new DOSBoxPresence(e.getData());
