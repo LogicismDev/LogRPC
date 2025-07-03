@@ -1,3 +1,11 @@
+2.2 - July 2, 2025
+
+- Fixed Snes9x Presence not showing for 64 bit.
+- Fixed LogRPC cache when running it in installed Program Files.
+- Refined DeSmuME Presence
+- Added Nintendo Switch 2. Add the following configuration lines below:
+nintendoSwitch2Disabled: false
+
 2.1 - May 15, 2025
 
 - Fixed Presence not showing for Java 22 and above.
@@ -66,7 +74,3 @@ vlcWebInterfacePassword: changeme
 
 mpchcWebInterfaceHost: 127.0.0.1
 mpchcWebInterfacePort: 13579
-
-1.93 - August 20, 2024
-
-- Fixed VLC Presence Crashing

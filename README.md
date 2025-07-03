@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v2.1-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v2.1-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v2.1-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v2.1)
+[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v2.2-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v2.2-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v2.2-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v2.2)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
@@ -14,6 +14,7 @@ A Rich Presence program to show your activity on Discord
           - Nintendo 3DS
           - Wii U
           - Nintendo Switch
+          - Nintendo Switch 2
       - PC Games:
          - Overwatch 2
       * Credits go to: 
