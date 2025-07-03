@@ -18,6 +18,11 @@ public class DeSmuMEPresence extends Presence {
 
     @Override
     public String getDetails() {
+        JSONData data = (JSONData) this.data;
+
+        if (data.getTitle().contains("x64 SSE2 |")) {
+            return data.getTitle().split(" \\| ")[1];
+        }
         return "Playing a DS Game";
     }
 
@@ -30,7 +35,11 @@ public class DeSmuMEPresence extends Presence {
     public String getLargeImageText() {
         JSONData data = (JSONData) this.data;
 
-        return data.getTitle() + " - " + super.getLargeImageText();
+        if (data.getTitle().contains("x64 SSE2 |")) {
+            return data.getTitle().split(" \\| ")[0] + " - " + super.getLargeImageText();
+        }
+
+        return "DeSmuME 0.9.13 x64 SSE2 - " + super.getLargeImageText();
     }
 
     @Override
