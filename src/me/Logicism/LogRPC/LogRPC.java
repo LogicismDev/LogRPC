@@ -92,6 +92,7 @@ public class LogRPC {
     private List<String> nintendo3dsGames = new ArrayList<>();
     private List<String> wiiUGames = new ArrayList<>();
     private List<String> nintendoSwitchGames = new ArrayList<>();
+    private List<String> nintendoSwitch2Games = new ArrayList<>();
 
     private String owGamemode = "Quickplay";
     private OverwatchMap owMap = new OverwatchMap("eichenwalde", new String[]{"Hybrid", "Deathmatch", "Team Deathmatch"}, "Eichenwalde");
@@ -267,6 +268,25 @@ public class LogRPC {
                     }
                     Collections.sort(lines);
                     nintendoSwitchGames.addAll(lines);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Unable to grab the Nintendo Switch games database, try again later!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            if (!config.isNintendoSwitch2Disabled()) {
+                try {
+                    BrowserData data = BrowserClient.executeGETRequest(new URL("https://raw.githubusercontent.com/ninstar/Rich-Presence-U-DB/main/titles/bee.csv"), null);
+
+                    BufferedReader br = new BufferedReader(new InputStreamReader(data.getResponse(), StandardCharsets.UTF_8));
+                    List<String> lines = new ArrayList<>();
+                    String s1;
+
+                    while ((s1 = br.readLine()) != null) {
+                        if (!s1.equals("ID,US,EU,JP,US TITLE,EU TITLE,JP TITLE")) {
+                            lines.add(s1);
+                        }
+                    }
+                    Collections.sort(lines);
+                    nintendoSwitch2Games.addAll(lines);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Unable to grab the Nintendo Switch games database, try again later!", "LogRPC", JOptionPane.ERROR_MESSAGE);
                 }
@@ -870,13 +890,21 @@ public class LogRPC {
                 }
             });
 
-            if (config.isNintendoSwitchDisabled()) {
-                nintendoSwitch.setEnabled(false);
-            }
+            MenuItem nintendoSwitch2 = new MenuItem("Nintendo Switch 2");
+
+            nintendoSwitch2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    GameSearchDialog gameSearchDialog = new GameSearchDialog("Nintendo Switch 2");
+                    gameSearchDialog.pack();
+                    gameSearchDialog.setVisible(true);
+                }
+            });
 
             gameConsolesMenu.add(nintendo3ds);
             gameConsolesMenu.add(wiiU);
             gameConsolesMenu.add(nintendoSwitch);
+            gameConsolesMenu.add(nintendoSwitch2);
 
             if (config.isNintendo3dsDisabled()) {
                 nintendo3ds.setEnabled(false);
@@ -886,6 +914,9 @@ public class LogRPC {
             }
             if (config.isNintendoSwitchDisabled()) {
                 nintendoSwitch.setEnabled(false);
+            }
+            if (config.isNintendoSwitch2Disabled()) {
+                nintendoSwitch2.setEnabled(false);
             }
 
             popupMenu.add(gameConsolesMenu);
@@ -1076,6 +1107,10 @@ public class LogRPC {
 
     public List<String> getNintendoSwitchGames() {
         return nintendoSwitchGames;
+    }
+
+    public List<String> getNintendoSwitch2Games() {
+        return nintendoSwitch2Games;
     }
 
     public boolean isOwInQueue() {

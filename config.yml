@@ -186,5 +186,6 @@ mediaPlayerDisabled: false
 nintendo3dsDisabled: false
 wiiUDisabled: false
 nintendoSwitchDisabled: false
+nintendoSwitch2Disabled: false
 
 overwatchDisabled: false

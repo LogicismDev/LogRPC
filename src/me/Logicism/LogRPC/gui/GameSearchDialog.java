@@ -48,6 +48,14 @@ public class GameSearchDialog extends JDialog {
                     comboBox1.addItem(game.split(",")[4]);
                 }
             }
+        } else if (platform.equals("Nintendo Switch 2")) {
+            for (String game : LogRPC.INSTANCE.getNintendoSwitch2Games()) {
+                if (game.contains("\"")) {
+                    comboBox1.addItem(game.split("\"")[1]);
+                } else {
+                    comboBox1.addItem(game.split(",")[4]);
+                }
+            }
         }
 
         AutoCompletion.enable(comboBox1);
@@ -101,6 +109,12 @@ public class GameSearchDialog extends JDialog {
         } else if (platform.equals("Nintendo Switch")) {
             try {
                 LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("title", comboBox1.getSelectedItem()).put("details", "NintendoSwitchPresence").put("largeImageKey", LogRPC.INSTANCE.getNintendoSwitchGames().get(comboBox1.getSelectedIndex()).split(",")[0]))));
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+        } else if (platform.equals("Nintendo Switch 2")) {
+            try {
+                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("title", comboBox1.getSelectedItem()).put("details", "NintendoSwitch2Presence").put("largeImageKey", LogRPC.INSTANCE.getNintendoSwitch2Games().get(comboBox1.getSelectedIndex()).split(",")[0]))));
             } catch (JSONException ex) {
                 ex.printStackTrace();
             }

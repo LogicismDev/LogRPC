@@ -108,9 +108,9 @@ public class LogRPCConfig {
 
     private boolean nintendoSwitchDisabled;
 
-    private boolean overwatchDisabled;
+    private boolean nintendoSwitch2Disabled;
 
-    private boolean overwatch2Disabled;
+    private boolean overwatchDisabled;
 
     public boolean isCheckForUpdates() {
         return checkForUpdates;
@@ -308,6 +308,10 @@ public class LogRPCConfig {
 
     public boolean isNintendoSwitchDisabled() {
         return nintendoSwitchDisabled;
+    }
+
+    public boolean isNintendoSwitch2Disabled() {
+        return nintendoSwitch2Disabled;
     }
 
     public boolean isWiimmfiDisabled() {
