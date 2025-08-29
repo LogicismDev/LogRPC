@@ -13,6 +13,9 @@
 - Fixed where if the selected item was selected already, to not have the code executed again.
 - Fixed MAGIX Vegas Pro 21 and 22 Presences where the title isn't showing up properly.
 - Modify the configuration lines applicable to these:
+# Acceptable defaultActivityType values: PLAYING, WATCHING, LISTENING, COMPETING
+# Acceptable defaultDisplayType values: NAME, DETAILS, STATE
+# Acceptable defaultPartyPrivacy values: PRIVATE, PUBLIC
 defaultActivityType: "WATCHING"
 defaultDisplayType: "NAME"
 defaultClientID: "389249289223929856"
