@@ -449,56 +449,11 @@ public class LogRPC {
                 manualMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        beatSaberMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
-                        mpchcMediaPlayerMenuItem.setState(false);
-                        if (mediaPlayerExecutor != null) {
-                            mediaPlayerExecutor = null;
-                        }
-
-                        manualMenuItem.setState(true);
-
-                        defaultPresence.setEnabled(true);
-                        setManualMenuItem.setEnabled(true);
-                        presetPresencesMenu.setEnabled(true);
-                        gameConsolesMenu.setEnabled(true);
-                        pcGamesMenu.setEnabled(true);
-
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
-                        }
-
-                        saveCachedData(PresenceType.MANUAL, desmumeRPCFile);
-                    }
-                });
-                programMenuItem.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if (System.getProperty("os.name").startsWith("Windows")) {
-                            manualMenuItem.setState(false);
+                        if (!manualMenuItem.getState()) {
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
                             musicMenuItem.setState(false);
                             if (musicExecutor != null) {
                                 musicExecutor = null;
@@ -523,7 +478,108 @@ public class LogRPC {
                                 mediaPlayerExecutor = null;
                             }
 
-                            programMenuItem.setState(true);
+                            manualMenuItem.setState(true);
+
+                            defaultPresence.setEnabled(true);
+                            setManualMenuItem.setEnabled(true);
+                            presetPresencesMenu.setEnabled(true);
+                            gameConsolesMenu.setEnabled(true);
+                            pcGamesMenu.setEnabled(true);
+
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            saveCachedData(PresenceType.MANUAL, desmumeRPCFile);
+                        }
+                    }
+                });
+                programMenuItem.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if (System.getProperty("os.name").startsWith("Windows")) {
+                            if (!programMenuItem.getState()) {
+                                manualMenuItem.setState(false);
+                                musicMenuItem.setState(false);
+                                if (musicExecutor != null) {
+                                    musicExecutor = null;
+                                }
+                                chromeMenuItem.setState(false);
+                                beatSaberMenuItem.setState(false);
+                                wiimmfiMenuItem.setState(false);
+                                if (wiimmfiExecutor != null) {
+                                    wiimmfiExecutor = null;
+                                }
+                                nintendoSwitchMenuItem.setState(false);
+                                if (nintendoSwitchExecutor != null) {
+                                    nintendoSwitchExecutor = null;
+                                }
+                                desmumeMenuItem.setState(false);
+                                if (desmumeExecutor != null) {
+                                    desmumeExecutor = null;
+                                }
+                                vlcMediaPlayerMenuItem.setState(false);
+                                mpchcMediaPlayerMenuItem.setState(false);
+                                if (mediaPlayerExecutor != null) {
+                                    mediaPlayerExecutor = null;
+                                }
+
+                                programMenuItem.setState(true);
+
+                                defaultPresence.setEnabled(false);
+                                setManualMenuItem.setEnabled(false);
+                                presetPresencesMenu.setEnabled(false);
+                                gameConsolesMenu.setEnabled(false);
+                                pcGamesMenu.setEnabled(false);
+
+                                try {
+                                    eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                                } catch (JSONException jsonException) {
+                                    jsonException.printStackTrace();
+                                }
+
+                                programExecutor = Executors.newSingleThreadExecutor();
+                                programExecutor.execute(new ProgramRunnable());
+
+                                saveCachedData(PresenceType.PROGRAM, desmumeRPCFile);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Program Presence is not supported (yet) on Mac/Linux Systems!");
+                        }
+                    }
+                });
+                musicMenuItem.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if (!musicMenuItem.getState()) {
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
+                            chromeMenuItem.setState(false);
+                            beatSaberMenuItem.setState(false);
+                            wiimmfiMenuItem.setState(false);
+                            if (wiimmfiExecutor != null) {
+                                wiimmfiExecutor = null;
+                            }
+                            nintendoSwitchMenuItem.setState(false);
+                            if (nintendoSwitchExecutor != null) {
+                                nintendoSwitchExecutor = null;
+                            }
+                            desmumeMenuItem.setState(false);
+                            if (desmumeExecutor != null) {
+                                desmumeExecutor = null;
+                            }
+                            vlcMediaPlayerMenuItem.setState(false);
+                            mpchcMediaPlayerMenuItem.setState(false);
+                            if (mediaPlayerExecutor != null) {
+                                mediaPlayerExecutor = null;
+                            }
+
+                            musicMenuItem.setState(true);
 
                             defaultPresence.setEnabled(false);
                             setManualMenuItem.setEnabled(false);
@@ -537,431 +593,395 @@ public class LogRPC {
                                 jsonException.printStackTrace();
                             }
 
-                            programExecutor = Executors.newSingleThreadExecutor();
-                            programExecutor.execute(new ProgramRunnable());
+                            musicExecutor = Executors.newSingleThreadExecutor();
+                            musicExecutor.execute(new MusicRunnable());
 
-                            saveCachedData(PresenceType.PROGRAM, desmumeRPCFile);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Program Presence is not supported (yet) on Mac/Linux Systems!");
+                            saveCachedData(PresenceType.MUSIC, desmumeRPCFile);
                         }
-                    }
-                });
-                musicMenuItem.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        beatSaberMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
-                        mpchcMediaPlayerMenuItem.setState(false);
-                        if (mediaPlayerExecutor != null) {
-                            mediaPlayerExecutor = null;
-                        }
-
-                        musicMenuItem.setState(true);
-
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
-
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
-                        }
-
-                        musicExecutor = Executors.newSingleThreadExecutor();
-                        musicExecutor.execute(new MusicRunnable());
-
-                        saveCachedData(PresenceType.MUSIC, desmumeRPCFile);
                     }
                 });
                 chromeMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        beatSaberMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
-                        mpchcMediaPlayerMenuItem.setState(false);
-                        if (mediaPlayerExecutor != null) {
-                            mediaPlayerExecutor = null;
-                        }
+                        if (!chromeMenuItem.getState()) {
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
+                            musicMenuItem.setState(false);
+                            if (musicExecutor != null) {
+                                musicExecutor = null;
+                            }
+                            beatSaberMenuItem.setState(false);
+                            wiimmfiMenuItem.setState(false);
+                            if (wiimmfiExecutor != null) {
+                                wiimmfiExecutor = null;
+                            }
+                            nintendoSwitchMenuItem.setState(false);
+                            if (nintendoSwitchExecutor != null) {
+                                nintendoSwitchExecutor = null;
+                            }
+                            desmumeMenuItem.setState(false);
+                            if (desmumeExecutor != null) {
+                                desmumeExecutor = null;
+                            }
+                            vlcMediaPlayerMenuItem.setState(false);
+                            mpchcMediaPlayerMenuItem.setState(false);
+                            if (mediaPlayerExecutor != null) {
+                                mediaPlayerExecutor = null;
+                            }
 
-                        chromeMenuItem.setState(true);
+                            chromeMenuItem.setState(true);
 
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
+                            defaultPresence.setEnabled(false);
+                            setManualMenuItem.setEnabled(false);
+                            presetPresencesMenu.setEnabled(false);
+                            gameConsolesMenu.setEnabled(false);
+                            pcGamesMenu.setEnabled(false);
 
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            saveCachedData(PresenceType.EXTENSION, desmumeRPCFile);
                         }
-
-                        saveCachedData(PresenceType.EXTENSION, desmumeRPCFile);
                     }
                 });
                 beatSaberMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
-                        mpchcMediaPlayerMenuItem.setState(false);
-                        if (mediaPlayerExecutor != null) {
-                            mediaPlayerExecutor = null;
-                        }
+                        if (!beatSaberMenuItem.getState()) {
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
+                            musicMenuItem.setState(false);
+                            if (musicExecutor != null) {
+                                musicExecutor = null;
+                            }
+                            chromeMenuItem.setState(false);
+                            wiimmfiMenuItem.setState(false);
+                            if (wiimmfiExecutor != null) {
+                                wiimmfiExecutor = null;
+                            }
+                            nintendoSwitchMenuItem.setState(false);
+                            if (nintendoSwitchExecutor != null) {
+                                nintendoSwitchExecutor = null;
+                            }
+                            desmumeMenuItem.setState(false);
+                            if (desmumeExecutor != null) {
+                                desmumeExecutor = null;
+                            }
+                            vlcMediaPlayerMenuItem.setState(false);
+                            mpchcMediaPlayerMenuItem.setState(false);
+                            if (mediaPlayerExecutor != null) {
+                                mediaPlayerExecutor = null;
+                            }
 
-                        beatSaberMenuItem.setState(true);
+                            beatSaberMenuItem.setState(true);
 
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
+                            defaultPresence.setEnabled(false);
+                            setManualMenuItem.setEnabled(false);
+                            presetPresencesMenu.setEnabled(false);
+                            gameConsolesMenu.setEnabled(false);
+                            pcGamesMenu.setEnabled(false);
 
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            saveCachedData(PresenceType.BEAT_SABER, desmumeRPCFile);
                         }
-
-                        saveCachedData(PresenceType.BEAT_SABER, desmumeRPCFile);
                     }
                 });
                 wiimmfiMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        beatSaberMenuItem.setState(false);
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
-                        mpchcMediaPlayerMenuItem.setState(false);
-                        if (mediaPlayerExecutor != null) {
-                            mediaPlayerExecutor = null;
-                        }
-
-                        wiimmfiMenuItem.setState(true);
-
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
-
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
-                        }
-
-                        if (config.getWiimmfiPresenceType().equals("headless") || config.getWiimmfiPresenceType().equals("headlessjson")) {
-                            wiimmfiExecutor = Executors.newSingleThreadExecutor();
-                            wiimmfiExecutor.execute(new WiimmfiRunnable());
-                        } else if (config.getWiimmfiPresenceType().equals("browser")) {
-                            try {
-                                Desktop.getDesktop().browse(new URI(config.getWiimmfiPlayerURL()));
-                            } catch (IOException | URISyntaxException ex) {
-                                ex.printStackTrace();
+                        if (!wiimmfiMenuItem.getState()) {
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
                             }
-                        }
+                            musicMenuItem.setState(false);
+                            if (musicExecutor != null) {
+                                musicExecutor = null;
+                            }
+                            chromeMenuItem.setState(false);
+                            beatSaberMenuItem.setState(false);
+                            nintendoSwitchMenuItem.setState(false);
+                            if (nintendoSwitchExecutor != null) {
+                                nintendoSwitchExecutor = null;
+                            }
+                            desmumeMenuItem.setState(false);
+                            if (desmumeExecutor != null) {
+                                desmumeExecutor = null;
+                            }
+                            vlcMediaPlayerMenuItem.setState(false);
+                            mpchcMediaPlayerMenuItem.setState(false);
+                            if (mediaPlayerExecutor != null) {
+                                mediaPlayerExecutor = null;
+                            }
 
-                        saveCachedData(PresenceType.WIIMMFI, desmumeRPCFile);
+                            wiimmfiMenuItem.setState(true);
+
+                            defaultPresence.setEnabled(false);
+                            setManualMenuItem.setEnabled(false);
+                            presetPresencesMenu.setEnabled(false);
+                            gameConsolesMenu.setEnabled(false);
+                            pcGamesMenu.setEnabled(false);
+
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            if (config.getWiimmfiPresenceType().equals("headless") || config.getWiimmfiPresenceType().equals("headlessjson")) {
+                                wiimmfiExecutor = Executors.newSingleThreadExecutor();
+                                wiimmfiExecutor.execute(new WiimmfiRunnable());
+                            } else if (config.getWiimmfiPresenceType().equals("browser")) {
+                                try {
+                                    Desktop.getDesktop().browse(new URI(config.getWiimmfiPlayerURL()));
+                                } catch (IOException | URISyntaxException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+
+                            saveCachedData(PresenceType.WIIMMFI, desmumeRPCFile);
+                        }
                     }
                 });
                 nintendoSwitchMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        beatSaberMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
-                        mpchcMediaPlayerMenuItem.setState(false);
-                        if (mediaPlayerExecutor != null) {
-                            mediaPlayerExecutor = null;
-                        }
+                        if (!nintendoSwitchMenuItem.getState()) {
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
+                            musicMenuItem.setState(false);
+                            if (musicExecutor != null) {
+                                musicExecutor = null;
+                            }
+                            chromeMenuItem.setState(false);
+                            beatSaberMenuItem.setState(false);
+                            wiimmfiMenuItem.setState(false);
+                            if (wiimmfiExecutor != null) {
+                                wiimmfiExecutor = null;
+                            }
+                            desmumeMenuItem.setState(false);
+                            if (desmumeExecutor != null) {
+                                desmumeExecutor = null;
+                            }
+                            vlcMediaPlayerMenuItem.setState(false);
+                            mpchcMediaPlayerMenuItem.setState(false);
+                            if (mediaPlayerExecutor != null) {
+                                mediaPlayerExecutor = null;
+                            }
 
-                        nintendoSwitchMenuItem.setState(true);
+                            nintendoSwitchMenuItem.setState(true);
 
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
+                            defaultPresence.setEnabled(false);
+                            setManualMenuItem.setEnabled(false);
+                            presetPresencesMenu.setEnabled(false);
+                            gameConsolesMenu.setEnabled(false);
+                            pcGamesMenu.setEnabled(false);
 
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            nintendoSwitchExecutor = Executors.newSingleThreadExecutor();
+                            nintendoSwitchExecutor.execute(new NintendoSwitchRunnable());
                         }
-
-                        nintendoSwitchExecutor = Executors.newSingleThreadExecutor();
-                        nintendoSwitchExecutor.execute(new NintendoSwitchRunnable());
                     }
                 });
                 desmumeMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        if (desmumeRPCFile == null) {
-                            JFileChooser chooser = new JFileChooser();
-                            chooser.setDialogTitle("Open out.dat");
-                            chooser.setFileFilter(new FileNameExtensionFilter("out.dat DeSmuME File", "dat"));
-                            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                                try {
-                                    List<String> list = Files.readAllLines(chooser.getSelectedFile().toPath());
-                                    if (list.size() == 3 && chooser.getSelectedFile().getName().equals("out.dat")) {
-                                        desmumeRPCFile = chooser.getSelectedFile();
-                                    } else {
-                                        JOptionPane.showMessageDialog(null, "Invalid File!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+                        if (!desmumeMenuItem.getState()) {
+                            if (desmumeRPCFile == null) {
+                                JFileChooser chooser = new JFileChooser();
+                                chooser.setDialogTitle("Open out.dat");
+                                chooser.setFileFilter(new FileNameExtensionFilter("out.dat DeSmuME File", "dat"));
+                                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                                    try {
+                                        List<String> list = Files.readAllLines(chooser.getSelectedFile().toPath());
+                                        if (list.size() == 3 && chooser.getSelectedFile().getName().equals("out.dat")) {
+                                            desmumeRPCFile = chooser.getSelectedFile();
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Invalid File!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+
+                                            return;
+                                        }
+                                    } catch (IOException ex) {
+                                        JOptionPane.showMessageDialog(null, "Can't Open File! " + ex.getMessage(), "LogRPC", JOptionPane.ERROR_MESSAGE);
 
                                         return;
                                     }
-                                } catch (IOException ex) {
-                                    JOptionPane.showMessageDialog(null, "Can't Open File! " + ex.getMessage(), "LogRPC", JOptionPane.ERROR_MESSAGE);
-
+                                } else {
                                     return;
                                 }
-                            } else {
-                                return;
                             }
-                        }
 
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        beatSaberMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
-                        mpchcMediaPlayerMenuItem.setState(false);
-                        if (mediaPlayerExecutor != null) {
-                            mediaPlayerExecutor = null;
-                        }
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
+                            musicMenuItem.setState(false);
+                            if (musicExecutor != null) {
+                                musicExecutor = null;
+                            }
+                            chromeMenuItem.setState(false);
+                            beatSaberMenuItem.setState(false);
+                            wiimmfiMenuItem.setState(false);
+                            if (wiimmfiExecutor != null) {
+                                wiimmfiExecutor = null;
+                            }
+                            nintendoSwitchMenuItem.setState(false);
+                            if (nintendoSwitchExecutor != null) {
+                                nintendoSwitchExecutor = null;
+                            }
+                            vlcMediaPlayerMenuItem.setState(false);
+                            mpchcMediaPlayerMenuItem.setState(false);
+                            if (mediaPlayerExecutor != null) {
+                                mediaPlayerExecutor = null;
+                            }
 
-                        desmumeMenuItem.setState(true);
+                            desmumeMenuItem.setState(true);
 
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
+                            defaultPresence.setEnabled(false);
+                            setManualMenuItem.setEnabled(false);
+                            presetPresencesMenu.setEnabled(false);
+                            gameConsolesMenu.setEnabled(false);
+                            pcGamesMenu.setEnabled(false);
 
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            desmumeExecutor = Executors.newSingleThreadExecutor();
+                            desmumeExecutor.execute(new DeSmuMERunnable());
+
+                            saveCachedData(PresenceType.DESMUME, desmumeRPCFile);
                         }
-
-                        desmumeExecutor = Executors.newSingleThreadExecutor();
-                        desmumeExecutor.execute(new DeSmuMERunnable());
-
-                        saveCachedData(PresenceType.DESMUME, desmumeRPCFile);
                     }
                 });
                 vlcMediaPlayerMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        beatSaberMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        mpchcMediaPlayerMenuItem.setState(false);
+                        if (!vlcMediaPlayerMenuItem.getState()) {
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
+                            musicMenuItem.setState(false);
+                            if (musicExecutor != null) {
+                                musicExecutor = null;
+                            }
+                            chromeMenuItem.setState(false);
+                            beatSaberMenuItem.setState(false);
+                            wiimmfiMenuItem.setState(false);
+                            if (wiimmfiExecutor != null) {
+                                wiimmfiExecutor = null;
+                            }
+                            nintendoSwitchMenuItem.setState(false);
+                            if (nintendoSwitchExecutor != null) {
+                                nintendoSwitchExecutor = null;
+                            }
+                            desmumeMenuItem.setState(false);
+                            if (desmumeExecutor != null) {
+                                desmumeExecutor = null;
+                            }
+                            mpchcMediaPlayerMenuItem.setState(false);
 
-                        vlcMediaPlayerMenuItem.setState(true);
+                            vlcMediaPlayerMenuItem.setState(true);
 
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
+                            defaultPresence.setEnabled(false);
+                            setManualMenuItem.setEnabled(false);
+                            presetPresencesMenu.setEnabled(false);
+                            gameConsolesMenu.setEnabled(false);
+                            pcGamesMenu.setEnabled(false);
 
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            if (mediaPlayerExecutor == null) {
+                                mediaPlayerExecutor = Executors.newSingleThreadExecutor();
+                                mediaPlayerExecutor.execute(new MediaPlayerRunnable());
+                            }
+
+                            saveCachedData(PresenceType.VLC_MEDIA_PLAYER, desmumeRPCFile);
                         }
-
-                        if (mediaPlayerExecutor == null) {
-                            mediaPlayerExecutor = Executors.newSingleThreadExecutor();
-                            mediaPlayerExecutor.execute(new MediaPlayerRunnable());
-                        }
-
-                        saveCachedData(PresenceType.VLC_MEDIA_PLAYER, desmumeRPCFile);
                     }
                 });
                 mpchcMediaPlayerMenuItem.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
-                        manualMenuItem.setState(false);
-                        programMenuItem.setState(false);
-                        if (programExecutor != null) {
-                            programExecutor = null;
-                        }
-                        musicMenuItem.setState(false);
-                        if (musicExecutor != null) {
-                            musicExecutor = null;
-                        }
-                        chromeMenuItem.setState(false);
-                        beatSaberMenuItem.setState(false);
-                        wiimmfiMenuItem.setState(false);
-                        if (wiimmfiExecutor != null) {
-                            wiimmfiExecutor = null;
-                        }
-                        nintendoSwitchMenuItem.setState(false);
-                        if (nintendoSwitchExecutor != null) {
-                            nintendoSwitchExecutor = null;
-                        }
-                        desmumeMenuItem.setState(false);
-                        if (desmumeExecutor != null) {
-                            desmumeExecutor = null;
-                        }
-                        vlcMediaPlayerMenuItem.setState(false);
+                        if (!mpchcMediaPlayerMenuItem.getState()) {
+                            manualMenuItem.setState(false);
+                            programMenuItem.setState(false);
+                            if (programExecutor != null) {
+                                programExecutor = null;
+                            }
+                            musicMenuItem.setState(false);
+                            if (musicExecutor != null) {
+                                musicExecutor = null;
+                            }
+                            chromeMenuItem.setState(false);
+                            beatSaberMenuItem.setState(false);
+                            wiimmfiMenuItem.setState(false);
+                            if (wiimmfiExecutor != null) {
+                                wiimmfiExecutor = null;
+                            }
+                            nintendoSwitchMenuItem.setState(false);
+                            if (nintendoSwitchExecutor != null) {
+                                nintendoSwitchExecutor = null;
+                            }
+                            desmumeMenuItem.setState(false);
+                            if (desmumeExecutor != null) {
+                                desmumeExecutor = null;
+                            }
+                            vlcMediaPlayerMenuItem.setState(false);
 
-                        mpchcMediaPlayerMenuItem.setState(true);
+                            mpchcMediaPlayerMenuItem.setState(true);
 
-                        defaultPresence.setEnabled(false);
-                        setManualMenuItem.setEnabled(false);
-                        presetPresencesMenu.setEnabled(false);
-                        gameConsolesMenu.setEnabled(false);
-                        pcGamesMenu.setEnabled(false);
+                            defaultPresence.setEnabled(false);
+                            setManualMenuItem.setEnabled(false);
+                            presetPresencesMenu.setEnabled(false);
+                            gameConsolesMenu.setEnabled(false);
+                            pcGamesMenu.setEnabled(false);
 
-                        try {
-                            eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                        } catch (JSONException jsonException) {
-                            jsonException.printStackTrace();
+                            try {
+                                eventManager.callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+
+                            if (mediaPlayerExecutor == null) {
+                                mediaPlayerExecutor = Executors.newSingleThreadExecutor();
+                                mediaPlayerExecutor.execute(new MediaPlayerRunnable());
+                            }
+
+                            saveCachedData(PresenceType.MPCHC_MEDIA_PLAYER, desmumeRPCFile);
                         }
-
-                        if (mediaPlayerExecutor == null) {
-                            mediaPlayerExecutor = Executors.newSingleThreadExecutor();
-                            mediaPlayerExecutor.execute(new MediaPlayerRunnable());
-                        }
-
-                        saveCachedData(PresenceType.MPCHC_MEDIA_PLAYER, desmumeRPCFile);
                     }
                 });
 
