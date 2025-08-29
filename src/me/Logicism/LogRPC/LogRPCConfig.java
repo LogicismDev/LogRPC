@@ -12,11 +12,17 @@ public class LogRPCConfig {
 
     private String defaultActivityType;
 
+    private String defaultDisplayType;
+
     private String defaultClientID;
 
     private String defaultDetails;
 
+    private String defaultDetailsURL;
+
     private String defaultState;
+
+    private String defaultStateURL;
 
     private String defaultLargeImageKey;
 
@@ -42,6 +48,8 @@ public class LogRPCConfig {
 
     private int defaultMaxPartySize;
 
+    private String defaultPartyPrivacy;
+
     private List<String> enabledPrograms;
 
     private String musicProgram;
@@ -51,6 +59,10 @@ public class LogRPCConfig {
     private boolean invidiousAPIEnabled;
 
     private String invidiousAPIInstance;
+
+    private boolean safeTwitchAPIEnabled;
+
+    private String safeTwitchBackendAPIInstance;
 
     private String wiimmfiPlayerURL;
 
@@ -63,6 +75,12 @@ public class LogRPCConfig {
     private String flareSolverrSession;
 
     private boolean enableSavingNintendoRefreshToken;
+
+    private String nintendoSwitchUsername;
+
+    private boolean enableShowingNintendoPlaytime;
+
+    private boolean enableShowingSplatoon3Presence;
 
     private String hrReader;
 
@@ -132,6 +150,8 @@ public class LogRPCConfig {
         return defaultActivityType;
     }
 
+    public String getDefaultDisplayType() { return defaultDisplayType; }
+
     public String getDefaultClientID() {
         return defaultClientID;
     }
@@ -140,8 +160,16 @@ public class LogRPCConfig {
         return defaultDetails;
     }
 
+    public String getDefaultDetailsURL() {
+        return defaultDetailsURL;
+    }
+
     public String getDefaultState() {
         return defaultState;
+    }
+
+    public String getDefaultStateURL() {
+        return defaultStateURL;
     }
 
     public String getDefaultLargeImageKey() {
@@ -192,6 +220,10 @@ public class LogRPCConfig {
         return defaultMaxPartySize;
     }
 
+    public String getDefaultPartyPrivacy() {
+        return defaultPartyPrivacy;
+    }
+
     public List<String> getEnabledPrograms() {
         return enabledPrograms;
     }
@@ -210,6 +242,14 @@ public class LogRPCConfig {
 
     public String getInvidiousAPIInstance() {
         return invidiousAPIInstance;
+    }
+
+    public boolean isSafeTwitchAPIEnabled() {
+        return safeTwitchAPIEnabled;
+    }
+
+    public String getSafeTwitchBackendAPIInstance() {
+        return safeTwitchBackendAPIInstance;
     }
 
     public String getWiimmfiPlayerURL() {
@@ -234,6 +274,18 @@ public class LogRPCConfig {
 
     public boolean isEnableSavingNintendoRefreshToken() {
         return enableSavingNintendoRefreshToken;
+    }
+
+    public String getNintendoSwitchUsername() {
+        return nintendoSwitchUsername;
+    }
+
+    public boolean isEnableShowingNintendoPlaytime() {
+        return enableShowingNintendoPlaytime;
+    }
+
+    public boolean isEnableShowingSplatoon3Presence() {
+        return enableShowingSplatoon3Presence;
     }
 
     public String getHrReader() {
