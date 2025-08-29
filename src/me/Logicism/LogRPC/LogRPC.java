@@ -450,7 +450,7 @@ public class LogRPC {
             manualMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!manualMenuItem.getState()) {
+                    if (manualMenuItem.getState()) {
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
                             programExecutor = null;
@@ -501,7 +501,7 @@ public class LogRPC {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
                     if (System.getProperty("os.name").startsWith("Windows")) {
-                        if (!programMenuItem.getState()) {
+                        if (programMenuItem.getState()) {
                             manualMenuItem.setState(false);
                             musicMenuItem.setState(false);
                             if (musicExecutor != null) {
@@ -554,7 +554,7 @@ public class LogRPC {
             musicMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!musicMenuItem.getState()) {
+                    if (musicMenuItem.getState()) {
                         manualMenuItem.setState(false);
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
@@ -604,7 +604,7 @@ public class LogRPC {
             chromeMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!chromeMenuItem.getState()) {
+                    if (chromeMenuItem.getState()) {
                         manualMenuItem.setState(false);
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
@@ -654,7 +654,7 @@ public class LogRPC {
             beatSaberMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!beatSaberMenuItem.getState()) {
+                    if (beatSaberMenuItem.getState()) {
                         manualMenuItem.setState(false);
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
@@ -704,7 +704,7 @@ public class LogRPC {
             wiimmfiMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!wiimmfiMenuItem.getState()) {
+                    if (wiimmfiMenuItem.getState()) {
                         manualMenuItem.setState(false);
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
@@ -762,7 +762,7 @@ public class LogRPC {
             nintendoSwitchMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!nintendoSwitchMenuItem.getState()) {
+                    if (nintendoSwitchMenuItem.getState()) {
                         manualMenuItem.setState(false);
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
@@ -810,7 +810,7 @@ public class LogRPC {
             desmumeMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!desmumeMenuItem.getState()) {
+                    if (desmumeMenuItem.getState()) {
                         if (desmumeRPCFile == null) {
                             JFileChooser chooser = new JFileChooser();
                             chooser.setDialogTitle("Open out.dat");
@@ -884,7 +884,7 @@ public class LogRPC {
             vlcMediaPlayerMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!vlcMediaPlayerMenuItem.getState()) {
+                    if (vlcMediaPlayerMenuItem.getState()) {
                         manualMenuItem.setState(false);
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
@@ -936,7 +936,7 @@ public class LogRPC {
             mpchcMediaPlayerMenuItem.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if (!mpchcMediaPlayerMenuItem.getState()) {
+                    if (mpchcMediaPlayerMenuItem.getState()) {
                         manualMenuItem.setState(false);
                         programMenuItem.setState(false);
                         if (programExecutor != null) {
