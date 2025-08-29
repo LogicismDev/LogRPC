@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.website;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
@@ -61,6 +62,11 @@ public class YouTubePresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        return DisplayType.STATE;
     }
 
     @Override
@@ -244,6 +250,13 @@ public class YouTubePresence extends Presence {
     }
 
     @Override
+    public String getDetailsURL() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        return data.getURL();
+    }
+
+    @Override
     public String getSecondaryButtonText() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
@@ -256,6 +269,29 @@ public class YouTubePresence extends Presence {
 
     @Override
     public String getSecondaryButtonURL() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (data.getURL().startsWith("https://www.youtube.com/watch?v=")) {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return "https://www.youtube.com/channel/" + invidiousAPIResult.getString("authorId");
+            } else {
+                Element channelElement = data.getHTMLDocument().selectFirst("#text > a");
+                if (data.getURL().startsWith("https://www.youtube.com/watch?v=") && channelElement != null) {
+
+                    return "https://www.youtube.com" + channelElement.attr("href");
+                }
+            }
+        } else if (data.getURL().startsWith("https://www.youtube.com/shorts/")) {
+            if (LogRPC.INSTANCE.getConfig().isInvidiousAPIEnabled()) {
+                return "https://www.youtube.com/channel/" + invidiousAPIResult.getString("authorId");
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getStateURL() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (data.getURL().startsWith("https://www.youtube.com/watch?v=")) {

@@ -1,14 +1,19 @@
 package me.Logicism.LogRPC.presence.manual;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
+import com.jagrosh.discordipc.entities.PartyPrivacy;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
 
 public class CustomizablePresence extends Presence implements PresenceData {
 
     private ActivityType activityType;
+    private DisplayType displayType;
     private String details;
+    private String detailsURL;
     private String state;
+    private String stateURL;
     private String largeImageKey;
     private String largeImageText;
     private String smallImageKey;
@@ -21,16 +26,21 @@ public class CustomizablePresence extends Presence implements PresenceData {
     private long endTimestamp;
     private int partySize;
     private int maxPartySize;
+    private PartyPrivacy partyPrivacy;
 
-    public CustomizablePresence(long clientID, ActivityType activityType, String details, String state, String largeImageKey,
+    public CustomizablePresence(long clientID, ActivityType activityType, DisplayType displayType, String details,
+                                String detailsURL, String state, String stateURL, String largeImageKey,
                                 String largeImageText, String smallImageKey, String smallImageText,
                                 String mainButtonText, String mainButtonURL, String secondaryButtonText,
-                                String secondaryButtonURL, long startTimestamp, long endTimestamp, int partySize, int maxPartySize) {
+                                String secondaryButtonURL, long startTimestamp, long endTimestamp, int partySize, int maxPartySize, PartyPrivacy partyPrivacy) {
         super(clientID);
 
         this.activityType = activityType;
+        this.displayType = displayType;
         this.details = details;
+        this.detailsURL = detailsURL;
         this.state = state;
+        this.stateURL = stateURL;
         this.largeImageKey = largeImageKey;
         this.largeImageText = largeImageText;
         this.smallImageKey = smallImageKey;
@@ -43,6 +53,7 @@ public class CustomizablePresence extends Presence implements PresenceData {
         this.endTimestamp = endTimestamp;
         this.partySize = partySize;
         this.maxPartySize = maxPartySize;
+        this.partyPrivacy = partyPrivacy;
     }
 
     @Override
@@ -51,13 +62,28 @@ public class CustomizablePresence extends Presence implements PresenceData {
     }
 
     @Override
+    public DisplayType getDisplayType() {
+        return displayType;
+    }
+
+    @Override
     public String getDetails() {
         return details;
     }
 
     @Override
+    public String getDetailsURL() {
+        return detailsURL;
+    }
+
+    @Override
     public String getState() {
         return state;
+    }
+
+    @Override
+    public String getStateURL() {
+        return stateURL;
     }
 
     @Override
@@ -126,6 +152,11 @@ public class CustomizablePresence extends Presence implements PresenceData {
     @Override
     public int getPartyMax() {
         return maxPartySize;
+    }
+
+    @Override
+    public PartyPrivacy getPartyPrivacy() {
+        return partyPrivacy;
     }
 
     @Override

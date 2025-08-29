@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.program;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -14,6 +15,15 @@ public class MAMEPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.PLAYING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        if (!data.getTitle().isEmpty() && !data.getTitle().startsWith("No Driver Loaded")) {
+            return DisplayType.DETAILS;
+        } else {
+            return DisplayType.NAME;
+        }
     }
 
     @Override

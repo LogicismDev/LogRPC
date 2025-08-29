@@ -2,7 +2,6 @@ package me.Logicism.LogRPC.network;
 
 import me.Logicism.LogRPC.LogRPC;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -54,6 +53,33 @@ public class BrowserClient {
         int resCode = c.getResponseCode();
         int resLength = c.getContentLength();
 
+        return new BrowserData(c.getURL().toString(), c.getHeaderFields(), resCode, resLength, c.getResponseCode() == 200 || c.getResponseCode() == 201 ? c.getInputStream() : c.getErrorStream());
+    }
+
+    public static BrowserData executePOSTRequest(URL url, byte[] bytes, Map<String, String> headers) throws IOException {
+        HttpURLConnection c = (HttpURLConnection) url.openConnection();
+        c.setRequestProperty("User-Agent", "Java 17 / LogRPC " + LogRPC.VERSION);
+        c.setConnectTimeout(30000);
+        c.setReadTimeout(30000);
+        c.setInstanceFollowRedirects(false);
+
+        if (headers != null) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                c.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
+
+        c.setDoInput(true);
+        c.setDoOutput(true);
+
+        DataOutputStream dos = new DataOutputStream(c.getOutputStream());
+        dos.write(bytes);
+        dos.flush();
+        dos.close();
+
+        int resCode = c.getResponseCode();
+        int resLength = c.getContentLength();
+
         return new BrowserData(c.getURL().toString(), c.getHeaderFields(), resCode, resLength, c.getResponseCode() == 200 ? c.getInputStream() : c.getErrorStream());
     }
 
@@ -69,5 +95,22 @@ public class BrowserClient {
 
         return sb.toString();
     }
+
+    public static byte[] requestToBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[4096]; // Read in 4KB chunks
+        int bytesRead;
+
+        // Read from the input stream and write to the output stream
+        while ((bytesRead = is.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+
+        is.close();
+
+        return outputStream.toByteArray();
+    }
+
 
 }

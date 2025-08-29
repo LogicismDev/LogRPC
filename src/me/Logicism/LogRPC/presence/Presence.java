@@ -1,6 +1,8 @@
 package me.Logicism.LogRPC.presence;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
+import com.jagrosh.discordipc.entities.PartyPrivacy;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.PresenceData;
 
@@ -22,12 +24,24 @@ public abstract class Presence {
         return ActivityType.PLAYING;
     }
 
+    public DisplayType getDisplayType() {
+        return DisplayType.NAME;
+    }
+
     public String getDetails() {
         return "none";
     }
 
+    public String getDetailsURL() {
+        return null;
+    }
+
     public String getState() {
         return "";
+    }
+
+    public String getStateURL() {
+        return null;
     }
 
     public String getLargeImageKey() {
@@ -72,6 +86,10 @@ public abstract class Presence {
 
     public int getPartyMax() {
         return 0;
+    }
+
+    public PartyPrivacy getPartyPrivacy() {
+        return PartyPrivacy.PUBLIC;
     }
 
     public long getClientID() {

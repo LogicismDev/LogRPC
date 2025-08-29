@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.program;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -14,6 +15,17 @@ public class MPCHCPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        JSONData data = (JSONData) this.data;
+
+        if (!data.getTitle().equals("Options") && !data.getTitle().equals("Open") && !data.getTitle().equals("Properties") && !data.getTitle().equals("About") || data.contains("start_time")) {
+            return DisplayType.DETAILS;
+        }
+
+        return DisplayType.NAME;
     }
 
     @Override

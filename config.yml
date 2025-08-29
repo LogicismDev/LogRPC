@@ -17,19 +17,24 @@ checkForUpdates: true
 lastPresenceOnStartup: true
 
 # Override last presence if lastPresenceOnStartup is true
-# Acceptable overrideLastPresenceType values: NONE, PROGRAM, MUSIC, EXTENSION, BEAT_SABER, WIIMMFI, DESMUME, VLC_MEDIA_PLAYER, MPCHC_MEDIA_PLAYER
+# Acceptable overrideLastPresenceType values: NONE, PROGRAM, MUSIC, EXTENSION, BEAT_SABER, WIIMMFI, NINTENDO_SWITCH, DESMUME, VLC_MEDIA_PLAYER, MPCHC_MEDIA_PLAYER
 # NONE will use the last presence it has saved upon exit
 overrideLastPresenceType: NONE
 
 # This section allows you to modify the default fallback presence or default startup presence
 # Acceptable defaultActivityType values: PLAYING, WATCHING, LISTENING, COMPETING
+# Acceptable defaultDisplayType values: NAME, DETAILS, STATE
+# Acceptable defaultPartyPrivacy values: PRIVATE, PUBLIC
 
 defaultActivityType: "WATCHING"
+defaultDisplayType: "NAME"
 defaultClientID: "389249289223929856"
-defaultDetails: "LogRPC v2.0"
+defaultDetails: "LogRPC v2.3"
+defaultDetailsURL: "https://github.com/LogicismDev/LogRPC"
 defaultState: "Coded in Java and JavaScript"
+defaultStateURL: "null"
 defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
-defaultLargeImageText: "LogRPC v2.0"
+defaultLargeImageText: "LogRPC v2.3"
 defaultSmallImageKey: "null"
 defaultSmallImageText: "null"
 
@@ -44,6 +49,7 @@ defaultSecondaryButtonURL: "https://www.fiverr.com/logicism/design-a-youtube-or-
 
 defaultPartySize: 0
 defaultMaxPartySize: 0
+defaultPartyPrivacy: PUBLIC
 
 # This section lists the programs that are enabled on the presence software. Please note that this will only work on Windows Systems.
 
@@ -104,6 +110,11 @@ musicArtworkCountry: US
 invidiousAPIEnabled: true
 invidiousAPIInstance: https://invidious.logicism.tv/
 
+# This is where you can enable the SafeTwitch API to fetch the proper Twitch Stream Name, Video Title, and Channel Name if it's showing improperly on your presence.
+
+safeTwitchAPIEnabled: true
+safeTwitchBackendAPIInstance: https://safetwitch-backend.logicism.tv/
+
 # This is where you have to get your player url. You can get this by going into a room and going on to the wiimmfi.de website and then clicking on your friend code in the Mario Kart Wii Rooms List
 
 wiimmfiPlayerURL: https://wiimmfi.de/stats/mkw/room/p600487228
@@ -125,6 +136,15 @@ flareSolverrSession: 1
 
 # This section enables or disables saving the Nintendo Switch Refresh Token on exit, thus each time allowing you to re-login to your Nintendo account each time.
 enableSavingNintendoRefreshToken: true
+
+# This can be set to a username and have you auto pick which presence to grab from. Set it to none to manually pick one each time.
+nintendoSwitchUsername: none
+
+# This section allows you to enable or disable showing the Nintendo Playtime on your Discord Presence.
+enableShowingNintendoPlaytime: true
+
+# This section allows you to enable or disable showing the Splatoon 3 Presence on your Discord Presence.
+enableShowingSplatoon3Presence: true
 
 # This section is where you can specify HR Reader settings. Currently supports Pulsoid and HypeRate.
 # Supported devices can be found at https://www.blog.pulsoid.net/monitors?from=mheader or https://www.hyperate.io/supported-devices

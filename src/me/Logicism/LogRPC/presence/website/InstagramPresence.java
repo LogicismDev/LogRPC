@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.website;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -15,6 +16,11 @@ public class InstagramPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        return DisplayType.STATE;
     }
 
     @Override
@@ -75,6 +81,23 @@ public class InstagramPresence extends Presence {
         }
 
         return "";
+    }
+
+    @Override
+    public String getStateURL() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (data.getURL().startsWith("https://www.instagram.com/p/") || data.getURL().startsWith("https://www.instagram.com/stories/")) {
+            return data.getURL();
+        } else {
+            Element element = data.getHTMLDocument().selectFirst("#mount_0_0_kf > div > div > div > div.x9f619.x1n2onr6.x1ja2u2z > div > div > div.x78zum5.xdt5ytf.x1t2pt76.x1n2onr6.x1ja2u2z.x10cihs4 > div:nth-child(2) > div > div.x1gryazu.xh8yej3.x10o80wk.x14k21rp.x17snn68.x6osk4m.x1porb0y.x8vgawa > section > main > div > header > section.x1xdureb.x1agbcgv.x1lhsz42.xieb3on.xr1yuqi.x6ikm8r.x10wlt62.xs5motx > div > div > div.x9f619.xjbqb8w.x78zum5.x168nmei.x13lgxp2.x5pf9jr.xo71vjh.x1h5jrl4.x1uhb9sk.x6ikm8r.x10wlt62.x1c4vz4f.xs83m0k.xdt5ytf.xqjyukv.x1qjc9v5.x1oa3qoh.x1nhvcw1 > div > a > h2 > span");
+
+            if (element != null) {
+                return data.getURL();
+            }
+        }
+
+        return null;
     }
 
     @Override

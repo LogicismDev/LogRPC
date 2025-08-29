@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.website;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -15,6 +16,17 @@ public class DailymotionPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
+            return DisplayType.DETAILS;
+        }
+
+        return DisplayType.STATE;
     }
 
     @Override
@@ -124,6 +136,13 @@ public class DailymotionPresence extends Presence {
     }
 
     @Override
+    public String getDetailsURL() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        return data.getURL();
+    }
+
+    @Override
     public String getSecondaryButtonText() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
@@ -136,6 +155,19 @@ public class DailymotionPresence extends Presence {
 
     @Override
     public String getSecondaryButtonURL() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {
+            Element channelElement = data.getHTMLDocument().selectFirst("#root > div > main > div > div.NewWatchingDiscovery__watchingSection___3Bzey > div > div.WatchingSection__safeZone___w2sTV > div > div:nth-child(2) > div > div > div.NewVideoInfo__channelLineWrapper___3SHpY > div:nth-child(1) > div > a");
+
+            return "https://www.dailymotion.com" + channelElement.attr("href");
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public String getStateURL() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (data.getURL().startsWith("https://www.dailymotion.com/video/") || data.getURL().startsWith("https://www.dailymotion.com/playlist")) {

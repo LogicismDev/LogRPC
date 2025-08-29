@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.program;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -14,6 +15,15 @@ public class DeSmuMEPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.PLAYING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        if (data.getTitle().contains("x64 SSE2 |")) {
+            return DisplayType.DETAILS;
+        }
+
+        return DisplayType.NAME;
     }
 
     @Override

@@ -131,6 +131,19 @@ public class TwitterPresence extends Presence {
     }
 
     @Override
+    public String getStateURL() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (data.getURL().contains("/status/")) {
+            return data.getURL();
+        } else if (!data.getURL().equals("https://x.com/home") && !data.getURL().endsWith("https://x.com/explore") && !data.getURL().startsWith("https://x.com/explore/tabs/") && !data.getURL().equals("https://x.com/notifications") && !data.getURL().equals("https://x.com/notifications/verified") && !data.getURL().equals("https://x.com/notifications/mentions") && !data.getURL().equals("https://x.com/notifications/mentions") && !data.getURL().equals("https://x.com/messages") && !data.getURL().startsWith("https://x.com/messages/") && !data.getURL().endsWith("/i/grok") && !data.getURL().endsWith("/jobs") && !data.getURL().contains("/communities/")) {
+            return data.getURL();
+        }
+
+        return null;
+    }
+
+    @Override
     public String getMainButtonURL() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 

@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.program;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -14,6 +15,15 @@ public class PotPlayerPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        if (!data.getTitle().equals("PotPlayer") && data.getTitle().contains(" - PotPlayer")) {
+            return DisplayType.DETAILS;
+        }
+
+        return DisplayType.NAME;
     }
 
     @Override

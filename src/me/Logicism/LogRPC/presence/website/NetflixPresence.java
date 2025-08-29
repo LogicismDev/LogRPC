@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.website;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -18,6 +19,17 @@ public class NetflixPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (data.getURL().startsWith("https://www.netflix.com/watch/")) {
+            return DisplayType.DETAILS;
+        } else {
+            return DisplayType.STATE;
+        }
     }
 
     @Override

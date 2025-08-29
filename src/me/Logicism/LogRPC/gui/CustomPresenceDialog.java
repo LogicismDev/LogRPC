@@ -1,6 +1,8 @@
 package me.Logicism.LogRPC.gui;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
+import com.jagrosh.discordipc.entities.PartyPrivacy;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.presence.PresenceType;
 import me.Logicism.LogRPC.event.UpdatePresenceEvent;
@@ -38,6 +40,10 @@ public class CustomPresenceDialog extends JDialog {
     private JSpinner startTimestampSpinner;
     private JSpinner endTimestampSpinner;
     private JComboBox activityTypeComboBox;
+    private JTextField detailsURLTextField;
+    private JTextField stateURLTextField;
+    private JComboBox displayTypeComboBox;
+    private JComboBox partyPrivacyComboBox;
 
     public CustomPresenceDialog() {
         try {
@@ -81,9 +87,16 @@ public class CustomPresenceDialog extends JDialog {
         applicationIDTextField.setText(String.valueOf(LogRPC.INSTANCE.getClientID()));
         try {
             activityTypeComboBox.setSelectedItem(ActivityType.from(LogRPC.INSTANCE.getPresence().build().toJson().getInt("type")).toString());
+            displayTypeComboBox.setSelectedItem(DisplayType.from(LogRPC.INSTANCE.getPresence().build().toJson().getInt("status_display_type")).toString());
             detailsTextField.setText(LogRPC.INSTANCE.getPresence().build().toJson().getString("details"));
+            if ((LogRPC.INSTANCE.getPresence().build().toJson().has("details_url"))) {
+                detailsURLTextField.setText(LogRPC.INSTANCE.getPresence().build().toJson().getString("details_url"));
+            }
             if ((LogRPC.INSTANCE.getPresence().build().toJson().has("state"))) {
                 stateTextField.setText(LogRPC.INSTANCE.getPresence().build().toJson().getString("state"));
+            }
+            if ((LogRPC.INSTANCE.getPresence().build().toJson().has("state_url"))) {
+                stateURLTextField.setText(LogRPC.INSTANCE.getPresence().build().toJson().getString("state_url"));
             }
             if (LogRPC.INSTANCE.getPresence().build().toJson().getJSONObject("assets").has("large_image")) {
                 largeImageKeyTextField.setText(LogRPC.INSTANCE.getPresence().build().toJson().getJSONObject("assets").getString("large_image"));
@@ -125,6 +138,7 @@ public class CustomPresenceDialog extends JDialog {
             if (LogRPC.INSTANCE.getPresence().build().toJson().has("party")) {
                 partySizeSpinner.setValue(LogRPC.INSTANCE.getPresence().build().toJson().getJSONObject("party").getJSONArray("size").getInt(0));
                 maxPartySizeSpinner.setValue(LogRPC.INSTANCE.getPresence().build().toJson().getJSONObject("party").getJSONArray("size").getInt(1));
+                partyPrivacyComboBox.setSelectedItem(PartyPrivacy.from(LogRPC.INSTANCE.getPresence().build().toJson().getJSONObject("party").getInt("privacy")));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -168,7 +182,7 @@ public class CustomPresenceDialog extends JDialog {
                 partySizeSpinner.setValue(maxPartySizeSpinner.getValue());
             }
 
-            LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new CustomizablePresence(Long.parseLong(applicationIDTextField.getText()), ActivityType.valueOf((String) activityTypeComboBox.getSelectedItem()), detailsTextField.getText(), stateTextField.getText(), largeImageKeyTextField.getText(), largeImageTextTextField.getText(), smallImageKeyTextField.getText(), smallImageTextTextField.getText(), enableMainButtonCheckBox.isSelected() ? mainButtonTextTextField.getText() : "", enableMainButtonCheckBox.isSelected() ? mainButtonURLTextField.getText() : "", enableSecondaryButtonCheckBox.isSelected() ? secondaryButtonTextTextField.getText() : "", enableSecondaryButtonCheckBox.isSelected() ? secondaryButtonURLTextField.getText() : "", Long.parseLong(String.valueOf(startTimestampSpinner.getValue())), Long.parseLong(String.valueOf(endTimestampSpinner.getValue())), Integer.parseInt(String.valueOf(partySizeSpinner.getValue())), Integer.parseInt(String.valueOf(maxPartySizeSpinner.getValue())))));
+            LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new CustomizablePresence(Long.parseLong(applicationIDTextField.getText()), ActivityType.valueOf((String) activityTypeComboBox.getSelectedItem()), DisplayType.valueOf((String) displayTypeComboBox.getSelectedItem()), detailsTextField.getText(), detailsURLTextField.getText(), stateTextField.getText(), stateURLTextField.getText(), largeImageKeyTextField.getText(), largeImageTextTextField.getText(), smallImageKeyTextField.getText(), smallImageTextTextField.getText(), enableMainButtonCheckBox.isSelected() ? mainButtonTextTextField.getText() : "", enableMainButtonCheckBox.isSelected() ? mainButtonURLTextField.getText() : "", enableSecondaryButtonCheckBox.isSelected() ? secondaryButtonTextTextField.getText() : "", enableSecondaryButtonCheckBox.isSelected() ? secondaryButtonURLTextField.getText() : "", Long.parseLong(String.valueOf(startTimestampSpinner.getValue())), Long.parseLong(String.valueOf(endTimestampSpinner.getValue())), Integer.parseInt(String.valueOf(partySizeSpinner.getValue())), Integer.parseInt(String.valueOf(maxPartySizeSpinner.getValue())), PartyPrivacy.valueOf((String) partyPrivacyComboBox.getSelectedItem()))));
             dispose();
         }
     }
