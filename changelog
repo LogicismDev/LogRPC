@@ -55,6 +55,8 @@ enableShowingNintendoPlaytime: true
 # This section allows you to enable or disable showing the Splatoon 3 Presence on your Discord Presence.
 enableShowingSplatoon3Presence: true
 
+nintendoSwitchAutoDisabled: false
+
 2.2 - July 2, 2025
 
 - Fixed Snes9x Presence not showing for 64 bit.
