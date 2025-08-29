@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.music;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -14,6 +15,11 @@ public class AmazonMusicPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.LISTENING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        return DisplayType.STATE;
     }
 
     @Override
@@ -58,6 +64,17 @@ public class AmazonMusicPresence extends Presence {
         }
 
         return super.getLargeImageText();
+    }
+
+    @Override
+    public String getDetailsURL() {
+        JSONData data = (JSONData) this.data;
+
+        if (!data.getAttribute("song_url").isEmpty()) {
+            return data.getAttribute("song_url");
+        }
+
+        return super.getMainButtonURL();
     }
 
     @Override

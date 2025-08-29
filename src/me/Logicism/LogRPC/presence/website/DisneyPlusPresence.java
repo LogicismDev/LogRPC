@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.website;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -18,6 +19,22 @@ public class DisneyPlusPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (data.getURL().contains("/video/") || data.getURL().contains("/play/")) {
+            Element element = data.getHTMLDocument().selectFirst("#hudson-wrapper > div > div > div.btm-media-overlays-container > div > div > div.controls__header > div.title-bug-area > div > button.control-icon-btn.title-btn > div.title-field.body-copy");
+            if (element != null) {
+                return DisplayType.DETAILS;
+            } else {
+                return DisplayType.NAME;
+            }
+        }
+
+        return DisplayType.STATE;
     }
 
     @Override

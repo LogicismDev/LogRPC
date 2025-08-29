@@ -35,9 +35,9 @@ public class MAGIXVEGASProPresence extends Presence {
         } else if (data.getTitle().contains(" - VEGAS Pro 20.0")) {
             return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 20.0".length()));
         } else if (data.getTitle().contains(" - VEGAS Pro 21.0")) {
-            return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 20.0".length()));
+            return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 21.0".length()));
         } else if (data.getTitle().contains(" - VEGAS Pro 22.0")) {
-            return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 20.0".length()));
+            return data.getTitle().substring(0, data.getTitle().length() - (" - VEGAS Pro 22.0".length()));
         } else {
             return "Editing a Video";
         }

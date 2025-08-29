@@ -1,6 +1,8 @@
 package me.Logicism.LogRPC.presence.manual;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
+import com.jagrosh.discordipc.entities.PartyPrivacy;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.presence.Presence;
 
@@ -12,7 +14,12 @@ public class DefaultPresence extends Presence {
 
     @Override
     public ActivityType getActivityType() {
-        return LogRPC.INSTANCE.getConfig().getDefaultDetails().isEmpty() || LogRPC.INSTANCE.getConfig().getDefaultDetails().equals("null") ? ActivityType.PLAYING : ActivityType.valueOf(LogRPC.INSTANCE.getConfig().getDefaultActivityType());
+        return LogRPC.INSTANCE.getConfig().getDefaultActivityType().isEmpty() || LogRPC.INSTANCE.getConfig().getDefaultActivityType().equals("null") ? ActivityType.PLAYING : ActivityType.valueOf(LogRPC.INSTANCE.getConfig().getDefaultActivityType());
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        return LogRPC.INSTANCE.getConfig().getDefaultDisplayType().isEmpty() || LogRPC.INSTANCE.getConfig().getDefaultDisplayType().equals("null") ? DisplayType.NAME : DisplayType.valueOf(LogRPC.INSTANCE.getConfig().getDefaultDisplayType());
     }
 
     @Override
@@ -21,8 +28,18 @@ public class DefaultPresence extends Presence {
     }
 
     @Override
+    public String getDetailsURL() {
+        return LogRPC.INSTANCE.getConfig().getDefaultDetailsURL().isEmpty() || LogRPC.INSTANCE.getConfig().getDefaultDetailsURL().equals("null") ? null : LogRPC.INSTANCE.getConfig().getDefaultDetailsURL();
+    }
+
+    @Override
     public String getState() {
         return LogRPC.INSTANCE.getConfig().getDefaultState().isEmpty() || LogRPC.INSTANCE.getConfig().getDefaultState().equals("null") ? null : LogRPC.INSTANCE.getConfig().getDefaultState();
+    }
+
+    @Override
+    public String getStateURL() {
+        return LogRPC.INSTANCE.getConfig().getDefaultStateURL().isEmpty() || LogRPC.INSTANCE.getConfig().getDefaultStateURL().equals("null") ? null : LogRPC.INSTANCE.getConfig().getDefaultStateURL();
     }
 
     @Override
@@ -91,5 +108,10 @@ public class DefaultPresence extends Presence {
     @Override
     public int getPartyMax() {
         return LogRPC.INSTANCE.getConfig().getDefaultMaxPartySize();
+    }
+
+    @Override
+    public PartyPrivacy getPartyPrivacy() {
+        return PartyPrivacy.valueOf(LogRPC.INSTANCE.getConfig().getDefaultPartyPrivacy());
     }
 }

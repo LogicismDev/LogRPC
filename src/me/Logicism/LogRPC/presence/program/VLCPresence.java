@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.program;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -14,6 +15,16 @@ public class VLCPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        JSONData data = (JSONData) this.data;
+        if (!data.getTitle().equals("VLC media player") && data.getTitle().contains(" - VLC media player") || data.contains("start_time")) {
+            return DisplayType.DETAILS;
+        }
+
+        return DisplayType.NAME;
     }
 
     @Override

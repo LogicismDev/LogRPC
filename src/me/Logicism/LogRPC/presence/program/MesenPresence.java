@@ -1,5 +1,6 @@
 package me.Logicism.LogRPC.presence.program;
 
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.JSONData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -8,6 +9,15 @@ public class MesenPresence extends Presence {
 
     public MesenPresence(PresenceData data) {
         super(528420146964856847L, data);
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        if (data.getTitle().startsWith("Mesen - ")) {
+            return DisplayType.DETAILS;
+        } else {
+            return DisplayType.NAME;
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.jagrosh.discordipc.entities.RichPresence;
 import me.Logicism.LogRPC.LogRPC;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.JSONData;
+import me.Logicism.LogRPC.core.data.NintendoSwitchData;
 import me.Logicism.LogRPC.core.event.EventHandler;
 import me.Logicism.LogRPC.core.presence.PresenceType;
 import me.Logicism.LogRPC.network.HypeRateWebSocketClient;
@@ -167,6 +168,12 @@ public class UpdatePresenceHandler extends EventHandler {
             presence = new BeatSaberPresence(e.getData());
         } else if (e.getType() == PresenceType.WIIMMFI) {
             presence = new WiimmfiPresence(e.getData());
+        } else if (e.getType() == PresenceType.NINTENDO_SWITCH) {
+            if (((NintendoSwitchData) e.getData()).getPlatform() == 1) {
+                presence = new NintendoSwitchAutoPresence((NintendoSwitchData) e.getData());
+            } else {
+                presence = new NintendoSwitch2AutoPresence((NintendoSwitchData) e.getData());
+            }
         } else if (e.getType() == PresenceType.DESMUME) {
             presence = new DeSmuMEPokémonPresence(e.getData());
         } else if (e.getType() == PresenceType.VLC_MEDIA_PLAYER) {
@@ -177,12 +184,19 @@ public class UpdatePresenceHandler extends EventHandler {
 
         if (presence != null) {
             builder.setActivityType(presence.getActivityType());
+            builder.setDisplayType(presence.getDisplayType());
 
             if (!presence.getState().isEmpty()) {
                 builder.setState(new String(presence.getState().length() < 128 ? presence.getState().getBytes(StandardCharsets.UTF_8) : presence.getState().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
             }
+            if (presence.getStateURL() != null) {
+                builder.setStateURL(presence.getStateURL());
+            }
 
             builder.setDetails(new String(presence.getDetails().length() < 128 ? presence.getDetails().getBytes(StandardCharsets.UTF_8) : presence.getDetails().substring(0, 128).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+            if (presence.getDetailsURL() != null) {
+                builder.setDetailsURL(presence.getDetailsURL());
+            }
 
             if (presence.getLargeImageKey() != null && !presence.getLargeImageKey().isEmpty()) {
                 builder.setLargeImage(presence.getLargeImageKey(),
@@ -215,7 +229,7 @@ public class UpdatePresenceHandler extends EventHandler {
             }
 
             if (presence.getPartySize() > 0 && presence.getPartyMax() > 0) {
-                builder.setParty("logrpc-" + LogRPC.VERSION, presence.getPartySize(), presence.getPartyMax(), "PRIVATE");
+                builder.setParty("logrpc-" + LogRPC.VERSION, presence.getPartySize(), presence.getPartyMax(), presence.getPartyPrivacy());
             }
 
             if (!presence.getDetails().isEmpty()) {

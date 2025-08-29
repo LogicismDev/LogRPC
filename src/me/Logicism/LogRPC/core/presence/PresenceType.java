@@ -8,6 +8,7 @@ public enum PresenceType {
     BEAT_SABER,
     WIIMMFI,
     DESMUME,
+    NINTENDO_SWITCH,
     VLC_MEDIA_PLAYER,
     MPCHC_MEDIA_PLAYER
 }

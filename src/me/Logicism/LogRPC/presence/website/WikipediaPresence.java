@@ -1,6 +1,7 @@
 package me.Logicism.LogRPC.presence.website;
 
 import com.jagrosh.discordipc.entities.ActivityType;
+import com.jagrosh.discordipc.entities.DisplayType;
 import me.Logicism.LogRPC.core.data.BrowserHTMLData;
 import me.Logicism.LogRPC.core.data.PresenceData;
 import me.Logicism.LogRPC.presence.Presence;
@@ -17,6 +18,11 @@ public class WikipediaPresence extends Presence {
     @Override
     public ActivityType getActivityType() {
         return ActivityType.WATCHING;
+    }
+
+    @Override
+    public DisplayType getDisplayType() {
+        return DisplayType.STATE;
     }
 
     @Override
@@ -113,6 +119,21 @@ public class WikipediaPresence extends Presence {
 
     @Override
     public String getMainButtonURL() {
+        BrowserHTMLData data = (BrowserHTMLData) this.data;
+
+        if (!data.getURL().equals("https://www.wikipedia.org/")) {
+            String url = data.getURL();
+            if (data.getURL().contains("#/media/")) {
+                url = url.split("#/media/")[0];
+            }
+            return url;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public String getStateURL() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
         if (!data.getURL().equals("https://www.wikipedia.org/")) {
