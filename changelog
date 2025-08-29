@@ -1,3 +1,60 @@
+2.3 - August 29, 2025
+
+- Added Configurable Presence Display Type
+- Added Configurable Details and State Clickable URLs
+- Added Display Types for all Media Players (including Program, VLC and MPC-HC Presences), Websites, Music, and Emulators Presences
+- Added Nintendo Switch Auto Presence.
+    - This means you can use it to automatically retrieve the presence of what you're playing on your Switch system.
+    - In order for this to work, you must have an account that you can login to that is friends with your account to properly read the presence.
+    - Please note that this sends data to APIs for usage.
+- Added Large Image Preview for watching Live Twitch Streams Presences
+- Added SafeTwitch API for improved Twitch Presences.
+- Fixed Proper Windows Pipe for Java versions 22 and above.
+- Fixed where if the selected item was selected already, to not have the code executed again.
+- Fixed MAGIX Vegas Pro 21 and 22 Presences where the title isn't showing up properly.
+- Modify the configuration lines applicable to these:
+defaultActivityType: "WATCHING"
+defaultDisplayType: "NAME"
+defaultClientID: "389249289223929856"
+defaultDetails: "LogRPC v2.3"
+defaultDetailsURL: "https://github.com/LogicismDev/LogRPC"
+defaultState: "Coded in Java and JavaScript"
+defaultStateURL: "null"
+defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
+defaultLargeImageText: "LogRPC v2.3"
+defaultSmallImageKey: "null"
+defaultSmallImageText: "null"
+
+# Use -1 for no timestamp. Use 0 for current timestamp.
+defaultStartTimestamp: -1
+defaultEndTimestamp: -1
+
+defaultMainButtonText: "Download my Work"
+defaultMainButtonURL: "https://logicism.tv/downloads/"
+defaultSecondaryButtonText: "Buy a Gaming/Anime Banner"
+defaultSecondaryButtonURL: "https://www.fiverr.com/logicism/design-a-youtube-or-twitch-banner-and-logo-made-for-gamers"
+
+defaultPartySize: 0
+defaultMaxPartySize: 0
+defaultPartyPrivacy: PUBLIC
+- Add the following configuration lines below:
+# This is where you can enable the SafeTwitch API to fetch the proper Twitch Stream Name, Video Title, and Channel Name if it's showing improperly on your presence.
+
+safeTwitchAPIEnabled: true
+safeTwitchBackendAPIInstance: https://safetwitch-backend.logicism.tv/
+
+# This section enables or disables saving the Nintendo Switch Refresh Token on exit, thus each time allowing you to re-login to your Nintendo account each time.
+enableSavingNintendoRefreshToken: true
+
+# This can be set to a username and have you auto pick which presence to grab from. Set it to none to manually pick one each time.
+nintendoSwitchUsername: none
+
+# This section allows you to enable or disable showing the Nintendo Playtime on your Discord Presence.
+enableShowingNintendoPlaytime: true
+
+# This section allows you to enable or disable showing the Splatoon 3 Presence on your Discord Presence.
+enableShowingSplatoon3Presence: true
+
 2.2 - July 2, 2025
 
 - Fixed Snes9x Presence not showing for 64 bit.
@@ -25,52 +82,3 @@ nintendoSwitch2Disabled: false
 
 invidiousAPIEnabled: true
 invidiousAPIInstance: https://invidious.logicism.tv/
-
-2.0 - January 8, 2025
-
-- Fixed TIDAL API parsing incorrect Album Name, Artwork and Inaccurate results
-- Removed TIDAL Timestamps due to inaccuracy
-- Update Display Username from deprecated Username and Discriminator, to Display Name and Username in Menu
-- Added Auto-Reconnect Feature, so if your Discord does disconnect randomly, or close and open, then LogRPC should still be able to reconnect once it's open
-- Added Last Presence Type Remembered on Startup
-- Added Last DeSmuME RPC File Remembered on Startup
-- Added Watching, Listening and Competing Presence Types. The current website presences and media player programs hold the watching presence types and the current music presence types hold the listening types. No programs or websites use the competing presence (yet)
-- Added PotPlayer Program Presence. You can add it in the enabledPrograms as potplayer
-- Fixed Davinci Resolve still being enabled despite disabled in the enabledPrograms. If you need to enable it, add davinciresolve in enabledPrograms
-- Added VLC Media Player and MPC-HC Extended Presences using their Web UI.
-- Added PotPlayer Presence
-- Fixed Mesen, X.com, Instagram, Dailymotion, Twitch Presences
-- Changed Twitter to X.com
-- Modify the configuration lines applicable to these:
-# Apply last presence used on startup
-lastPresenceOnStartup: true
-
-# Override last presence if lastPresenceOnStartup is true
-# Acceptable overrideLastPresenceType values: NONE, PROGRAM, MUSIC, EXTENSION, BEAT_SABER, WIIMMFI, DESMUME, VLC_MEDIA_PLAYER, MPCHC_MEDIA_PLAYER
-# NONE will use the last presence it has saved upon exit
-overrideLastPresenceType: NONE
-
-# This section allows you to modify the default fallback presence or default startup presence
-# Acceptable defaultActivityType values: PLAYING, WATCHING, LISTENING, COMPETING
-
-defaultActivityType: "WATCHING"
-defaultClientID: "389249289223929856"
-defaultDetails: "LogRPC v2.0"
-defaultState: "Coded in Java and JavaScript"
-defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
-defaultLargeImageText: "LogRPC v2.0"
-defaultSmallImageKey: "null"
-defaultSmallImageText: "null"
-- Add these configuration lines below:
-# This section enables or disables saving the DeSmuME RPC File on exit, thus each time allowing you to choose the file every time.
-enableSavingDeSmuMEFile: true
-
-# This section is where you can modify the media player section.
-# VLC and MPC-HC require the web interface to be enabled. If you are worried of enabling it, make sure it's set to localhost only.
-
-vlcWebInterfaceHost: 127.0.0.1
-vlcWebInterfacePort: 8080
-vlcWebInterfacePassword: changeme
-
-mpchcWebInterfaceHost: 127.0.0.1
-mpchcWebInterfacePort: 13579
