@@ -1,3 +1,8 @@
+2.31 - August 30, 2025
+
+- Fixed Nintendo Switch Runnable when Token is Expired
+- Added Extended Error Message if LogRPC fails to startup
+
 2.3 - August 29, 2025
 
 - Added Configurable Presence Display Type

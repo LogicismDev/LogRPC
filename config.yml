@@ -7,7 +7,7 @@
 #              ##       ##     ## ##    ##  ##    ##  ##        ##    ##
 #              ########  #######   ######   ##     ## ##         ######
 #
-#                             Version 2.3 by Logicism
+#                             Version 2.31 by Logicism
 #              A Rich Presence program to show your activity on Discord
 
 # Check for updates on startup
@@ -29,12 +29,12 @@ overrideLastPresenceType: NONE
 defaultActivityType: "WATCHING"
 defaultDisplayType: "NAME"
 defaultClientID: "389249289223929856"
-defaultDetails: "LogRPC v2.3"
+defaultDetails: "LogRPC v2.31"
 defaultDetailsURL: "https://github.com/LogicismDev/LogRPC"
 defaultState: "Coded in Java and JavaScript"
 defaultStateURL: "null"
 defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
-defaultLargeImageText: "LogRPC v2.3"
+defaultLargeImageText: "LogRPC v2.31"
 defaultSmallImageKey: "null"
 defaultSmallImageText: "null"
 
