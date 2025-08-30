@@ -30,27 +30,19 @@ import org.cef.CefApp;
 import org.cef.CefClient;
 import org.cef.browser.CefBrowser;
 import org.cef.browser.CefFrame;
-import org.cef.callback.CefCallback;
-import org.cef.callback.CefSchemeHandlerFactory;
 import org.cef.handler.CefLoadHandlerAdapter;
-import org.cef.handler.CefRequestHandlerAdapter;
-import org.cef.handler.CefResourceHandler;
-import org.cef.handler.CefResourceHandlerAdapter;
-import org.cef.network.CefRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.Style;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -69,7 +61,7 @@ import java.util.regex.Pattern;
 
 public class LogRPC {
 
-    public static String VERSION = "2.3";
+    public static String VERSION = "2.31";
 
     public static LogRPC INSTANCE;
 
@@ -157,7 +149,20 @@ public class LogRPC {
         } catch (NoDiscordClientException | RuntimeException e) {
             e.printStackTrace();
 
-            JOptionPane.showMessageDialog(null, "Discord must be open to use this Program!", "LogRPC", JOptionPane.ERROR_MESSAGE);
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+
+            JLabel label = new JLabel("There was an error opening LogRPC! Check if your Discord is open. You can report this issue if there's a bug with the error below.");
+
+            JTextArea textArea = new JTextArea(10, 30);
+            textArea.setText(sw.toString());
+            JScrollPane scrollPane = new JScrollPane(textArea);
+
+            JPanel panel = new JPanel();
+            panel.add(label);
+            panel.add(scrollPane);
+
+            JOptionPane.showMessageDialog(null, panel, "LogRPC", JOptionPane.ERROR_MESSAGE);
 
             System.exit(0);
         }
