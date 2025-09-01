@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,18 +24,22 @@ import java.util.concurrent.ExecutionException;
 public class NintendoSwitchRunnable implements Runnable {
 
     private String NXAPI_TOKEN = "";
+    private long NXAPI_TOKEN_TIMESTAMP;
 
     private String NA_ACCESS_TOKEN = "";
     private String NA_ID_TOKEN = "";
 
     private String WEBAPI_TOKEN = "";
     private long WEBAPI_TOKEN_TIMESTAMP = 0;
+    private long WEBAPI_TOKEN_TIMESTAMP_EXP = 0;
 
     private String SPLATNET_WEBAPI_TOKEN = "";
     private long SPLATNET_WEBAPI_TOKEN_TIMESTAMP = 0;
+    private long SPLATNET_WEBAPI_TOKEN_TIMESTAMP_EXP = 0;
 
     private String BULLET_TOKEN;
     private long BULLET_TOKEN_TIMESTAMP = 0;
+    private long BULLET_TOKEN_TIMESTAMP_EXP = 0;
 
     private String lastStatus = "";
     private String lastGame = "";
@@ -70,9 +76,12 @@ public class NintendoSwitchRunnable implements Runnable {
             System.out.println("Grabbing nxapi Token");
             String[] nxapiTokens = getNXAPIAccessToken(LogRPC.INSTANCE.getNXAPIRefreshToken());
             NXAPI_TOKEN = nxapiTokens[0];
+            JSONObject nxapiObj = new JSONObject(new String(Base64.getDecoder().decode(NXAPI_TOKEN.split("\\.")[1])));
+            NXAPI_TOKEN_TIMESTAMP = nxapiObj.getLong("exp");
+
             LogRPC.INSTANCE.setNXAPIRefreshToken(nxapiTokens[1]);
 
-            if (System.currentTimeMillis() - LogRPC.INSTANCE.getNintendoWebServiceTokenTimestamp() >= 7000000) {
+            if ((System.currentTimeMillis() / 1000L) > LogRPC.INSTANCE.getNintendoWebServiceTokenTimestampExp()) {
                 System.out.println("Grabbing Nintendo Account Tokens");
                 String[] naTokens = getNATokens(refreshToken);
 
@@ -90,13 +99,18 @@ public class NintendoSwitchRunnable implements Runnable {
                 String[] fParameters = getFParameter(1, meObj.getString("id"), null, NA_ID_TOKEN, new JSONObject().put("url", "/v3/Account/Login").put("parameter", new JSONObject().put("naIdToken", NA_ID_TOKEN).put("naBirthday", meObj.getString("birthday")).put("naCountry", meObj.getString("country")).put("language", meObj.getString("language")).put("timestamp", 0).put("requestId", "").put("f", "")));
                 if (fParameters[0] != null) {
                     System.out.println("Grabbing Web Service Token");
+
                     Object[] webApiResults = getWebAPITokens(Base64.getDecoder().decode(fParameters[1]));
                     WEBAPI_TOKEN = (String) webApiResults[0];
                     meObj = (JSONObject) webApiResults[1];
-                    WEBAPI_TOKEN_TIMESTAMP = System.currentTimeMillis();
+                    JSONObject webAPITokenObj = new JSONObject(new String(Base64.getDecoder().decode(WEBAPI_TOKEN.split("\\.")[1])));
+                    WEBAPI_TOKEN_TIMESTAMP = webAPITokenObj.getLong("iat");
+                    WEBAPI_TOKEN_TIMESTAMP_EXP = webAPITokenObj.getLong("exp");
+
                     LogRPC.INSTANCE.setNintendoWebServiceToken(WEBAPI_TOKEN);
                     LogRPC.INSTANCE.setNintendoWebServiceObject((JSONObject) webApiResults[1]);
                     LogRPC.INSTANCE.setNintendoWebServiceTokenTimestamp(WEBAPI_TOKEN_TIMESTAMP);
+                    LogRPC.INSTANCE.setNintendoWebServiceTokenTimestampExp(WEBAPI_TOKEN_TIMESTAMP_EXP);
                 } else {
                     JOptionPane.showMessageDialog(null, "We can't login at the moment! Please try again in a bit!", "LogRPC", JOptionPane.ERROR_MESSAGE);
 
@@ -106,8 +120,13 @@ public class NintendoSwitchRunnable implements Runnable {
                 System.out.println("Using cached Web Service Token");
                 WEBAPI_TOKEN = LogRPC.INSTANCE.getNintendoWebServiceToken();
                 WEBAPI_TOKEN_TIMESTAMP = LogRPC.INSTANCE.getNintendoWebServiceTokenTimestamp();
+                WEBAPI_TOKEN_TIMESTAMP_EXP = LogRPC.INSTANCE.getNintendoWebServiceTokenTimestampExp();
                 SPLATNET_WEBAPI_TOKEN = LogRPC.INSTANCE.getNintendoGameWebServiceToken();
                 SPLATNET_WEBAPI_TOKEN_TIMESTAMP = LogRPC.INSTANCE.getNintendoGameWebServiceTokenTimestamp();
+                SPLATNET_WEBAPI_TOKEN_TIMESTAMP_EXP = LogRPC.INSTANCE.getNintendoGameWebServiceTokenTimestampExp();
+                BULLET_TOKEN = LogRPC.INSTANCE.getNintendoBulletToken();
+                BULLET_TOKEN_TIMESTAMP = LogRPC.INSTANCE.getNintendoBulletTokenTimestamp();
+                BULLET_TOKEN_TIMESTAMP_EXP = LogRPC.INSTANCE.getNintendoBulletTokenTimestampExp();
 
                 meObj = LogRPC.INSTANCE.getNintendoWebServiceObject();
             }
@@ -137,14 +156,15 @@ public class NintendoSwitchRunnable implements Runnable {
                 LogRPC.INSTANCE.getNintendoSwitchMenuItem().setName("Nintendo Switch (Auto) - " + friend.getName());
 
                 while (LogRPC.INSTANCE.getNintendoSwitchMenuItem().getState()) {
-                    if (System.currentTimeMillis() - WEBAPI_TOKEN_TIMESTAMP >= 7000000) {
-                        String[] naTokens = getNATokens(refreshToken);
-
-                        nxapiTokens = getNXAPIAccessToken(null);
+                    if ((System.currentTimeMillis()) / 1000L > NXAPI_TOKEN_TIMESTAMP) {
+                        nxapiTokens = getNXAPIAccessToken(LogRPC.INSTANCE.getNXAPIRefreshToken());
                         NXAPI_TOKEN = nxapiTokens[0];
 
                         LogRPC.INSTANCE.setNXAPIRefreshToken(nxapiTokens[1]);
                         LogRPC.INSTANCE.saveCachedData(PresenceType.NINTENDO_SWITCH, LogRPC.INSTANCE.getDesmumeRPCFile());
+                    }
+                    if ((System.currentTimeMillis() / 1000L) > WEBAPI_TOKEN_TIMESTAMP_EXP) {
+                        String[] naTokens = getNATokens(refreshToken);
 
                         String[] fParameters = getFParameter(1, LogRPC.INSTANCE.getNintendoAccountID(), null, NA_ID_TOKEN, new JSONObject().put("url", "/v3/Account/Login").put("parameter", new JSONObject().put("naIdToken", NA_ID_TOKEN).put("naBirthday", meObj.getString("birthday")).put("naCountry", meObj.getString("country")).put("language", meObj.getString("language")).put("timestamp", 0).put("requestId", "").put("f", "")));
 
@@ -153,90 +173,91 @@ public class NintendoSwitchRunnable implements Runnable {
 
                         Object[] webApiResults = getWebAPITokens(Base64.getDecoder().decode(fParameters[1]));
                         WEBAPI_TOKEN = (String) webApiResults[0];
-                        WEBAPI_TOKEN_TIMESTAMP = System.currentTimeMillis();
+                        JSONObject webAPITokenObj = new JSONObject(new String(Base64.getDecoder().decode(WEBAPI_TOKEN.split("\\.")[1])));
+                        WEBAPI_TOKEN_TIMESTAMP = webAPITokenObj.getLong("iat");
+                        WEBAPI_TOKEN_TIMESTAMP_EXP = webAPITokenObj.getLong("exp");
+
+                        LogRPC.INSTANCE.setNintendoWebServiceToken(WEBAPI_TOKEN);
+                        LogRPC.INSTANCE.setNintendoWebServiceObject((JSONObject) webApiResults[1]);
+                        LogRPC.INSTANCE.setNintendoWebServiceTokenTimestamp(WEBAPI_TOKEN_TIMESTAMP);
+                        LogRPC.INSTANCE.setNintendoWebServiceTokenTimestampExp(WEBAPI_TOKEN_TIMESTAMP_EXP);
 
                         LogRPC.INSTANCE.saveCachedData(PresenceType.NINTENDO_SWITCH, LogRPC.INSTANCE.getDesmumeRPCFile());
                     }
 
                     byte[] friendEncrypted = encryptResponse("https://api-lp1.znc.srv.nintendo.net/v4/Friend/Show", WEBAPI_TOKEN, new JSONObject().put("parameter", new JSONObject().put("nsaId", friend.getNSAID())).toString());
                     JSONObject jsonObject1 = getZNCResult("/v4/Friend/Show", friendEncrypted);
-                    System.out.println(jsonObject1);
+                    if (jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").has("name") && jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name").equals("Splatoon 3")) {
+                        if (LogRPC.INSTANCE.getConfig().isEnableShowingSplatoon3Presence()) {
+                            if ((System.currentTimeMillis() / 1000L) > SPLATNET_WEBAPI_TOKEN_TIMESTAMP_EXP) {
+                                String[] fParameters = getFParameter(2, LogRPC.INSTANCE.getNintendoAccountID(), String.valueOf(meObj.getLong("id")), WEBAPI_TOKEN, new JSONObject().put("url", "https://api-lp1.znc.srv.nintendo.net/v4/Game/GetWebServiceToken").put("parameter", new JSONObject().put("id", Long.valueOf("4834290508791808")).put("registrationToken", "").put("timestamp", 0L).put("requestId", "").put("f", "")));
+                                SPLATNET_WEBAPI_TOKEN = getGameWebAPIToken(Base64.getDecoder().decode(fParameters[1]));
+                                JSONObject splatnetWebAPIObj = new JSONObject(new String(Base64.getDecoder().decode(SPLATNET_WEBAPI_TOKEN.split("\\.")[1])));
+                                SPLATNET_WEBAPI_TOKEN_TIMESTAMP = splatnetWebAPIObj.getLong("iat");
+                                SPLATNET_WEBAPI_TOKEN_TIMESTAMP_EXP = splatnetWebAPIObj.getLong("exp");
+                                LogRPC.INSTANCE.setNintendoGameWebServiceToken(SPLATNET_WEBAPI_TOKEN);
+                                LogRPC.INSTANCE.setNintendoGameWebServiceTokenTimestamp(SPLATNET_WEBAPI_TOKEN_TIMESTAMP);
+                                LogRPC.INSTANCE.setNintendoGameWebServiceTokenTimestampExp(SPLATNET_WEBAPI_TOKEN_TIMESTAMP_EXP);
+                                LogRPC.INSTANCE.saveCachedData(PresenceType.NINTENDO_SWITCH, LogRPC.INSTANCE.getDesmumeRPCFile());
+                            }
+                            if ((System.currentTimeMillis() / 1000L) > BULLET_TOKEN_TIMESTAMP_EXP) {
+                                BULLET_TOKEN = getBulletToken().getString("bulletToken");
+                                JSONObject bulletTokenObj = new JSONObject(new String(Base64.getDecoder().decode(Base64.getDecoder().decode(BULLET_TOKEN.split("\\.")[1]))));
+                                BULLET_TOKEN_TIMESTAMP = bulletTokenObj.getLong("iat");
+                                BULLET_TOKEN_TIMESTAMP_EXP = bulletTokenObj.getLong("exp");
+                                LogRPC.INSTANCE.setNintendoBulletToken(BULLET_TOKEN);
+                                LogRPC.INSTANCE.setNintendoBulletTokenTimestamp(BULLET_TOKEN_TIMESTAMP);
+                                LogRPC.INSTANCE.setNintendoBulletTokenTimestampExp(BULLET_TOKEN_TIMESTAMP_EXP);
+                                LogRPC.INSTANCE.saveCachedData(PresenceType.NINTENDO_SWITCH, LogRPC.INSTANCE.getDesmumeRPCFile());
+                            }
 
-                    if (jsonObject1.has("error") && jsonObject1.getString("error").equals("invalid_token")) {
-                        WEBAPI_TOKEN_TIMESTAMP = System.currentTimeMillis() + 7000000;
-                    } else {
-                        if (jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").has("name") && jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name").equals("Splatoon 3")) {
-                            if (LogRPC.INSTANCE.getConfig().isEnableShowingSplatoon3Presence()) {
-                                if (System.currentTimeMillis() - LogRPC.INSTANCE.getNintendoGameWebServiceTokenTimestamp() >= 10800000) {
-                                    String[] fParameters = getFParameter(2, LogRPC.INSTANCE.getNintendoAccountID(), String.valueOf(meObj.getLong("id")), WEBAPI_TOKEN, new JSONObject().put("url", "https://api-lp1.znc.srv.nintendo.net/v4/Game/GetWebServiceToken").put("parameter", new JSONObject().put("id", Long.valueOf("4834290508791808")).put("registrationToken", "").put("timestamp", 0L).put("requestId", "").put("f", "")));
-                                    SPLATNET_WEBAPI_TOKEN = getGameWebAPIToken(Base64.getDecoder().decode(fParameters[1]));
-                                    SPLATNET_WEBAPI_TOKEN_TIMESTAMP = System.currentTimeMillis();
-                                    LogRPC.INSTANCE.setNintendoGameWebServiceToken(SPLATNET_WEBAPI_TOKEN);
-                                    LogRPC.INSTANCE.setNintendoGameWebServiceTokenTimestamp(SPLATNET_WEBAPI_TOKEN_TIMESTAMP);
-                                    LogRPC.INSTANCE.saveCachedData(PresenceType.NINTENDO_SWITCH, LogRPC.INSTANCE.getDesmumeRPCFile());
-                                } else {
-                                    SPLATNET_WEBAPI_TOKEN = LogRPC.INSTANCE.getNintendoGameWebServiceToken();
-                                    SPLATNET_WEBAPI_TOKEN_TIMESTAMP = LogRPC.INSTANCE.getNintendoGameWebServiceTokenTimestamp();
-                                }
-                                if (System.currentTimeMillis() - LogRPC.INSTANCE.getNintendoBulletTokenTimestamp() >= 7200000) {
-                                    BULLET_TOKEN = getBulletToken().getString("bulletToken");
-                                    BULLET_TOKEN_TIMESTAMP = System.currentTimeMillis();
-                                    LogRPC.INSTANCE.setNintendoBulletToken(BULLET_TOKEN);
-                                    LogRPC.INSTANCE.setNintendoBulletTokenTimestamp(BULLET_TOKEN_TIMESTAMP);
-                                    LogRPC.INSTANCE.saveCachedData(PresenceType.NINTENDO_SWITCH, LogRPC.INSTANCE.getDesmumeRPCFile());
-                                } else {
-                                    BULLET_TOKEN = LogRPC.INSTANCE.getNintendoBulletToken();
-                                    BULLET_TOKEN_TIMESTAMP = LogRPC.INSTANCE.getNintendoBulletTokenTimestamp();
-                                }
-
-                                JSONObject splatnet3FriendObj;
-                                if (splatnet3Friend != null) {
-                                    splatnet3FriendObj = getSplatNet3Result("/graphql", new JSONObject().put("variables", "").put("extensions", new JSONObject().put("persistedQuery", new JSONObject().put("version", 1).put("sha256Hash", "411b3fa70a9e0ff083d004b06cc6fad2638a1a24326cbd1fb111e7c72a529931"))).toString());
-                                } else {
-                                    splatnet3FriendObj = getSplatNet3Result("/graphql", new JSONObject().put("variables", "").put("extensions", new JSONObject().put("persistedQuery", new JSONObject().put("version", 1).put("sha256Hash", "ea1297e9bb8e52404f52d89ac821e1d73b726ceef2fd9cc8d6b38ab253428fb3"))).toString());
-                                }
-                                for (int i = 0; i < splatnet3FriendObj.getJSONObject("data").getJSONObject("friends").getJSONArray("node").length(); i++) {
-                                    if (friend.getName().equals(splatnet3FriendObj.getJSONObject("data").getJSONObject("friends").getJSONArray("node").getJSONObject(i).getString("nickname"))) {
-                                        splatnet3Friend = splatnet3FriendObj.getJSONObject("data").getJSONObject("friends").getJSONArray("node").getJSONObject(i);
-                                        break;
-                                    }
-                                }
-
-                                if (!lastSplatoon3Status.equals(splatnet3Friend.getString("onlineStatus"))) {
-                                    lastSplatoon3Status = splatnet3Friend.getString("onlineStatus");
-                                    if (splatnet3Friend != null) {
-                                        LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData("Splatoon 3", jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), splatnet3Friend)));
-                                    } else {
-                                        LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"), jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), jsonObject1)));
-                                    }
-                                }
+                            JSONObject splatnet3FriendObj;
+                            if (splatnet3Friend != null) {
+                                splatnet3FriendObj = getSplatNet3Result("/graphql", new JSONObject().put("variables", "").put("extensions", new JSONObject().put("persistedQuery", new JSONObject().put("version", 1).put("sha256Hash", "411b3fa70a9e0ff083d004b06cc6fad2638a1a24326cbd1fb111e7c72a529931"))).toString());
                             } else {
-                                lastGame = jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name");
-                                if ((jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("ONLINE") || jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("PLAYING")) && !lastStatus.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state"))) {
-                                    lastStatus = jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state");
+                                splatnet3FriendObj = getSplatNet3Result("/graphql", new JSONObject().put("variables", "").put("extensions", new JSONObject().put("persistedQuery", new JSONObject().put("version", 1).put("sha256Hash", "ea1297e9bb8e52404f52d89ac821e1d73b726ceef2fd9cc8d6b38ab253428fb3"))).toString());
+                            }
+                            for (int i = 0; i < splatnet3FriendObj.getJSONObject("data").getJSONObject("friends").getJSONArray("node").length(); i++) {
+                                if (friend.getName().equals(splatnet3FriendObj.getJSONObject("data").getJSONObject("friends").getJSONArray("node").getJSONObject(i).getString("nickname"))) {
+                                    splatnet3Friend = splatnet3FriendObj.getJSONObject("data").getJSONObject("friends").getJSONArray("node").getJSONObject(i);
+                                    break;
                                 }
+                            }
 
-                                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"), jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), jsonObject1)));
+                            if (!lastSplatoon3Status.equals(splatnet3Friend.getString("onlineStatus"))) {
+                                lastSplatoon3Status = splatnet3Friend.getString("onlineStatus");
+                                if (splatnet3Friend != null) {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData("Splatoon 3", jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), splatnet3Friend)));
+                                } else {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"), jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), jsonObject1)));
+                                }
                             }
                         } else {
-                            if (jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").has("name") && !lastGame.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"))) {
-                                lastGame = jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name");
-                                if ((jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("ONLINE") || jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("PLAYING")) && !lastStatus.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state"))) {
-                                    lastStatus = jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state");
-                                }
+                            lastGame = jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name");
+                            if ((jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("ONLINE") || jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("PLAYING")) && !lastStatus.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state"))) {
+                                lastStatus = jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state");
+                            }
 
-                                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"), jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), jsonObject1)));
-                            } else if (!jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").has("name")) {
-                                if (!lastGame.isEmpty()) {
-                                    lastGame = "";
-                                }
-                                if (!lastStatus.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state"))) {
-                                    lastStatus = jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state");
-                                    if (jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("OFFLINE")) {
-                                        LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                                    } else if (jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("INACTIVE")) {
-                                        LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData("Not Playing", 1, -1, -1, "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Nintendo_switch_logo.png/500px-Nintendo_switch_logo.png", jsonObject1.getJSONObject("result").getString("imageUri"), null, jsonObject1)));
-                                    }
+                            LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"), jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), jsonObject1)));
+                        }
+                    } else {
+                        if (jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").has("name") && !lastGame.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"))) {
+                            lastGame = jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name");
+                            if ((jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("ONLINE") || jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("PLAYING")) && !lastStatus.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state"))) {
+                                lastStatus = jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state");
+                            }
+
+                            LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData(jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("name"), jsonObject1.getJSONObject("result").getJSONObject("presence").getInt("platform"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("totalPlayTime"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getLong("firstPlayedAt"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("imageUri"), jsonObject1.getJSONObject("result").getString("imageUri"), jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").getString("shopUri"), jsonObject1)));
+                        } else if (!jsonObject1.getJSONObject("result").getJSONObject("presence").getJSONObject("game").has("name")) {
+                            if (!lastGame.isEmpty()) {
+                                lastGame = "";
+                            }
+                            if (!lastStatus.equals(jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state"))) {
+                                lastStatus = jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state");
+                                if (jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("OFFLINE")) {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                                } else if (jsonObject1.getJSONObject("result").getJSONObject("presence").getString("state").equals("INACTIVE")) {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.NINTENDO_SWITCH, new NintendoSwitchData("Not Playing", 1, -1, -1, "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Nintendo_switch_logo.png/500px-Nintendo_switch_logo.png", jsonObject1.getJSONObject("result").getString("imageUri"), null, jsonObject1)));
                                 }
                             }
                         }

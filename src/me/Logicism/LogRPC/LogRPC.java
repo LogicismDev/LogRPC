@@ -111,8 +111,11 @@ public class LogRPC {
     private String nintendoGameWebServiceToken;
     private String nintendoBulletToken;
     private long nintendoWebServiceTokenTimestamp = -1;
+    private long nintendoWebServiceTokenTimestampExp = -1;
     private long nintendoGameWebServiceTokenTimestamp = -1;
+    private long nintendoGameWebServiceTokenTimestampExp = -1;
     private long nintendoBulletTokenTimestamp = -1;
+    private long nintendoBulletTokenTimestampExp = -1;
     private CefApp cefApp;
 
     private File desmumeRPCFile;
@@ -158,9 +161,9 @@ public class LogRPC {
             textArea.setText(sw.toString());
             JScrollPane scrollPane = new JScrollPane(textArea);
 
-            JPanel panel = new JPanel();
-            panel.add(label);
-            panel.add(scrollPane);
+            JPanel panel = new JPanel(new BorderLayout());
+            panel.add(label, BorderLayout.NORTH);
+            panel.add(scrollPane, BorderLayout.CENTER);
 
             JOptionPane.showMessageDialog(null, panel, "LogRPC", JOptionPane.ERROR_MESSAGE);
 
@@ -280,11 +283,20 @@ public class LogRPC {
             if (cachedData.containsKey("Nintendo Web Service Token Timestamp") && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
                 nintendoWebServiceTokenTimestamp = Long.parseLong(cachedData.get("Nintendo Web Service Token Timestamp"));
             }
+            if (cachedData.containsKey("Nintendo Web Service Token Timestamp Expiration") && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                nintendoWebServiceTokenTimestampExp = Long.parseLong(cachedData.get("Nintendo Web Service Token Timestamp Expiration"));
+            }
             if (cachedData.containsKey("Nintendo Game Web Service Token Timestamp") && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
                 nintendoGameWebServiceTokenTimestamp = Long.parseLong(cachedData.get("Nintendo Game Web Service Token Timestamp"));
             }
+            if (cachedData.containsKey("Nintendo Game Web Service Token Timestamp Expiration") && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                nintendoGameWebServiceTokenTimestampExp = Long.parseLong(cachedData.get("Nintendo Game Web Service Token Timestamp Expiration"));
+            }
             if (cachedData.containsKey("Nintendo Bullet Token Timestamp") && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
                 nintendoBulletTokenTimestamp = Long.parseLong(cachedData.get("Nintendo Bullet Token Timestamp"));
+            }
+            if (cachedData.containsKey("Nintendo Bullet Token Timestamp Expiration") && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                nintendoBulletTokenTimestampExp = Long.parseLong(cachedData.get("Nintendo Bullet Token Timestamp Expiration"));
             }
 
             if (!config.isDeSmuMEDisabled()) {
@@ -1377,12 +1389,28 @@ public class LogRPC {
         this.nintendoWebServiceTokenTimestamp = nintendoWebServiceTokenTimestamp;
     }
 
+    public long getNintendoWebServiceTokenTimestampExp() {
+        return nintendoWebServiceTokenTimestampExp;
+    }
+
+    public void setNintendoWebServiceTokenTimestampExp(long nintendoWebServiceTokenTimestampExp) {
+        this.nintendoWebServiceTokenTimestampExp = nintendoWebServiceTokenTimestampExp;
+    }
+
     public long getNintendoGameWebServiceTokenTimestamp() {
         return nintendoGameWebServiceTokenTimestamp;
     }
 
     public void setNintendoGameWebServiceTokenTimestamp(long nintendoGameWebServiceTokenTimestamp) {
         this.nintendoGameWebServiceTokenTimestamp = nintendoGameWebServiceTokenTimestamp;
+    }
+
+    public long getNintendoGameWebServiceTokenTimestampExp() {
+        return nintendoGameWebServiceTokenTimestampExp;
+    }
+
+    public void setNintendoGameWebServiceTokenTimestampExp(long nintendoGameWebServiceTokenTimestampExp) {
+        this.nintendoGameWebServiceTokenTimestampExp = nintendoGameWebServiceTokenTimestampExp;
     }
 
     public String getNintendoBulletToken() {
@@ -1399,6 +1427,14 @@ public class LogRPC {
 
     public void setNintendoBulletTokenTimestamp(long nintendoBulletTokenTimestamp) {
         this.nintendoBulletTokenTimestamp = nintendoBulletTokenTimestamp;
+    }
+
+    public long getNintendoBulletTokenTimestampExp() {
+        return nintendoBulletTokenTimestampExp;
+    }
+
+    public void setNintendoBulletTokenTimestampExp(long nintendoBulletTokenTimestampExp) {
+        this.nintendoBulletTokenTimestampExp = nintendoBulletTokenTimestampExp;
     }
 
     public File getDesmumeRPCFile() {
@@ -1507,7 +1543,7 @@ public class LogRPC {
         if (!setOnly) {
             boolean presenceDisabled = false;
             if (client != null && !presenceDisabled && client.getStatus() == PipeStatus.CONNECTED) {
-                client.sendRichPresence(presence.build(), new Callback(e -> System.out.println("Success"), err -> System.out.println(err)));
+                client.sendRichPresence(presence.build(), new Callback(e -> System.out.println("Success"), System.out::println));
             }
         }
     }
@@ -1680,11 +1716,43 @@ public class LogRPC {
                 }
             }
 
+            if (nintendoWebServiceTokenTimestampExp != -1 && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                if (cachedData.containsKey("Nintendo Web Service Token Timestamp Expiration")) {
+                    cachedData.replace("Nintendo Web Service Token Timestamp Expiration", String.valueOf(nintendoWebServiceTokenTimestampExp));
+                } else {
+                    cachedData.put("Nintendo Web Service Token Timestamp Expiration", String.valueOf(nintendoWebServiceTokenTimestampExp));
+                }
+            }
+
             if (nintendoGameWebServiceTokenTimestamp != -1 && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
                 if (cachedData.containsKey("Nintendo Game Web Service Token Timestamp")) {
                     cachedData.replace("Nintendo Game Web Service Token Timestamp", String.valueOf(nintendoGameWebServiceTokenTimestamp));
                 } else {
                     cachedData.put("Nintendo Game Web Service Token Timestamp", String.valueOf(nintendoGameWebServiceTokenTimestamp));
+                }
+            }
+
+            if (nintendoGameWebServiceTokenTimestampExp != -1 && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                if (cachedData.containsKey("Nintendo Game Web Service Token Timestamp Expiration")) {
+                    cachedData.replace("Nintendo Game Web Service Token Timestamp Expiration", String.valueOf(nintendoGameWebServiceTokenTimestampExp));
+                } else {
+                    cachedData.put("Nintendo Game Web Service Token Timestamp Expiration", String.valueOf(nintendoGameWebServiceTokenTimestampExp));
+                }
+            }
+
+            if (nintendoBulletTokenTimestamp != -1 && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                if (cachedData.containsKey("Nintendo Bullet Token Timestamp")) {
+                    cachedData.replace("Nintendo Bullet Token Timestamp", String.valueOf(nintendoBulletTokenTimestamp));
+                } else {
+                    cachedData.put("Nintendo Bullet Token Timestamp", String.valueOf(nintendoBulletTokenTimestamp));
+                }
+            }
+
+            if (nintendoBulletTokenTimestampExp != -1 && config.isEnableSavingNintendoRefreshToken() && !config.isNintendoSwitchAutoDisabled()) {
+                if (cachedData.containsKey("Nintendo Bullet Token Timestamp Expiration")) {
+                    cachedData.replace("Nintendo Bullet Token Timestamp Expiration", String.valueOf(nintendoBulletTokenTimestampExp));
+                } else {
+                    cachedData.put("Nintendo Bullet Token Timestamp Expiration", String.valueOf(nintendoBulletTokenTimestampExp));
                 }
             }
 
