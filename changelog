@@ -1,3 +1,8 @@
+2.32 - September 1, 2025
+
+- Refined Nintendo Switch Runnable when Tokens is Expired
+- Fixed Extended Error Message if LogRPC fails to startup
+
 2.31 - August 30, 2025
 
 - Fixed Nintendo Switch Runnable when Token is Expired
@@ -64,31 +69,3 @@ enableShowingNintendoPlaytime: true
 enableShowingSplatoon3Presence: true
 
 nintendoSwitchAutoDisabled: false
-
-2.2 - July 2, 2025
-
-- Fixed Snes9x Presence not showing for 64 bit.
-- Fixed LogRPC cache when running it in installed Program Files.
-- Refined DeSmuME Presence
-- Added Nintendo Switch 2. Add the following configuration lines below:
-nintendoSwitch2Disabled: false
-
-2.1 - May 15, 2025
-
-- Fixed Presence not showing for Java 22 and above.
-- Fixed Nintendo Game Console Presences
-- Fixed Music Presence for Windows 11. The following are the IDs you should enter instead of the executable name for LogRPC to recognize the Presence.
-    - Deezer: com.deezer.deezer-desktop
-    - Amazon Music: Amazon.Music
-    - TIDAL: com.squirrel.TIDAL.TIDAL
-    - Qobuz: com.squirrel.Qobuz.Qobuz
-    - iTunes: 49586DaveAntoine.MediaControllerforiTunes_9bzempp7dntjg!App
-    - iTunes Users should install this software to get iTunes presences. https://www.microsoft.com/store/apps/9NQ3D21QT8ML?cid=storebadge&ocid=badge
-- Fixed Twitch Watching Stream Presence (if not on Mod View)
-- Fixed Twitch Watching Video Presence
-- Fixed X.com Viewing Photo Presence
-- Added Invidious API Fetching Feature for improved YouTube Presences. Add the following configuration lines below:
-# This is where you can enable the Invidious API to fetch the proper Video Name, Thumbnails, and Channel Name if it's showing improperly on your presence.
-
-invidiousAPIEnabled: true
-invidiousAPIInstance: https://invidious.logicism.tv/

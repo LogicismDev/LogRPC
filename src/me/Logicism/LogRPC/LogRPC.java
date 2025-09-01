@@ -61,7 +61,7 @@ import java.util.regex.Pattern;
 
 public class LogRPC {
 
-    public static String VERSION = "2.31";
+    public static String VERSION = "2.32";
 
     public static LogRPC INSTANCE;
 
