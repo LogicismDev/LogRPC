@@ -41,7 +41,7 @@ public class UpdaterDialog extends JDialog {
                         long downloadedFileSize = 0;
 
                         BufferedInputStream bis = new BufferedInputStream(bd.getResponse());
-                        File file = new File("updater/LogRPCUpdater" + (System.getProperty("os.name").startsWith("Windows") ? ".exe" : ".jar"));
+                        File file = new File(LogRPC.INSTANCE.getBaseDir(), "updater/LogRPCUpdater" + (System.getProperty("os.name").startsWith("Windows") ? ".exe" : ".jar"));
                         FileOutputStream fos = new FileOutputStream(file);
                         byte dataBuffer[] = new byte[1024];
                         int bytesRead;

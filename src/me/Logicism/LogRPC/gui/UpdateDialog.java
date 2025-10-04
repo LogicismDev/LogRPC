@@ -67,7 +67,7 @@ public class UpdateDialog extends JDialog {
     }
 
     private void onOK() {
-        File file = new File("updater/LogRPCUpdater" + (System.getProperty("os.name").startsWith("Windows") ? ".exe" : ".jar"));
+        File file = new File(LogRPC.INSTANCE.getBaseDir(), "updater/LogRPCUpdater" + (System.getProperty("os.name").startsWith("Windows") ? ".exe" : ".jar"));
 
         new Thread(new Runnable() {
             @Override

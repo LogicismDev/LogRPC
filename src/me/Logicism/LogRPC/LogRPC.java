@@ -66,6 +66,7 @@ public class LogRPC {
     public static LogRPC INSTANCE;
 
     private LogRPCConfig config;
+    private File baseDir;
 
     private long clientID;
 
@@ -199,12 +200,12 @@ public class LogRPC {
         }
 
         if (INSTANCE.config.isCheckForUpdates()) {
-            File updaterdir = new File("updater");
+            File updaterdir = new File(INSTANCE.baseDir, "updater");
             if (!updaterdir.exists()) {
                 updaterdir.mkdir();
             }
 
-            File file = new File("updater/LogRPCUpdater" + (System.getProperty("os.name").startsWith("Windows") ? ".exe" : ".jar"));
+            File file = new File(updaterdir, "LogRPCUpdater" + (System.getProperty("os.name").startsWith("Windows") ? ".exe" : ".jar"));
 
             if (!file.exists()) {
                 UpdaterDialog updaterDialog = new UpdaterDialog();
@@ -236,21 +237,27 @@ public class LogRPC {
         }
 
         try {
-            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-            config = mapper.readValue(new File("config.yml"), LogRPCConfig.class);
-
-            File cachedDataFile;
+            File origBaseDir = null;
+            baseDir = new File(System.getProperty("user.dir"));
             if (System.getProperty("os.name").startsWith("Windows") && (System.getProperty("user.dir").substring(1).startsWith(":\\Program Files\\LogRPC") || System.getProperty("user.dir").substring(1).startsWith(":\\Program Files (x86)\\LogRPC"))) {
-                File appDataFolder = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\LogRPC");
-
-                if (!appDataFolder.exists()) {
-                    appDataFolder.mkdir();
-                }
-
-                cachedDataFile = new File(appDataFolder, "LogRPC.dat");
-            } else {
-                cachedDataFile = new File("LogRPC.dat");
+                origBaseDir = baseDir;
+                baseDir = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\LogRPC");
             }
+            if (!baseDir.exists()) {
+                baseDir.mkdir();
+
+                if (origBaseDir != null) {
+                    File origConfigFile = new File(origBaseDir, "config.yml");
+                    File configFile = new File(baseDir, "config.yml");
+
+                    Files.copy(origConfigFile.toPath(), configFile.toPath());
+                }
+            }
+
+            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+            config = mapper.readValue(new File(baseDir, "config.yml"), LogRPCConfig.class);
+
+            File cachedDataFile = new File(baseDir, "LogRPC.dat");
             cachedData = readCachedData(cachedDataFile);
 
             if (cachedData.containsKey("DeSmuME RPC File") && config.isEnableSavingDeSmuMEFile() && !config.isDeSmuMEDisabled()) {
@@ -381,16 +388,12 @@ public class LogRPC {
 
             if (!config.isNintendoSwitchAutoDisabled()) {
                 try {
-                    File browserDataDirectory = new File("browser-data");
-                    File browserDataCacheDirectory = new File("browser-data/cache");
-                    File browserDataInstallDirectory = new File("browser-data/install");
+                    File browserDataDirectory = new File(baseDir, "browser-data");
+                    File browserDataCacheDirectory = new File(browserDataDirectory, "cache");
+                    File browserDataInstallDirectory = new File(browserDataDirectory, "install");
                     if (!browserDataDirectory.exists()) {
                         browserDataDirectory.mkdir();
-                    }
-                    if (!browserDataCacheDirectory.exists()) {
                         browserDataCacheDirectory.mkdir();
-                    }
-                    if (!browserDataInstallDirectory.exists()) {
                         browserDataInstallDirectory.mkdir();
                     }
 
@@ -1199,6 +1202,10 @@ public class LogRPC {
 
     public LogRPCConfig getConfig() {
         return config;
+    }
+
+    public File getBaseDir() {
+        return baseDir;
     }
 
     public long getClientID() {
