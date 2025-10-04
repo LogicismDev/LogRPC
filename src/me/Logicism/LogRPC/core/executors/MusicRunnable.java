@@ -88,6 +88,9 @@ public class MusicRunnable implements Runnable {
 
                                 jsonObject.put("title", lineSplit[0]);
                                 jsonObject.put("artist", lineSplit[1]);
+                                jsonObject.put("start_time", -1);
+                                jsonObject.put("end_time", -1);
+                                jsonObject.put("position", -1);
 
                                 JSONObject result1;
                                 if (result.has("id")) {
