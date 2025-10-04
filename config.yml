@@ -105,6 +105,12 @@ musicProgram: Amazon Music.exe
 
 musicArtworkCountry: US
 
+# If you can't get the music presence, set this to true to grab it by the Window Title.
+# This only works with Windows at the moment and only for TIDAL, and Qobuz.
+# For Windows 11, do not use the App IDs, but use instead the executable name.
+
+musicWindowTitleGrabbing: true
+
 # This is where you can enable the Invidious API to fetch the proper Video Name, Thumbnails, and Channel Name if it's showing improperly on your presence.
 
 invidiousAPIEnabled: true

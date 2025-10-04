@@ -56,6 +56,8 @@ public class LogRPCConfig {
 
     private String musicArtworkCountry;
 
+    private boolean musicWindowTitleGrabbing;
+
     private boolean invidiousAPIEnabled;
 
     private String invidiousAPIInstance;
@@ -234,6 +236,10 @@ public class LogRPCConfig {
 
     public String getMusicArtworkCountry() {
         return musicArtworkCountry;
+    }
+
+    public boolean isMusicWindowTitleGrabbing() {
+        return musicWindowTitleGrabbing;
     }
 
     public boolean isInvidiousAPIEnabled() {
