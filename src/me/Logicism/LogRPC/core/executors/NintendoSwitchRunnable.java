@@ -8,6 +8,8 @@ import me.Logicism.LogRPC.event.UpdatePresenceEvent;
 import me.Logicism.LogRPC.network.BrowserClient;
 import me.Logicism.LogRPC.network.BrowserData;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import sun.rmi.runtime.Log;
 
 import javax.swing.*;
@@ -23,6 +25,9 @@ import java.util.concurrent.ExecutionException;
 
 public class NintendoSwitchRunnable implements Runnable {
 
+    private String ZNCA_VERSION = "";
+    private String ZNCA_API_VERSION = "3.0.2";
+    
     private String NXAPI_TOKEN = "";
     private long NXAPI_TOKEN_TIMESTAMP;
 
@@ -50,6 +55,13 @@ public class NintendoSwitchRunnable implements Runnable {
     @Override
     public void run() {
         try {
+            BrowserData bd = BrowserClient.executeGETRequest(new URL("https://www.apkmirror.com/apk/nintendo-co-ltd/nintendo-switch-online/"), new HashMap<>());
+            Document document = Jsoup.parse(BrowserClient.requestToString(bd.getResponse()));
+            ZNCA_VERSION = document.selectFirst("#primary > div.card-with-tabs.unroll > div.tab-content.unroll > div:nth-child(2) > div > h3").text().substring("About Nintendo Switch App ".length());
+
+            System.out.println("ZNCA Version: " + ZNCA_VERSION);
+            System.out.println("ZNCA API Version: " + ZNCA_API_VERSION);
+
             Map<String, String> headers = new HashMap<>();
             headers.put("User-Agent", "NASDKAPI; Android");
             String refreshToken;
@@ -65,7 +77,7 @@ public class NintendoSwitchRunnable implements Runnable {
                 headers.put("Accept", "application/json");
                 headers.put("Content-Type", "application/x-www-form-urlencoded");
 
-                BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://accounts.nintendo.com/connect/1.0.0/api/session_token"), "client_id=71b963c1b7b6d119&session_token_code=" + sessionToken + "&session_token_code_verifier=" + sessionTokenVerifier, headers);
+                bd = BrowserClient.executePOSTRequest(new URL("https://accounts.nintendo.com/connect/1.0.0/api/session_token"), "client_id=71b963c1b7b6d119&session_token_code=" + sessionToken + "&session_token_code_verifier=" + sessionTokenVerifier, headers);
                 JSONObject sessionTokenObj = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
 
                 LogRPC.INSTANCE.setNintendoRefreshToken(sessionTokenObj.getString("session_token"));
@@ -90,7 +102,7 @@ public class NintendoSwitchRunnable implements Runnable {
 
                 headers.put("Authorization", "Bearer " + NA_ACCESS_TOKEN);
 
-                BrowserData bd = BrowserClient.executeGETRequest(new URL("https://api.accounts.nintendo.com/2.0.0/users/me"), headers);
+                bd = BrowserClient.executeGETRequest(new URL("https://api.accounts.nintendo.com/2.0.0/users/me"), headers);
                 meObj = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
 
                 LogRPC.INSTANCE.setNintendoAccountID(meObj.getString("id"));
@@ -276,8 +288,8 @@ public class NintendoSwitchRunnable implements Runnable {
         headers.put("Authorization", "Bearer " + NXAPI_TOKEN);
         headers.put("Accept", "application/octet-stream");
         headers.put("Content-Type", "application/json");
-        headers.put("X-znca-Version", "3.0.3");
-        headers.put("X-znca-Client-Version", "3.0.3");
+        headers.put("X-znca-Version", ZNCA_VERSION);
+        headers.put("X-znca-Client-Version", ZNCA_VERSION);
 
         BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://nxapi-znca-api.fancy.org.uk/api/znca/encrypt-request"), new JSONObject().put("url", url).put("token", token).put("data", data).toString(), headers);
 
@@ -289,8 +301,8 @@ public class NintendoSwitchRunnable implements Runnable {
         headers.put("Authorization", "Bearer " + NXAPI_TOKEN);
         headers.put("Accept", requestAssertion ? "application/json" : "text/plain");
         headers.put("Content-Type", "application/json");
-        headers.put("X-znca-Version", "3.0.3");
-        headers.put("X-znca-Client-Version", "3.0.3");
+        headers.put("X-znca-Version", ZNCA_VERSION);
+        headers.put("X-znca-Client-Version", ZNCA_VERSION);
 
         BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://nxapi-znca-api.fancy.org.uk/api/znca/decrypt-response"), new JSONObject().put("data", Base64.getUrlEncoder().encodeToString(bytes)).toString(), headers);
 
@@ -327,21 +339,22 @@ public class NintendoSwitchRunnable implements Runnable {
         headers.put("Authorization", "Bearer " + NXAPI_TOKEN);
         headers.put("Accept", "application/json");
         headers.put("Content-Type", "application/json");
-        headers.put("X-znca-Version", "3.0.3");
-        headers.put("X-znca-Client-Version", "3.0.3");
+        headers.put("X-znca-Platform", "Android");
+        headers.put("X-znca-Version", ZNCA_VERSION);
+        headers.put("X-znca-Client-Version", ZNCA_API_VERSION);
 
         JSONObject obj = new JSONObject().put("hash_method", hash_method).put("token", token).put("na_id", naID).put("encrypt_token_request", encryptTokenRequest);
         if (hash_method == 1) {
-            obj.put("url", "https://nxapi-znca-api.fancy.org.uk/api/znca/f").put("znca_platform", "Android").put("znca_version", "3.0.3");
+            obj.put("url", "https://nxapi-znca-api.fancy.org.uk/api/znca/f").put("znca_platform", "Android").put("znca_version", ZNCA_API_VERSION);
         }
         if (coralID != null) {
             obj.put("coral_user_id", coralID);
         }
 
-
         BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://nxapi-znca-api.fancy.org.uk/api/znca/f"), obj.toString(), headers);
         String s = BrowserClient.requestToString(bd.getResponse());
         JSONObject fObj = new JSONObject(s);
+        System.out.println(fObj);
         if (fObj.has("error_message")) {
             return new String[]{null, null};
         } else {
@@ -354,8 +367,8 @@ public class NintendoSwitchRunnable implements Runnable {
         headers.put("Accept", "application/octet-stream, application/json");
         headers.put("Content-Type", "application/octet-stream");
         headers.put("X-Platform", "Android");
-        headers.put("X-ProductVersion", "3.0.3");
-        headers.put("User-Agent", "com.nintendo.znca/3.0.3(Android/12)");
+        headers.put("X-ProductVersion", ZNCA_VERSION);
+        headers.put("User-Agent", "com.nintendo.znca/" + ZNCA_VERSION + "(Android/12)");
 
         BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://api-lp1.znc.srv.nintendo.net/v3/Account/Login"), body, headers);
         byte[] resultB = BrowserClient.requestToBytes(bd.getResponse());
@@ -370,8 +383,8 @@ public class NintendoSwitchRunnable implements Runnable {
         headers.put("Accept", "application/octet-stream,application/json");
         headers.put("Content-Type", "application/octet-stream");
         headers.put("X-Platform", "Android");
-        headers.put("X-ProductVersion", "3.0.3");
-        headers.put("User-Agent", "com.nintendo.znca/3.0.3(Android/12)");
+        headers.put("X-ProductVersion", ZNCA_VERSION);
+        headers.put("User-Agent", "com.nintendo.znca/" + ZNCA_VERSION + "(Android/12)");
 
         BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://api-lp1.znc.srv.nintendo.net/v4/Game/GetWebServiceToken"), body, headers);
         byte[] resultB = BrowserClient.requestToBytes(bd.getResponse());
@@ -385,7 +398,7 @@ public class NintendoSwitchRunnable implements Runnable {
         headers.put("Accept", "application/octet-stream,application/json");
         headers.put("Accept-Language", "en-US");
         headers.put("Content-Type", "application/octet-stream");
-        headers.put("User-Agent", "com.nintendo.znca/3.0.3(Android/12)");
+        headers.put("User-Agent", "com.nintendo.znca/" + ZNCA_VERSION + "(Android/12)");
         headers.put("Authorization", "Bearer " + WEBAPI_TOKEN);
         headers.put("X-Platform", "Android");
 
