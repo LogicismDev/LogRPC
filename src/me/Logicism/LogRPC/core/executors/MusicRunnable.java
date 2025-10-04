@@ -23,6 +23,7 @@ public class MusicRunnable implements Runnable {
 
     private int cachedPlaybackStatus = 0;
 
+    private String cachedWindowTitle = "";
     private String cachedAlbumName = "";
     private String cachedAlbumArtistName = "";
     private String cachedSongURL = "";
@@ -33,7 +34,11 @@ public class MusicRunnable implements Runnable {
         while (LogRPC.INSTANCE.getMusicMenuItem().getState()) {
             String[] command = null;
             if (System.getProperty("os.name").startsWith("Windows")) {
-                command = new String[]{"\"" + new File("LogRPC Music Scripts/Windows Script/python/python.exe").getAbsolutePath() + "\" \"" + new File("LogRPC Music Scripts/Windows Script/music.py").getAbsolutePath() + "\" \"" + LogRPC.INSTANCE.getConfig().getMusicProgram() + "\""};
+                if (LogRPC.INSTANCE.getConfig().isMusicWindowTitleGrabbing()) {
+                    command = new String[]{"powershell.exe" + "-Command" + "\"Get-Process -Name '" + LogRPC.INSTANCE.getConfig().getMusicProgram().replace(".exe", "") + "' | Where-Object { $_.MainWindowTitle } | Select-Object -ExpandProperty MainWindowTitle\""};
+                } else {
+                    command = new String[]{"\"" + new File("LogRPC Music Scripts/Windows Script/python/python.exe").getAbsolutePath() + "\" \"" + new File("LogRPC Music Scripts/Windows Script/music.py").getAbsolutePath() + "\" \"" + LogRPC.INSTANCE.getConfig().getMusicProgram() + "\""};
+                }
             } else if (System.getProperty("os.name").startsWith("Mac OS X")) {
                 command = new String[]{"/usr/local/bin/deno", "run", "--allow-env", "--allow-run", "--allow-net", "--allow-read", "--allow-write", new File("LogRPC Music Scripts/macOS Script/music.ts").getAbsolutePath()};
             }
@@ -68,140 +73,53 @@ public class MusicRunnable implements Runnable {
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
 
-                    JSONObject jsonObject = new JSONObject(line);
+                    if (LogRPC.INSTANCE.getConfig().isMusicWindowTitleGrabbing()) {
+                        if (!cachedWindowTitle.equals(line) && (!line.equals("Qobuz") && !line.equals("TIDAL"))) {
+                            cachedWindowTitle = line;
 
-                    if (System.getProperty("os.name").startsWith("Windows")) {
-                        if (jsonObject.getInt("playback_status") == 4) {
-                            String album_artwork_url = "";
-                            String song_url = "";
-                            JSONObject result = null;
-                            if (!jsonObject.getString("album").isEmpty() && !jsonObject.getString("album_artist").isEmpty()) {
-                                result = getTIDALAlbumInfo(jsonObject.getString("album"), jsonObject.getString("album_artist"));
-                                if (result == null) {
-                                    result = getiTunesAlbumInfo(jsonObject.getString("album"), jsonObject.getString("album_artist"));
-                                }
-                            } else if (!jsonObject.getString("title").isEmpty() && !jsonObject.getString("artist").isEmpty()) {
-                                result = getTIDALTrackInfo((jsonObject.getString("app_name").equals("Amazon Music.exe") && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
-                                if (result == null) {
-                                    result = getiTunesTrackInfo((jsonObject.getString("app_name").equals("Amazon Music.exe") && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
-                                }
+                            String[] lineSplit = line.split(" - ", 2);
+                            JSONObject result = getTIDALTrackInfo(lineSplit[0], lineSplit[1]);
+                            if (result == null) {
+                                result = getiTunesTrackInfo(lineSplit[0], lineSplit[1]);
                             }
 
                             if (result != null) {
-                                if (jsonObject.getString("album").isEmpty() || jsonObject.getString("album_artist").isEmpty()) {
-                                    JSONObject result1;
-                                    if (result.has("id")) {
-                                        result1 = getTIDALAlbumInfo(result.getJSONObject("album").getLong("id"));
+                                JSONObject jsonObject = new JSONObject();
 
-                                        if (result.getJSONArray("artists").length() > 1) {
+                                jsonObject.put("title", lineSplit[0]);
+                                jsonObject.put("artist", lineSplit[1]);
+
+                                JSONObject result1;
+                                if (result.has("id")) {
+                                    result1 = getTIDALAlbumInfo(result.getJSONObject("album").getLong("id"));
+
+                                    if (result.getJSONArray("artists").length() > 1) {
+                                        List<String> artistNames = new ArrayList<>();
+                                        for (int i = 0; i < result.getJSONArray("artists").length(); i++) {
+                                            artistNames.add(result.getJSONArray("artists").getJSONObject(i).getString("name"));
+                                        }
+
+                                        jsonObject.remove("artist");
+                                        jsonObject.put("artist", StringUtil.join(artistNames, ", "));
+                                    }
+
+                                    if (result1 != null) {
+                                        if (jsonObject.getString("album").isEmpty()) {
+                                            jsonObject.remove("album");
+                                            jsonObject.put("album", result.getJSONObject("album").getString("title"));
+                                        }
+                                        if (jsonObject.getString("album_artist").isEmpty()) {
+                                            jsonObject.remove("album_artist");
+
                                             List<String> artistNames = new ArrayList<>();
-                                            for (int i = 0; i < result.getJSONArray("artists").length(); i++) {
-                                                artistNames.add(result.getJSONArray("artists").getJSONObject(i).getString("name"));
+                                            for (int i = 0; i < result1.getJSONArray("artists").length(); i++) {
+                                                artistNames.add(result1.getJSONArray("artists").getJSONObject(i).getString("name"));
                                             }
 
-                                            jsonObject.remove("artist");
-                                            jsonObject.put("artist", StringUtil.join(artistNames, ", "));
-                                        }
-
-                                        if (result1 != null) {
-                                            if (jsonObject.getString("album").isEmpty()) {
-                                                jsonObject.remove("album");
-                                                jsonObject.put("album", result.getJSONObject("album").getString("title"));
-                                            }
-                                            if (jsonObject.getString("album_artist").isEmpty()) {
-                                                jsonObject.remove("album_artist");
-
-                                                List<String> artistNames = new ArrayList<>();
-                                                for (int i = 0; i < result1.getJSONArray("artists").length(); i++) {
-                                                    artistNames.add(result1.getJSONArray("artists").getJSONObject(i).getString("name"));
-                                                }
-
-                                                jsonObject.put("album_artist", StringUtil.join(artistNames, ", "));
-                                            }
-                                        }
-                                    } else {
-                                        result1 = getiTunesAlbumInfo(result.getLong("trackId"));
-
-                                        if (result1 != null) {
-                                            if (jsonObject.getString("album").isEmpty()) {
-                                                jsonObject.remove("album");
-                                                jsonObject.put("album", result1.getString("collectionName"));
-                                            }
-                                            if (jsonObject.getString("album_artist").isEmpty()) {
-                                                jsonObject.remove("album_artist");
-                                                jsonObject.put("album_artist", result1.getString("artistName"));
-                                            }
+                                            jsonObject.put("album_artist", StringUtil.join(artistNames, ", "));
                                         }
                                     }
-                                }
-
-                                if (!cachedAlbumArtistName.equals(jsonObject.getString("album_artist")) || !cachedAlbumName.equals(jsonObject.getString("album"))) {
-                                    if (result.has("id") && !jsonObject.getString("app_name").equals("iTunes.exe")) {
-                                        album_artwork_url = "https://resources.tidal.com/images/" + result.getJSONObject("album").getString("cover").replace("-", "/") + "/1280x1280.jpg";
-
-                                        JSONObject songDotLinkResponse = getSongDotLinkInfo(result.getString("url"));
-
-                                        if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
-                                            song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
-                                        } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
-                                            song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
-                                        } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
-                                            song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
-                                        }
-                                    } else {
-                                        album_artwork_url = result.getString("artworkUrl100");
-
-                                        JSONObject songDotLinkResponse = getSongDotLinkInfo(result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl"));
-
-                                        if (jsonObject.getString("app_name").equals("iTunes.exe")) {
-                                            song_url = result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl");
-                                        } else {
-                                            if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
-                                                song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
-                                            } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
-                                                song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
-                                            } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
-                                                song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
-                                            }
-                                        }
-                                    }
-
-                                    cachedAlbumName = jsonObject.getString("album");
-                                    cachedAlbumArtistName = jsonObject.getString("album_artist");
-                                    cachedArtworkURL = album_artwork_url;
-                                    cachedSongURL = song_url;
                                 } else {
-                                    album_artwork_url = cachedArtworkURL;
-                                    song_url = cachedSongURL;
-                                }
-                            }
-
-                            try {
-                                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MUSIC, new JSONData(new JSONObject().put("title", jsonObject.getString("title")).put("details", jsonObject.getString("artist")).put("album", jsonObject.getString("album")).put("album_artist", jsonObject.getString("album_artist")).put("app_name", jsonObject.getString("app_name")).put("album_artwork_url", album_artwork_url).put("song_url", song_url).put("start_time", jsonObject.getInt("start_time")).put("end_time", jsonObject.getInt("end_time")).put("position", jsonObject.getInt("position")))));
-                            } catch (JSONException jsonException) {
-                                jsonException.printStackTrace();
-                            }
-                        } else {
-                            try {
-                                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
-                            } catch (JSONException jsonException) {
-                                jsonException.printStackTrace();
-                            }
-                        }
-                    } else if (System.getProperty("os.name").startsWith("Mac OS X")) {
-                        if (jsonObject.getString("playerState").equals("playing")) {
-                            String album_artwork_url = "";
-                            String song_url = "";
-                            JSONObject result = null;
-                            if (!jsonObject.getString("album").isEmpty() && !jsonObject.getString("albumArtist").isEmpty()) {
-                                result = getiTunesAlbumInfo(jsonObject.getString("album"), jsonObject.getString("albumArtist"));
-                            } else if (!jsonObject.getString("name").isEmpty() && !jsonObject.getString("artist").isEmpty()) {
-                                result = getiTunesTrackInfo(jsonObject.getString("name"), jsonObject.getString("artist"));
-                            }
-
-                            if (result != null) {
-                                if (jsonObject.getString("album").isEmpty() || jsonObject.getString("albumArtist").isEmpty()) {
-                                    JSONObject result1;
                                     result1 = getiTunesAlbumInfo(result.getLong("trackId"));
 
                                     if (result1 != null) {
@@ -216,37 +134,232 @@ public class MusicRunnable implements Runnable {
                                     }
                                 }
 
-                                if (!cachedAlbumArtistName.equals(jsonObject.getString("album_artist")) || !cachedAlbumName.equals(jsonObject.getString("album"))) {
-                                    album_artwork_url = result.getString("artworkUrl100");
-                                    song_url = result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl");
+                                String album_artwork_url = "";
+                                String song_url = "";
+                                if (result.has("id")) {
+                                    album_artwork_url = "https://resources.tidal.com/images/" + result.getJSONObject("album").getString("cover").replace("-", "/") + "/1280x1280.jpg";
 
-                                    cachedAlbumName = jsonObject.getString("album");
-                                    cachedAlbumArtistName = jsonObject.getString("album_artist");
-                                    cachedArtworkURL = album_artwork_url;
-                                    cachedSongURL = song_url;
+                                    JSONObject songDotLinkResponse = getSongDotLinkInfo(result.getString("url"));
+
+                                    if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                        song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
+                                    } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                        song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
+                                    } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                        song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
+                                    }
                                 } else {
-                                    album_artwork_url = cachedArtworkURL;
-                                    song_url = cachedSongURL;
+                                    album_artwork_url = result.getString("artworkUrl100");
+
+                                    JSONObject songDotLinkResponse = getSongDotLinkInfo(result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl"));
+
+                                    if (jsonObject.getString("app_name").equals("iTunes.exe")) {
+                                        song_url = result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl");
+                                    } else {
+                                        if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                            song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
+                                        } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                            song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
+                                        } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                            song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
+                                        }
+                                    }
+                                }
+
+                                try {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MUSIC, new JSONData(new JSONObject().put("title", jsonObject.getString("title")).put("details", jsonObject.getString("artist")).put("album", jsonObject.getString("album")).put("album_artist", jsonObject.getString("album_artist")).put("app_name", jsonObject.getString("app_name")).put("album_artwork_url", album_artwork_url).put("song_url", song_url).put("start_time", jsonObject.getInt("start_time")).put("end_time", jsonObject.getInt("end_time")).put("position", jsonObject.getInt("position")))));
+                                } catch (JSONException jsonException) {
+                                    jsonException.printStackTrace();
                                 }
                             }
-
-                            System.out.println(jsonObject);
-
-                            try {
-                                LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MUSIC, new JSONData(new JSONObject().put("title", jsonObject.getString("name")).put("details", jsonObject.getString("artist")).put("album", jsonObject.getString("album")).put("album_artist", jsonObject.getString("albumArtist")).put("app_name", jsonObject.getString("playerName").equals("Music") ? "Apple Music" : "iTunes").put("album_artwork_url", album_artwork_url).put("song_url", song_url).put("start_time", 0).put("end_time", ((int) jsonObject.getDouble("duration"))).put("position", ((int) jsonObject.getDouble("playerPosition"))))));
-                            } catch (JSONException jsonException) {
-                                jsonException.printStackTrace();
-                            }
-                        } else if (jsonObject.getString("playerState").equals("stopped")) {
+                        } else if (!cachedWindowTitle.isEmpty() && line.contains("Get-Process : Cannot find a process with the name")) {
                             try {
                                 LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
                             } catch (JSONException jsonException) {
                                 jsonException.printStackTrace();
                             }
                         }
-                    }
+                    } else {
+                        JSONObject jsonObject = new JSONObject(line);
 
-                    cachedPlaybackStatus = jsonObject.getInt("playback_status");
+                        if (System.getProperty("os.name").startsWith("Windows")) {
+                            if (jsonObject.getInt("playback_status") == 4) {
+                                String album_artwork_url = "";
+                                String song_url = "";
+                                JSONObject result = null;
+                                if (!jsonObject.getString("album").isEmpty() && !jsonObject.getString("album_artist").isEmpty()) {
+                                    result = getTIDALAlbumInfo(jsonObject.getString("album"), jsonObject.getString("album_artist"));
+                                    if (result == null) {
+                                        result = getiTunesAlbumInfo(jsonObject.getString("album"), jsonObject.getString("album_artist"));
+                                    }
+                                } else if (!jsonObject.getString("title").isEmpty() && !jsonObject.getString("artist").isEmpty()) {
+                                    result = getTIDALTrackInfo((jsonObject.getString("app_name").equals("Amazon Music.exe") && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
+                                    if (result == null) {
+                                        result = getiTunesTrackInfo((jsonObject.getString("app_name").equals("Amazon Music.exe") && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
+                                    }
+                                }
+
+                                if (result != null) {
+                                    if (jsonObject.getString("album").isEmpty() || jsonObject.getString("album_artist").isEmpty()) {
+                                        JSONObject result1;
+                                        if (result.has("id")) {
+                                            result1 = getTIDALAlbumInfo(result.getJSONObject("album").getLong("id"));
+
+                                            if (result.getJSONArray("artists").length() > 1) {
+                                                List<String> artistNames = new ArrayList<>();
+                                                for (int i = 0; i < result.getJSONArray("artists").length(); i++) {
+                                                    artistNames.add(result.getJSONArray("artists").getJSONObject(i).getString("name"));
+                                                }
+
+                                                jsonObject.remove("artist");
+                                                jsonObject.put("artist", StringUtil.join(artistNames, ", "));
+                                            }
+
+                                            if (result1 != null) {
+                                                if (jsonObject.getString("album").isEmpty()) {
+                                                    jsonObject.remove("album");
+                                                    jsonObject.put("album", result.getJSONObject("album").getString("title"));
+                                                }
+                                                if (jsonObject.getString("album_artist").isEmpty()) {
+                                                    jsonObject.remove("album_artist");
+
+                                                    List<String> artistNames = new ArrayList<>();
+                                                    for (int i = 0; i < result1.getJSONArray("artists").length(); i++) {
+                                                        artistNames.add(result1.getJSONArray("artists").getJSONObject(i).getString("name"));
+                                                    }
+
+                                                    jsonObject.put("album_artist", StringUtil.join(artistNames, ", "));
+                                                }
+                                            }
+                                        } else {
+                                            result1 = getiTunesAlbumInfo(result.getLong("trackId"));
+
+                                            if (result1 != null) {
+                                                if (jsonObject.getString("album").isEmpty()) {
+                                                    jsonObject.remove("album");
+                                                    jsonObject.put("album", result1.getString("collectionName"));
+                                                }
+                                                if (jsonObject.getString("album_artist").isEmpty()) {
+                                                    jsonObject.remove("album_artist");
+                                                    jsonObject.put("album_artist", result1.getString("artistName"));
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (!cachedAlbumArtistName.equals(jsonObject.getString("album_artist")) || !cachedAlbumName.equals(jsonObject.getString("album"))) {
+                                        if (result.has("id") && !jsonObject.getString("app_name").equals("iTunes.exe")) {
+                                            album_artwork_url = "https://resources.tidal.com/images/" + result.getJSONObject("album").getString("cover").replace("-", "/") + "/1280x1280.jpg";
+
+                                            JSONObject songDotLinkResponse = getSongDotLinkInfo(result.getString("url"));
+
+                                            if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                                song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
+                                            } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                                song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
+                                            } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                                song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
+                                            }
+                                        } else {
+                                            album_artwork_url = result.getString("artworkUrl100");
+
+                                            JSONObject songDotLinkResponse = getSongDotLinkInfo(result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl"));
+
+                                            if (jsonObject.getString("app_name").equals("iTunes.exe")) {
+                                                song_url = result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl");
+                                            } else {
+                                                if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                                    song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
+                                                } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                                    song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
+                                                } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                                    song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
+                                                }
+                                            }
+                                        }
+
+                                        cachedAlbumName = jsonObject.getString("album");
+                                        cachedAlbumArtistName = jsonObject.getString("album_artist");
+                                        cachedArtworkURL = album_artwork_url;
+                                        cachedSongURL = song_url;
+                                    } else {
+                                        album_artwork_url = cachedArtworkURL;
+                                        song_url = cachedSongURL;
+                                    }
+                                }
+
+                                try {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MUSIC, new JSONData(new JSONObject().put("title", jsonObject.getString("title")).put("details", jsonObject.getString("artist")).put("album", jsonObject.getString("album")).put("album_artist", jsonObject.getString("album_artist")).put("app_name", jsonObject.getString("app_name")).put("album_artwork_url", album_artwork_url).put("song_url", song_url).put("start_time", jsonObject.getInt("start_time")).put("end_time", jsonObject.getInt("end_time")).put("position", jsonObject.getInt("position")))));
+                                } catch (JSONException jsonException) {
+                                    jsonException.printStackTrace();
+                                }
+                            } else {
+                                try {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                                } catch (JSONException jsonException) {
+                                    jsonException.printStackTrace();
+                                }
+                            }
+                        } else if (System.getProperty("os.name").startsWith("Mac OS X")) {
+                            if (jsonObject.getString("playerState").equals("playing")) {
+                                String album_artwork_url = "";
+                                String song_url = "";
+                                JSONObject result = null;
+                                if (!jsonObject.getString("album").isEmpty() && !jsonObject.getString("albumArtist").isEmpty()) {
+                                    result = getiTunesAlbumInfo(jsonObject.getString("album"), jsonObject.getString("albumArtist"));
+                                } else if (!jsonObject.getString("name").isEmpty() && !jsonObject.getString("artist").isEmpty()) {
+                                    result = getiTunesTrackInfo(jsonObject.getString("name"), jsonObject.getString("artist"));
+                                }
+
+                                if (result != null) {
+                                    if (jsonObject.getString("album").isEmpty() || jsonObject.getString("albumArtist").isEmpty()) {
+                                        JSONObject result1;
+                                        result1 = getiTunesAlbumInfo(result.getLong("trackId"));
+
+                                        if (result1 != null) {
+                                            if (jsonObject.getString("album").isEmpty()) {
+                                                jsonObject.remove("album");
+                                                jsonObject.put("album", result1.getString("collectionName"));
+                                            }
+                                            if (jsonObject.getString("album_artist").isEmpty()) {
+                                                jsonObject.remove("album_artist");
+                                                jsonObject.put("album_artist", result1.getString("artistName"));
+                                            }
+                                        }
+                                    }
+
+                                    if (!cachedAlbumArtistName.equals(jsonObject.getString("album_artist")) || !cachedAlbumName.equals(jsonObject.getString("album"))) {
+                                        album_artwork_url = result.getString("artworkUrl100");
+                                        song_url = result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl");
+
+                                        cachedAlbumName = jsonObject.getString("album");
+                                        cachedAlbumArtistName = jsonObject.getString("album_artist");
+                                        cachedArtworkURL = album_artwork_url;
+                                        cachedSongURL = song_url;
+                                    } else {
+                                        album_artwork_url = cachedArtworkURL;
+                                        song_url = cachedSongURL;
+                                    }
+                                }
+
+                                System.out.println(jsonObject);
+
+                                try {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MUSIC, new JSONData(new JSONObject().put("title", jsonObject.getString("name")).put("details", jsonObject.getString("artist")).put("album", jsonObject.getString("album")).put("album_artist", jsonObject.getString("albumArtist")).put("app_name", jsonObject.getString("playerName").equals("Music") ? "Apple Music" : "iTunes").put("album_artwork_url", album_artwork_url).put("song_url", song_url).put("start_time", 0).put("end_time", ((int) jsonObject.getDouble("duration"))).put("position", ((int) jsonObject.getDouble("playerPosition"))))));
+                                } catch (JSONException jsonException) {
+                                    jsonException.printStackTrace();
+                                }
+                            } else if (jsonObject.getString("playerState").equals("stopped")) {
+                                try {
+                                    LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
+                                } catch (JSONException jsonException) {
+                                    jsonException.printStackTrace();
+                                }
+                            }
+                        }
+
+                        cachedPlaybackStatus = jsonObject.getInt("playback_status");
+                    }
                 }
 
                 scanner.close();
