@@ -52,7 +52,7 @@ public class ChromeWebSocketServer extends WebSocketServer {
                     LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
                 }
             } catch (JSONException e) {
-                System.out.println(s);
+                //System.out.println(s);
             }
         } else if (LogRPC.INSTANCE.getWiimmfiMenuItem().getState() && LogRPC.INSTANCE.getConfig().getWiimmfiPresenceType().equals("browser")) {
             try {
@@ -67,7 +67,7 @@ public class ChromeWebSocketServer extends WebSocketServer {
                     LogRPC.INSTANCE.getEventManager().callEvent(new UpdatePresenceEvent(PresenceType.MANUAL, new JSONData(new JSONObject().put("details", "DefaultPresence"))));
                 }
             } catch (JSONException e) {
-                System.out.println(s);
+                //System.out.println(s);
             }
         }
     }

@@ -70,6 +70,8 @@ public class UpdatePresenceHandler extends EventHandler {
                     presence = new NetflixPresence(e.getData());
                 } else if (url.getHost().equals("www.disneyplus.com") && ((BrowserHTMLData) e.getData()).isEnabled("disneyplus")) {
                     presence = new DisneyPlusPresence(e.getData());
+                } else if (url.getHost().equals("www.hulu.com") && ((BrowserHTMLData) e.getData()).isEnabled("hulu")) {
+                    presence = new HuluPresence(e.getData());
                 }
             } catch (MalformedURLException ignored) {
 
