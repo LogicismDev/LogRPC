@@ -36,7 +36,7 @@ public class NetflixPresence extends Presence {
     public String getDetails() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("?jbv=") || data.getURL().contains("&jbv=")) {
+        if (data.getURL().contains("?jbv=") || data.getURL().contains("&jbv=") || data.getURL().contains("/title/")) {
             return "Browsing Netflix Show";
         } else if (data.getURL().startsWith("https://www.netflix.com/search?q=")) {
             return "Browsing Netflix Search";
@@ -56,8 +56,8 @@ public class NetflixPresence extends Presence {
     public String getState() {
         BrowserHTMLData data = (BrowserHTMLData) this.data;
 
-        if (data.getURL().contains("?jbv=") || data.getURL().contains("&jbv=")) {
-            return data.getHTMLDocument().getElementsByClass("previewModal--section-header").get(2).getElementsByTag("strong").text();
+        if (data.getURL().contains("?jbv=") || data.getURL().contains("&jbv=") || data.getURL().contains("/title/")) {
+            return data.getHTMLDocument().getElementsByClass("previewModal--section-header").get(3).getElementsByTag("strong").text();
         } else if (data.getURL().startsWith("https://www.netflix.com/search?q=")) {
             try {
                 return URLDecoder.decode(data.getURL().substring("https://www.netflix.com/search?q=".length()), "UTF-8");
