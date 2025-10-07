@@ -2,7 +2,7 @@
 
 A Rich Presence program to show your activity on Discord
 
-[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v2.32-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v2.32-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v2.32-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v2.32)
+[Download for Windows (setup)](https://logicism.tv/downloads/LogRPC-setup.exe) - [Download for Windows (zip)](https://logicism.tv/downloads/LogRPC-v2.32-win64.zip) - [Download for macOS (dmg)](https://logicism.tv/downloads/LogRPC-v2.32-mac.dmg) - [Download for Linux (zip)](https://logicism.tv/downloads/LogRPC-v2.32-linux.zip) - [Download (Mirror)](https://mega.nz/folder/EIhkjCIR#Ck5IlMZeEtjVvBYjLNqrRw) (v2.4)
 
 **Java 8 or higher is required in order to run LogRPC!**
 
@@ -62,6 +62,7 @@ A Rich Presence program to show your activity on Discord
       * Uses the Chrome/Firefox Extension to grab the Website Title, URL and HTML to parse into Discord Presences.
          - Dailymotion
          - Disney+
+         - Hulu
          - Instagram
          - Netflix
          - Twitch

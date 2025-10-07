@@ -1,3 +1,16 @@
+2.4 - October 8, 2025
+- Added Hulu Website Presence. To make use of this, update the LogRPC Extension.
+- Fix Instagram Presence
+- Fix Netflix Presence
+- Fixed Nintendo Switch Auto Presence
+- Fixed LogRPC when installed through Program Files on Windows
+- Added LogRPC Music Window Title Checking. Add the following configuration lines below:
+# If you can't get the music presence, set this to true to grab it by the Window Title.
+# This only works with Windows at the moment and only for TIDAL, and Qobuz.
+# For Windows 11, do not use the App IDs, but use instead the executable name.
+
+musicWindowTitleGrabbing: true
+
 2.32 - September 1, 2025
 
 - Refined Nintendo Switch Runnable when Tokens is Expired
@@ -7,65 +20,3 @@
 
 - Fixed Nintendo Switch Runnable when Token is Expired
 - Added Extended Error Message if LogRPC fails to startup
-
-2.3 - August 29, 2025
-
-- Added Configurable Presence Display Type
-- Added Configurable Details and State Clickable URLs
-- Added Display Types for all Media Players (including Program, VLC and MPC-HC Presences), Websites, Music, and Emulators Presences
-- Added Nintendo Switch Auto Presence.
-    - This means you can use it to automatically retrieve the presence of what you're playing on your Switch system.
-    - In order for this to work, you must have an account that you can login to that is friends with your account to properly read the presence.
-    - Please note that this sends data to APIs for usage.
-- Added Large Image Preview for watching Live Twitch Streams Presences
-- Added SafeTwitch API for improved Twitch Presences.
-- Fixed Proper Windows Pipe for Java versions 22 and above.
-- Fixed where if the selected item was selected already, to not have the code executed again.
-- Fixed MAGIX Vegas Pro 21 and 22 Presences where the title isn't showing up properly.
-- Modify the configuration lines applicable to these:
-# Acceptable defaultActivityType values: PLAYING, WATCHING, LISTENING, COMPETING
-# Acceptable defaultDisplayType values: NAME, DETAILS, STATE
-# Acceptable defaultPartyPrivacy values: PRIVATE, PUBLIC
-defaultActivityType: "WATCHING"
-defaultDisplayType: "NAME"
-defaultClientID: "389249289223929856"
-defaultDetails: "LogRPC v2.3"
-defaultDetailsURL: "https://github.com/LogicismDev/LogRPC"
-defaultState: "Coded in Java and JavaScript"
-defaultStateURL: "null"
-defaultLargeImageKey: "https://i.imgur.com/HApEahS.gif"
-defaultLargeImageText: "LogRPC v2.3"
-defaultSmallImageKey: "null"
-defaultSmallImageText: "null"
-
-# Use -1 for no timestamp. Use 0 for current timestamp.
-defaultStartTimestamp: -1
-defaultEndTimestamp: -1
-
-defaultMainButtonText: "Download my Work"
-defaultMainButtonURL: "https://logicism.tv/downloads/"
-defaultSecondaryButtonText: "Buy a Gaming/Anime Banner"
-defaultSecondaryButtonURL: "https://www.fiverr.com/logicism/design-a-youtube-or-twitch-banner-and-logo-made-for-gamers"
-
-defaultPartySize: 0
-defaultMaxPartySize: 0
-defaultPartyPrivacy: PUBLIC
-- Add the following configuration lines below:
-# This is where you can enable the SafeTwitch API to fetch the proper Twitch Stream Name, Video Title, and Channel Name if it's showing improperly on your presence.
-
-safeTwitchAPIEnabled: true
-safeTwitchBackendAPIInstance: https://safetwitch-backend.logicism.tv/
-
-# This section enables or disables saving the Nintendo Switch Refresh Token on exit, thus each time allowing you to re-login to your Nintendo account each time.
-enableSavingNintendoRefreshToken: true
-
-# This can be set to a username and have you auto pick which presence to grab from. Set it to none to manually pick one each time.
-nintendoSwitchUsername: none
-
-# This section allows you to enable or disable showing the Nintendo Playtime on your Discord Presence.
-enableShowingNintendoPlaytime: true
-
-# This section allows you to enable or disable showing the Splatoon 3 Presence on your Discord Presence.
-enableShowingSplatoon3Presence: true
-
-nintendoSwitchAutoDisabled: false
