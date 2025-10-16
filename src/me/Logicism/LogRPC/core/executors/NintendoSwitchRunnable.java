@@ -312,11 +312,11 @@ public class NintendoSwitchRunnable implements Runnable {
     private String[] getNXAPIAccessToken(String refreshToken) throws IOException {
         Map<String, String> headers = new HashMap<>();
         headers.replace("Content-Type", "applications/x-www-form-urlencoded");
-        BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://nxapi-auth.fancy.org.uk/api/oauth/token"), (refreshToken != null ? "grant_type=refresh_token&client_id=GlR_qsPZpNcxqMwnbsSjMA&refresh_token=" + refreshToken : "grant_type=client_credentials&client_id=GlR_qsPZpNcxqMwnbsSjMA&scope=ca:gf+ca:er+ca:dr"), headers);
+        BrowserData bd = BrowserClient.executePOSTRequest(new URL("https://nxapi-auth.fancy.org.uk/api/oauth/token"), (refreshToken != null ? "grant_type=refresh_token&client_id=awgLgMaC_np6PS0KMVGSUg&refresh_token=" + refreshToken : "grant_type=client_credentials&client_id=awgLgMaC_np6PS0KMVGSUg&scope=ca:gf+ca:er+ca:dr"), headers);
 
         JSONObject obj = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
         if (obj.has("error_description") && obj.getString("error_description").equals("Refresh token expired")) {
-            bd = BrowserClient.executePOSTRequest(new URL("https://nxapi-auth.fancy.org.uk/api/oauth/token"), "grant_type=client_credentials&client_id=GlR_qsPZpNcxqMwnbsSjMA&scope=ca:gf+ca:er+ca:dr", headers);
+            bd = BrowserClient.executePOSTRequest(new URL("https://nxapi-auth.fancy.org.uk/api/oauth/token"), "grant_type=client_credentials&client_id=awgLgMaC_np6PS0KMVGSUg&scope=ca:gf+ca:er+ca:dr", headers);
             obj = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
         }
         return new String[]{obj.getString("access_token"), obj.getString("refresh_token")};
