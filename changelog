@@ -1,3 +1,9 @@
+2.42 - February 20, 2026
+- Fix Discord Persistent Presences. We do instead is we clear the current presence each time we set the presence to a new app ID.
+- Fix Qobuz Window Title Presence.
+- Improve Nintendo Switch Runnable.
+- Add VEGAS Pro 23 Presence.
+
 2.41 - October 17, 2025
 - Fix Nintendo Switch Runnable Again
 
@@ -18,8 +24,3 @@ musicWindowTitleGrabbing: true
 
 - Refined Nintendo Switch Runnable when Tokens is Expired
 - Fixed Extended Error Message if LogRPC fails to startup
-
-2.31 - August 30, 2025
-
-- Fixed Nintendo Switch Runnable when Token is Expired
-- Added Extended Error Message if LogRPC fails to startup

@@ -30,7 +30,7 @@ A Rich Presence program to show your activity on Discord
          - LibreOffice (Writer, Calc, Impress, Draw, Base, Math)
          - Media Player Classic
          - PotPlayer
-         - MAGIX VEGAS Pro 14.0 - 22.0
+         - MAGIX VEGAS Pro 14.0 - 23.0
          - DaVinci Resolve
          - VLC Media Player
          - Zoom Meetings
@@ -42,6 +42,7 @@ A Rich Presence program to show your activity on Discord
 
     * Music (Windows/macOS):
       * Windows: Uses a Python Script with Embedded Python to grab the song information from the Windows Media Control Bar using WinRT API. Artwork is grabbed from TIDAL, and secondarily iTunes. For Windows 11 Users, you should read below what the current app IDs are to insert in musicProgram in the config.yml.
+      * For Qobuz Users on Windows, the presence is grabbed through the Window Title using a PowerShell command by it's executable name. This can be set in the config by changing musicWindowTitleGrabbing to true.
         * Specific Rich Presence Programs:
           - Amazon Music (does not display Timestamp)
           - Deezer
