@@ -35,7 +35,7 @@ public class MusicRunnable implements Runnable {
             String[] command = null;
             if (System.getProperty("os.name").startsWith("Windows")) {
                 if (LogRPC.INSTANCE.getConfig().isMusicWindowTitleGrabbing()) {
-                    command = new String[]{"powershell.exe" + "-Command" + "\"Get-Process -Name '" + LogRPC.INSTANCE.getConfig().getMusicProgram().replace(".exe", "") + "' | Where-Object { $_.MainWindowTitle } | Select-Object -ExpandProperty MainWindowTitle\""};
+                    command = new String[]{"powershell.exe", "-Command", " \"Get-Process -Name '" + LogRPC.INSTANCE.getConfig().getMusicProgram().replace(".exe", "") + "' | Where-Object { $_.MainWindowTitle } | Select-Object -ExpandProperty MainWindowTitle\""};
                 } else {
                     command = new String[]{"\"" + new File("LogRPC Music Scripts/Windows Script/python/python.exe").getAbsolutePath() + "\" \"" + new File("LogRPC Music Scripts/Windows Script/music.py").getAbsolutePath() + "\" \"" + LogRPC.INSTANCE.getConfig().getMusicProgram() + "\""};
                 }
@@ -144,11 +144,11 @@ public class MusicRunnable implements Runnable {
 
                                     JSONObject songDotLinkResponse = getSongDotLinkInfo(result.getString("url"));
 
-                                    if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                    if (jsonObject.getString("app_name").equals("Amazon Music.exe") || jsonObject.getString("app_name").equals("Amazon.Music")) {
                                         song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
-                                    } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                    } else if (jsonObject.getString("app_name").equals("Deezer.exe") || jsonObject.getString("app_name").equals("com.deezer.deezer-desktop")) {
                                         song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
-                                    } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                    } else if (jsonObject.getString("app_name").equals("TIDAL.exe") || jsonObject.getString("app_name").equals("com.squirrel.TIDAL.TIDAL")) {
                                         song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
                                     }
                                 } else {
@@ -156,14 +156,14 @@ public class MusicRunnable implements Runnable {
 
                                     JSONObject songDotLinkResponse = getSongDotLinkInfo(result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl"));
 
-                                    if (jsonObject.getString("app_name").equals("iTunes.exe")) {
+                                    if (jsonObject.getString("app_name").equals("iTunes.exe") || jsonObject.getString("app_name").equals("49586DaveAntoine.MediaControllerforiTunes_9bzempp7dntjg!App")) {
                                         song_url = result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl");
                                     } else {
-                                        if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                        if (jsonObject.getString("app_name").equals("Amazon Music.exe") || jsonObject.getString("app_name").equals("Amazon.Music")) {
                                             song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
-                                        } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                        } else if (jsonObject.getString("app_name").equals("Deezer.exe") || jsonObject.getString("app_name").equals("com.deezer.deezer-desktop")) {
                                             song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
-                                        } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                        } else if (jsonObject.getString("app_name").equals("TIDAL.exe") || jsonObject.getString("app_name").equals("com.squirrel.TIDAL.TIDAL")) {
                                             song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
                                         }
                                     }
@@ -196,9 +196,9 @@ public class MusicRunnable implements Runnable {
                                         result = getiTunesAlbumInfo(jsonObject.getString("album"), jsonObject.getString("album_artist"));
                                     }
                                 } else if (!jsonObject.getString("title").isEmpty() && !jsonObject.getString("artist").isEmpty()) {
-                                    result = getTIDALTrackInfo((jsonObject.getString("app_name").equals("Amazon Music.exe") && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
+                                    result = getTIDALTrackInfo(((jsonObject.getString("app_name").equals("Amazon Music.exe") || jsonObject.getString("app_name").equals("Amazon.Music")) && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
                                     if (result == null) {
-                                        result = getiTunesTrackInfo((jsonObject.getString("app_name").equals("Amazon Music.exe") && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
+                                        result = getiTunesTrackInfo(((jsonObject.getString("app_name").equals("Amazon Music.exe") || jsonObject.getString("app_name").equals("Amazon.Music")) && (jsonObject.getString("title").endsWith(" [Explicit]") || jsonObject.getString("title").endsWith(" [Clean]")) ? jsonObject.getString("title").substring(0, jsonObject.getString("title").length() - (jsonObject.getString("title").endsWith(" [Explicit]") ? " [Explicit]".length() : " [Clean]".length())) : jsonObject.getString("title")), jsonObject.getString("artist"));
                                     }
                                 }
 
@@ -251,16 +251,16 @@ public class MusicRunnable implements Runnable {
                                     }
 
                                     if (!cachedAlbumArtistName.equals(jsonObject.getString("album_artist")) || !cachedAlbumName.equals(jsonObject.getString("album"))) {
-                                        if (result.has("id") && !jsonObject.getString("app_name").equals("iTunes.exe")) {
+                                        if (result.has("id") && !jsonObject.getString("app_name").equals("iTunes.exe") || jsonObject.getString("app_name").equals("49586DaveAntoine.MediaControllerforiTunes_9bzempp7dntjg!App")) {
                                             album_artwork_url = "https://resources.tidal.com/images/" + result.getJSONObject("album").getString("cover").replace("-", "/") + "/1280x1280.jpg";
 
                                             JSONObject songDotLinkResponse = getSongDotLinkInfo(result.getString("url"));
 
-                                            if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                            if (jsonObject.getString("app_name").equals("Amazon Music.exe") || jsonObject.getString("app_name").equals("Amazon.Music")) {
                                                 song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
-                                            } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                            } else if (jsonObject.getString("app_name").equals("Deezer.exe") || jsonObject.getString("app_name").equals("com.deezer.deezer-desktop")) {
                                                 song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
-                                            } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                            } else if (jsonObject.getString("app_name").equals("TIDAL.exe") || jsonObject.getString("app_name").equals("com.squirrel.TIDAL.TIDAL")) {
                                                 song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
                                             }
                                         } else {
@@ -268,14 +268,14 @@ public class MusicRunnable implements Runnable {
 
                                             JSONObject songDotLinkResponse = getSongDotLinkInfo(result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl"));
 
-                                            if (jsonObject.getString("app_name").equals("iTunes.exe")) {
+                                            if (jsonObject.getString("app_name").equals("iTunes.exe") || jsonObject.getString("app_name").equals("49586DaveAntoine.MediaControllerforiTunes_9bzempp7dntjg!App")) {
                                                 song_url = result.has("collectionViewUrl") ? result.getString("collectionViewUrl") : result.getString("trackViewUrl");
                                             } else {
-                                                if (jsonObject.getString("app_name").equals("Amazon Music.exe")) {
+                                                if (jsonObject.getString("app_name").equals("Amazon Music.exe") || jsonObject.getString("app_name").equals("Amazon.Music")) {
                                                     song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("amazonMusic").getString("url");
-                                                } else if (jsonObject.getString("app_name").equals("Deezer.exe")) {
+                                                } else if (jsonObject.getString("app_name").equals("Deezer.exe") || jsonObject.getString("app_name").equals("com.deezer.deezer-desktop")) {
                                                     song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("deezer").getString("url");
-                                                } else if (jsonObject.getString("app_name").equals("TIDAL.exe")) {
+                                                } else if (jsonObject.getString("app_name").equals("TIDAL.exe") || jsonObject.getString("app_name").equals("com.squirrel.TIDAL.TIDAL")) {
                                                     song_url = songDotLinkResponse.getJSONObject("linksByPlatform").getJSONObject("tidal").getString("url");
                                                 }
                                             }
