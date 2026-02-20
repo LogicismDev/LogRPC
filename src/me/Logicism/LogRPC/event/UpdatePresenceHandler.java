@@ -238,6 +238,8 @@ public class UpdatePresenceHandler extends EventHandler {
                 System.out.println(builder.build().toJson());
 
                 if (e.getInstance().getClientID() != presence.getClientID()) {
+                    e.getInstance().setPresence(null, false);
+
                     e.getInstance().setClientID(presence.getClientID());
 
                     e.getInstance().setPresence(builder, true);

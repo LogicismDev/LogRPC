@@ -61,7 +61,7 @@ import java.util.regex.Pattern;
 
 public class LogRPC {
 
-    public static String VERSION = "2.41";
+    public static String VERSION = "2.42";
 
     public static LogRPC INSTANCE;
 
@@ -1548,9 +1548,8 @@ public class LogRPC {
         this.presence = presence;
 
         if (!setOnly) {
-            boolean presenceDisabled = false;
-            if (client != null && !presenceDisabled && client.getStatus() == PipeStatus.CONNECTED) {
-                client.sendRichPresence(presence.build(), new Callback(e -> System.out.println("Success"), System.out::println));
+            if (client != null && client.getStatus() == PipeStatus.CONNECTED) {
+                client.sendRichPresence(presence == null ? null : presence.build(), new Callback(e -> System.out.println("Success"), System.out::println));
             }
         }
     }
