@@ -147,6 +147,8 @@ public class UpdatePresenceHandler extends EventHandler {
                 presence = new MAMEPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("Fusion_") || ((JSONData) e.getData()).getDetails().startsWith("Fusion")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("fusion")) {
                 presence = new FusionPresence(e.getData());
+            } else if ((((JSONData) e.getData()).getDetails().startsWith("ares_") || ((JSONData) e.getData()).getDetails().startsWith("ares")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("ares")) {
+                presence = new AresPresence(e.getData());
             } else if ((((JSONData) e.getData()).getDetails().startsWith("Beat Saber_") || ((JSONData) e.getData()).getDetails().startsWith("Beat Saber")) && LogRPC.INSTANCE.getConfig().getEnabledPrograms().contains("beatsaber")) {
                 presence = new BeatSaberManualPresence(e.getData());
             }

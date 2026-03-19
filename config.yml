@@ -54,6 +54,7 @@ defaultPartyPrivacy: PUBLIC
 # This section lists the programs that are enabled on the presence software. Please note that this will only work on Windows Systems.
 
 enabledPrograms:
+  - ares
   - acrobat
   - aftereffects
   - beatsaber
