@@ -25,7 +25,7 @@ A Rich Presence program to show your activity on Discord
       * Uses Windows User32 Library to grab the current window title and process name that the user is using currently.
          - Adobe (Photoshop, Illustrator, Indesign, After Effects, Premiere Pro, Dreamweaver, Acrobat Reader)
          - Beat Saber
-         - Emulators (DeSmuME, DOSBox, FCEUX, Fusion, MAME, melonDS, Mesen, MPC-HC, NO$GBA, SNES9X, VisualBoyAdvance-M)
+         - Emulators (ares, DeSmuME, DOSBox, FCEUX, Fusion, MAME, melonDS, Mesen, MPC-HC, NO$GBA, SNES9X, VisualBoyAdvance-M)
          - Microsoft Office (Word, PowerPoint, Excel)
          - LibreOffice (Writer, Calc, Impress, Draw, Base, Math)
          - Media Player Classic
