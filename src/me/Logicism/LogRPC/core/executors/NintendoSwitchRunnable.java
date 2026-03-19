@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class NintendoSwitchRunnable implements Runnable {
 
     private String ZNCA_VERSION = "";
-    private String ZNCA_API_VERSION = "3.0.2";
+    private String ZNCA_API_VERSION = "3.0.3";
     
     private String NXAPI_TOKEN = "";
     private long NXAPI_TOKEN_TIMESTAMP;
@@ -55,9 +55,9 @@ public class NintendoSwitchRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            BrowserData bd = BrowserClient.executeGETRequest(new URL("https://www.apkmirror.com/apk/nintendo-co-ltd/nintendo-switch-online/"), new HashMap<>());
-            Document document = Jsoup.parse(BrowserClient.requestToString(bd.getResponse()));
-            ZNCA_VERSION = document.selectFirst("#primary > div.card-with-tabs.unroll > div.tab-content.unroll > div:nth-child(2) > div > h3").text().substring("About Nintendo Switch App ".length());
+            BrowserData bd = BrowserClient.executeGETRequest(new URL("https://nxapi-znca-api.fancy.org.uk/api/znca/config"), new HashMap<>());
+            JSONObject resObject = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
+            ZNCA_VERSION = resObject.getJSONArray("versions").getJSONObject(0).getString("version");
 
             System.out.println("ZNCA Version: " + ZNCA_VERSION);
             System.out.println("ZNCA API Version: " + ZNCA_API_VERSION);
