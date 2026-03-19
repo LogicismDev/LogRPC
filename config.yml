@@ -122,6 +122,11 @@ invidiousAPIInstance: https://invidious.logicism.tv/
 safeTwitchAPIEnabled: true
 safeTwitchBackendAPIInstance: https://safetwitch-backend.logicism.tv/
 
+# This is where you can enable the Nitter Scraper to fetch the proper X User and Post if it's showing improperly on your presence.
+
+nitterScraperEnabled: true
+nitterScraperInstance: https://nitter.logicism.tv/
+
 # This is where you have to get your player url. You can get this by going into a room and going on to the wiimmfi.de website and then clicking on your friend code in the Mario Kart Wii Rooms List
 
 wiimmfiPlayerURL: https://wiimmfi.de/stats/mkw/room/p600487228

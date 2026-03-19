@@ -66,6 +66,10 @@ public class LogRPCConfig {
 
     private String safeTwitchBackendAPIInstance;
 
+    private boolean nitterScraperEnabled;
+
+    private String nitterScraperInstance;
+
     private String wiimmfiPlayerURL;
 
     private String wiimmfiFriendCode;
@@ -256,6 +260,14 @@ public class LogRPCConfig {
 
     public String getSafeTwitchBackendAPIInstance() {
         return safeTwitchBackendAPIInstance;
+    }
+
+    public boolean isNitterScraperEnabled() {
+        return nitterScraperEnabled;
+    }
+
+    public String getNitterScraperInstance() {
+        return nitterScraperInstance;
     }
 
     public String getWiimmfiPlayerURL() {
