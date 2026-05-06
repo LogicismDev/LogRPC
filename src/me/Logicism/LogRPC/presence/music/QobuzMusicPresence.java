@@ -55,20 +55,6 @@ public class QobuzMusicPresence extends Presence {
     }
 
     @Override
-    public long getStartTimestamp() {
-        JSONData data = (JSONData) this.data;
-
-        return data.getIntAttribute("position") * 1000L;
-    }
-
-    @Override
-    public long getEndTimestamp() {
-        JSONData data = (JSONData) this.data;
-
-        return data.getIntAttribute("end_time") * 1000L;
-    }
-
-    @Override
     public String getDetailsURL() {
         JSONData data = (JSONData) this.data;
 

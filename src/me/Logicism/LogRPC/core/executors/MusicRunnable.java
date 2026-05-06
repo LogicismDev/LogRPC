@@ -91,6 +91,7 @@ public class MusicRunnable implements Runnable {
                                 jsonObject.put("start_time", -1);
                                 jsonObject.put("end_time", -1);
                                 jsonObject.put("position", -1);
+                                jsonObject.put("app_name", LogRPC.INSTANCE.getConfig().getMusicProgram());
 
                                 JSONObject result1;
                                 if (result.has("id")) {
@@ -107,33 +108,21 @@ public class MusicRunnable implements Runnable {
                                     }
 
                                     if (result1 != null) {
-                                        if (jsonObject.getString("album").isEmpty()) {
-                                            jsonObject.remove("album");
-                                            jsonObject.put("album", result.getJSONObject("album").getString("title"));
-                                        }
-                                        if (jsonObject.getString("album_artist").isEmpty()) {
-                                            jsonObject.remove("album_artist");
+                                        jsonObject.put("album", result.getJSONObject("album").getString("title"));
 
-                                            List<String> artistNames = new ArrayList<>();
-                                            for (int i = 0; i < result1.getJSONArray("artists").length(); i++) {
-                                                artistNames.add(result1.getJSONArray("artists").getJSONObject(i).getString("name"));
-                                            }
-
-                                            jsonObject.put("album_artist", StringUtil.join(artistNames, ", "));
+                                        List<String> artistNames = new ArrayList<>();
+                                        for (int i = 0; i < result1.getJSONArray("artists").length(); i++) {
+                                            artistNames.add(result1.getJSONArray("artists").getJSONObject(i).getString("name"));
                                         }
+
+                                        jsonObject.put("album_artist", StringUtil.join(artistNames, ", "));
                                     }
                                 } else {
                                     result1 = getiTunesAlbumInfo(result.getLong("trackId"));
 
                                     if (result1 != null) {
-                                        if (jsonObject.getString("album").isEmpty()) {
-                                            jsonObject.remove("album");
-                                            jsonObject.put("album", result1.getString("collectionName"));
-                                        }
-                                        if (jsonObject.getString("album_artist").isEmpty()) {
-                                            jsonObject.remove("album_artist");
-                                            jsonObject.put("album_artist", result1.getString("artistName"));
-                                        }
+                                        jsonObject.put("album", result1.getString("collectionName"));
+                                        jsonObject.put("album_artist", result1.getString("artistName"));
                                     }
                                 }
 
