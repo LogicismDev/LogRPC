@@ -9,16 +9,12 @@ import me.Logicism.LogRPC.network.BrowserClient;
 import me.Logicism.LogRPC.network.BrowserData;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import sun.rmi.runtime.Log;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +54,11 @@ public class NintendoSwitchRunnable implements Runnable {
     public void run() {
         try {
             BrowserData bd = BrowserClient.executeGETRequest(new URL("https://nxapi-znca-api.fancy.org.uk/api/znca/config"), new HashMap<>());
-            JSONObject resObject = new JSONObject(BrowserClient.requestToString(bd.getResponse()));
+            String response = null;
+            while (LogRPC.INSTANCE.getNintendoSwitchMenuItem().getState() && response == null) {
+                response = BrowserClient.requestToString(bd.getResponse());
+            }
+            JSONObject resObject = new JSONObject(response);
             ZNCA_VERSION = resObject.getJSONArray("versions").getJSONObject(0).getString("version");
 
             System.out.println("ZNCA Version: " + ZNCA_VERSION);
@@ -72,7 +72,7 @@ public class NintendoSwitchRunnable implements Runnable {
                 refreshToken = LogRPC.INSTANCE.getNintendoRefreshToken();
             } else {
                 System.out.println("Grabbing Nintendo Account Session Token");
-                String[] sessionData = LogRPC.INSTANCE.grabNintendoSessionToken().get();
+                String[] sessionData = LogRPC.INSTANCE.getConfig().isUseSystemBrowserForNintendoAuth() ? LogRPC.INSTANCE.grabNintendoSessionTokenServer().get() : LogRPC.INSTANCE.grabNintendoSessionToken().get();
                 String sessionToken = sessionData[0];
                 String sessionTokenVerifier = sessionData[1];
 
@@ -294,7 +294,7 @@ public class NintendoSwitchRunnable implements Runnable {
                     Thread.sleep(30000);
                 }
             }
-        } catch (InterruptedException | ExecutionException | IOException | NoSuchAlgorithmException e) {
+        } catch (InterruptedException | ExecutionException | IOException | NoSuchAlgorithmException | URISyntaxException e) {
             e.printStackTrace();
         }
     }

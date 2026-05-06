@@ -158,6 +158,10 @@ enableShowingNintendoPlaytime: true
 # This section allows you to enable or disable showing the Splatoon 3 Presence on your Discord Presence.
 enableShowingSplatoon3Presence: true
 
+# This section allows you to use your system's default browser rather than LogRPC's embedded browser to authenticate your Nintendo Account.
+# Use this if you get a blank screen for the embedded browser.
+useSystemBrowserForNintendoAuth: false
+
 # This section is where you can specify HR Reader settings. Currently supports Pulsoid and HypeRate.
 # Supported devices can be found at https://www.blog.pulsoid.net/monitors?from=mheader or https://www.hyperate.io/supported-devices
 # To use in your presence, use the variable ${hrRate}

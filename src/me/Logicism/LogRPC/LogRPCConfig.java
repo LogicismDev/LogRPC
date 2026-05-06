@@ -88,6 +88,8 @@ public class LogRPCConfig {
 
     private boolean enableShowingSplatoon3Presence;
 
+    private boolean useSystemBrowserForNintendoAuth;
+
     private String hrReader;
 
     private String pulsoidWidgetId;
@@ -304,6 +306,10 @@ public class LogRPCConfig {
 
     public boolean isEnableShowingSplatoon3Presence() {
         return enableShowingSplatoon3Presence;
+    }
+
+    public boolean isUseSystemBrowserForNintendoAuth() {
+        return useSystemBrowserForNintendoAuth;
     }
 
     public String getHrReader() {

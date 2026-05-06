@@ -386,8 +386,9 @@ public class LogRPC {
                 }
             }
 
-            if (!config.isNintendoSwitchAutoDisabled()) {
+            if (!config.isNintendoSwitchAutoDisabled() && !config.isUseSystemBrowserForNintendoAuth()) {
                 try {
+
                     File browserDataDirectory = new File(baseDir, "browser-data");
                     File browserDataCacheDirectory = new File(browserDataDirectory, "cache");
                     File browserDataInstallDirectory = new File(browserDataDirectory, "install");
@@ -405,10 +406,10 @@ public class LogRPC {
 
                     cefApp = builder.build();
                 } catch (UnsupportedPlatformException | InterruptedException e) {
-                    JOptionPane.showMessageDialog(null, "The Nintendo Switch Auto Feature Browser is not compatible with your OS, please use the manual Switch presence.", "LogRPC", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "The Nintendo Switch Auto Feature Browser is not compatible with your OS, please use the system browser in the config or the manual Switch presence.", "LogRPC", JOptionPane.ERROR_MESSAGE);
                     nintendoSwitchMenuItem.setEnabled(false);
                 } catch (CefInitializationException e) {
-                    JOptionPane.showMessageDialog(null, "We couldn't initialize the browser backend, please use the manual Switch presence.", "LogRPC", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "We couldn't initialize the browser backend, please use the system browser in the config or the manual Switch presence.", "LogRPC", JOptionPane.ERROR_MESSAGE);
                     nintendoSwitchMenuItem.setEnabled(false);
                 }
             }
@@ -1625,6 +1626,40 @@ public class LogRPC {
             cefBrowser.close(true);
             cefClient.dispose();
             cefApp.dispose();
+
+            return new String[]{nintendoSessionToken[0], nintendoSessionVerifier[0]};
+        });
+    }
+
+    public Future<String[]> grabNintendoSessionTokenServer() throws IOException, NoSuchAlgorithmException, URISyntaxException {
+        final String[] nintendoSessionToken = new String[1];
+        final String[] nintendoSessionVerifier = new String[1];
+
+        nintendoSessionToken[0] = "";
+        nintendoSessionVerifier[0] = generateRandomStateHash(32);
+        String hash = generateSHA256Hash(nintendoSessionVerifier[0]);
+        Desktop.getDesktop().browse(new URL("https://accounts.nintendo.com/connect/1.0.0/authorize?response_type=session_token_code&client_id=71b963c1b7b6d119&redirect_uri=npf71b963c1b7b6d119%3A%2F%2Fauth&scope=openid%20user%20user.birthday%20user.screenName&state=" + generateRandomStateHash(36) + "&session_token_code_challenge=" + hash + "&session_token_code_challenge_method=S256&theme=login_form").toURI());
+
+        boolean found = false;
+        while (!found) {
+            String url = JOptionPane.showInputDialog(null, "Please input the npf71b963c1b7b6d119:// URL by right clicking on Select this account and copying the link address.", "LogRPC", JOptionPane.INFORMATION_MESSAGE);
+            Pattern pattern = Pattern.compile("(eyJhbGciOiJIUzI1NiJ9\\.[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]*)");
+            Matcher matcher = pattern.matcher(url);
+            found = matcher.find();
+            if (found) {
+                nintendoSessionToken[0] = matcher.group();
+            }
+        }
+
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        return service.submit(() -> {
+            while (nintendoSessionToken[0].isEmpty()) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
             return new String[]{nintendoSessionToken[0], nintendoSessionVerifier[0]};
         });
